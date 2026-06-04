@@ -43,6 +43,214 @@
             opacity: 0.95;
         }
 
+        .completion-page {
+            display: none;
+        }
+
+        .completion-page.show {
+            display: block;
+        }
+
+        .success-header {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .success-header h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .success-header p {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .app-id-box {
+            background: white;
+            border: 2px solid #1b75bc;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .app-id-box label {
+            display: block;
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .app-id-box .id-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1b75bc;
+            font-family: 'Courier New', monospace;
+        }
+
+        .summary-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .summary-section h3 {
+            color: #1b75bc;
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .summary-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .summary-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .summary-item {
+            font-size: 13px;
+        }
+
+        .summary-item label {
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .summary-item p {
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .references-list {
+            background: #f8fafb;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #00aba9;
+        }
+
+        .reference-item {
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            border-left: 3px solid #00aba9;
+        }
+
+        .reference-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .reference-company {
+            font-weight: 600;
+            color: #1b75bc;
+            margin-bottom: 3px;
+        }
+
+        .reference-contact {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .next-steps {
+            background: #f0f8ff;
+            border-left: 4px solid #1b75bc;
+            padding: 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .next-steps h3 {
+            color: #1b75bc;
+            margin-bottom: 10px;
+        }
+
+        .next-steps ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .next-steps li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .next-steps li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .contact-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .contact-section h3 {
+            color: #1b75bc;
+            margin-bottom: 15px;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .contact-item {
+            font-size: 14px;
+        }
+
+        .contact-item label {
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .contact-item p {
+            color: #333;
+        }
+
+        .contact-item a {
+            color: #1b75bc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
         .form-section {
             background: white;
             border-radius: 8px;
@@ -109,15 +317,6 @@
         .form-group textarea {
             resize: vertical;
             min-height: 80px;
-        }
-
-        .info-box {
-            background: #f0f8ff;
-            border-left: 4px solid #1b75bc;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-size: 13px;
         }
 
         .signature-section {
@@ -271,16 +470,6 @@
             display: none;
         }
 
-        .success-message {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
         .reference-group {
             background: #f8fafb;
             padding: 15px;
@@ -329,6 +518,14 @@
             .button-group {
                 flex-direction: column;
             }
+
+            .summary-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -339,213 +536,313 @@
             <p>Credit Application Form</p>
         </header>
 
-        <div class="success-message" id="successMessage">
-            <strong>✓ Application submitted successfully!</strong>
-            <p>Your application ID is: <strong id="applicationId"></strong></p>
-            <p>Our accounts team will be in touch shortly.</p>
+        <!-- Completion Page -->
+        <div id="completionPage" class="completion-page">
+            <div class="success-header">
+                <h2>✓ Application Successfully Submitted</h2>
+                <p>Thank you for submitting your credit application to Specialist Sales Pty Ltd</p>
+            </div>
+
+            <div class="app-id-box">
+                <label>Your Application ID</label>
+                <div class="id-value" id="completionAppId"></div>
+            </div>
+
+            <div class="summary-section">
+                <h3>Company Information</h3>
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <label>Company Name</label>
+                        <p id="summaryCompanyName"></p>
+                    </div>
+                    <div class="summary-item">
+                        <label>ABN</label>
+                        <p id="summaryABN"></p>
+                    </div>
+                </div>
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <label>Business Type</label>
+                        <p id="summaryBusinessType"></p>
+                    </div>
+                    <div class="summary-item">
+                        <label>Years in Business</label>
+                        <p id="summaryYears"></p>
+                    </div>
+                </div>
+                <div class="summary-row full">
+                    <div class="summary-item">
+                        <label>Address</label>
+                        <p id="summaryAddress"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <h3>Principal/Owner</h3>
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <label>Name</label>
+                        <p id="summaryOwnerName"></p>
+                    </div>
+                    <div class="summary-item">
+                        <label>Position</label>
+                        <p id="summaryOwnerTitle"></p>
+                    </div>
+                </div>
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <label>Email</label>
+                        <p id="summaryOwnerEmail"></p>
+                    </div>
+                    <div class="summary-item">
+                        <label>Phone</label>
+                        <p id="summaryOwnerPhone"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <h3>Financial</h3>
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <label>Credit Limit Requested</label>
+                        <p id="summaryCredit"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <h3>Trade References</h3>
+                <div class="references-list" id="summaryReferences"></div>
+            </div>
+
+            <div class="next-steps">
+                <h3>What Happens Next</h3>
+                <ul>
+                    <li>Our accounts team will contact your trade references to verify your credit reliability</li>
+                    <li>You'll receive a confirmation email with your application ID</li>
+                    <li>We'll be in touch within 5-7 business days with the outcome</li>
+                    <li>Reference responses typically arrive within 2-3 business days</li>
+                </ul>
+            </div>
+
+            <div class="contact-section">
+                <h3>Questions?</h3>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <label>Email</label>
+                        <p><a href="mailto:accounts@specialistsales.com.au">accounts@specialistsales.com.au</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <label>Phone</label>
+                        <p>1800 780 317 or 07 4633 5654</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <form id="applicationForm">
-            <!-- Applicant Information -->
-            <div class="form-section">
-                <h2>Applicant Information</h2>
-                
-                <div class="form-row full">
-                    <div class="form-group required">
-                        <label for="companyName">Company Name</label>
-                        <input type="text" id="companyName" name="companyName" required>
-                        <span class="error-message">Company name is required</span>
+        <!-- Application Form -->
+        <div id="formPage">
+            <form id="applicationForm">
+                <!-- Applicant Information -->
+                <div class="form-section">
+                    <h2>Applicant Information</h2>
+                    
+                    <div class="form-row full">
+                        <div class="form-group required">
+                            <label for="companyName">Company Name</label>
+                            <input type="text" id="companyName" name="companyName" required>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="abn">ABN</label>
-                        <input type="text" id="abn" name="abn" placeholder="11 digits" maxlength="11" required>
-                        <span class="error-message">ABN must be 11 digits</span>
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="abn">ABN</label>
+                            <input type="text" id="abn" name="abn" placeholder="11 digits" maxlength="11" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="acn">ACN</label>
+                            <input type="text" id="acn" name="acn" placeholder="9 digits" maxlength="9">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="acn">ACN</label>
-                        <input type="text" id="acn" name="acn" placeholder="9 digits" maxlength="9">
-                    </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="businessType">Business Type</label>
-                        <select id="businessType" name="businessType" required>
-                            <option value="">Select type...</option>
-                            <option value="Sole Trader">Sole Trader</option>
-                            <option value="Partnership">Partnership</option>
-                            <option value="Pty Ltd">Pty Ltd</option>
-                            <option value="Trust">Trust</option>
-                            <option value="Other">Other</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="businessType">Business Type</label>
+                            <select id="businessType" name="businessType" required>
+                                <option value="">Select type...</option>
+                                <option value="Sole Trader">Sole Trader</option>
+                                <option value="Partnership">Partnership</option>
+                                <option value="Pty Ltd">Pty Ltd</option>
+                                <option value="Trust">Trust</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group required">
+                            <label for="yearsInBusiness">Years in Business</label>
+                            <input type="number" id="yearsInBusiness" name="yearsInBusiness" min="0" required>
+                        </div>
                     </div>
-                    <div class="form-group required">
-                        <label for="yearsInBusiness">Years in Business</label>
-                        <input type="number" id="yearsInBusiness" name="yearsInBusiness" min="0" required>
-                        <span class="error-message">Years in business is required</span>
-                    </div>
-                </div>
 
-                <div class="form-row full">
-                    <div class="form-group required">
-                        <label for="businessAddress">Business Address</label>
-                        <input type="text" id="businessAddress" name="businessAddress" required>
+                    <div class="form-row full">
+                        <div class="form-group required">
+                            <label for="businessAddress">Business Address</label>
+                            <input type="text" id="businessAddress" name="businessAddress" required>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="suburb">Suburb/City</label>
-                        <input type="text" id="suburb" name="suburb" required>
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="suburb">Suburb/City</label>
+                            <input type="text" id="suburb" name="suburb" required>
+                        </div>
+                        <div class="form-group required">
+                            <label for="state">State</label>
+                            <select id="state" name="state" required>
+                                <option value="">Select...</option>
+                                <option value="QLD">QLD</option>
+                                <option value="NSW">NSW</option>
+                                <option value="VIC">VIC</option>
+                                <option value="WA">WA</option>
+                                <option value="SA">SA</option>
+                                <option value="TAS">TAS</option>
+                                <option value="NT">NT</option>
+                                <option value="ACT">ACT</option>
+                            </select>
+                        </div>
+                        <div class="form-group required">
+                            <label for="postcode">Postcode</label>
+                            <input type="text" id="postcode" name="postcode" maxlength="4" required>
+                        </div>
                     </div>
-                    <div class="form-group required">
-                        <label for="state">State</label>
-                        <select id="state" name="state" required>
-                            <option value="">Select...</option>
-                            <option value="QLD">QLD</option>
-                            <option value="NSW">NSW</option>
-                            <option value="VIC">VIC</option>
-                            <option value="WA">WA</option>
-                            <option value="SA">SA</option>
-                            <option value="TAS">TAS</option>
-                            <option value="NT">NT</option>
-                            <option value="ACT">ACT</option>
-                        </select>
-                    </div>
-                    <div class="form-group required">
-                        <label for="postcode">Postcode</label>
-                        <input type="text" id="postcode" name="postcode" maxlength="4" required>
-                    </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="phone">Phone</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group required">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Owner/Principal Information -->
-            <div class="form-section">
-                <h2>Principal/Owner</h2>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="ownerName">Full Name</label>
-                        <input type="text" id="ownerName" name="ownerName" required>
-                    </div>
-                    <div class="form-group required">
-                        <label for="ownerTitle">Position/Title</label>
-                        <input type="text" id="ownerTitle" name="ownerTitle" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="ownerEmail">Personal Email</label>
-                        <input type="email" id="ownerEmail" name="ownerEmail" required>
-                    </div>
-                    <div class="form-group required">
-                        <label for="ownerPhone">Personal Phone</label>
-                        <input type="tel" id="ownerPhone" name="ownerPhone" required>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Financial Information -->
-            <div class="form-section">
-                <h2>Financial Information</h2>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="creditLimit">Credit Limit Requested</label>
-                        <div style="position: relative;">
-                            <span style="position: absolute; left: 12px; top: 10px; font-weight: 600;">$</span>
-                            <input type="number" id="creditLimit" name="creditLimit" style="padding-left: 30px;" min="0" required>
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group required">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-row full">
-                    <div class="form-group">
-                        <label for="bankDetails">Bank Details (Optional)</label>
-                        <textarea id="bankDetails" name="bankDetails" placeholder="Bank name, account number, etc."></textarea>
+                <!-- Owner/Principal Information -->
+                <div class="form-section">
+                    <h2>Principal/Owner</h2>
+
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="ownerName">Full Name</label>
+                            <input type="text" id="ownerName" name="ownerName" required>
+                        </div>
+                        <div class="form-group required">
+                            <label for="ownerTitle">Position/Title</label>
+                            <input type="text" id="ownerTitle" name="ownerTitle" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="ownerEmail">Personal Email</label>
+                            <input type="email" id="ownerEmail" name="ownerEmail" required>
+                        </div>
+                        <div class="form-group required">
+                            <label for="ownerPhone">Personal Phone</label>
+                            <input type="tel" id="ownerPhone" name="ownerPhone" required>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Trade References -->
-            <div class="form-section">
-                <h2>Trade References</h2>
-                <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Provide details of companies you currently trade with or have traded with recently.</p>
-                
-                <div id="referencesContainer"></div>
+                <!-- Financial Information -->
+                <div class="form-section">
+                    <h2>Financial Information</h2>
 
-                <button type="button" class="btn-submit add-reference-btn" onclick="addReference()">+ Add Another Reference</button>
-            </div>
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="creditLimit">Credit Limit Requested</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 12px; top: 10px; font-weight: 600;">$</span>
+                                <input type="number" id="creditLimit" name="creditLimit" style="padding-left: 30px;" min="0" required>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- Signature -->
-            <div class="form-section">
-                <h2>Digital Signature</h2>
-                <div class="signature-section">
-                    <p style="margin-bottom: 15px; font-size: 13px; color: #666;">Please sign below to confirm your application:</p>
-                    <canvas id="signaturePad" width="600" height="150"></canvas>
-                    <div class="signature-buttons">
-                        <button type="button" class="btn-clear" onclick="clearSignature()">Clear Signature</button>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="bankDetails">Bank Details (Optional)</label>
+                            <textarea id="bankDetails" name="bankDetails" placeholder="Bank name, account number, etc."></textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Legal & Declarations -->
-            <div class="form-section">
-                <h2>Terms & Conditions</h2>
-                
-                <div class="legal-text">
-                    <h3>Application Terms</h3>
-                    <p>1. I/We declare that all information provided in this application is true and correct.</p>
-                    <p>2. I/We consent to Specialist Sales Pty Ltd obtaining credit references from the suppliers listed above.</p>
-                    <p>3. I/We understand that the provision of credit is conditional on satisfactory references and creditworthiness assessment.</p>
-                    <p>4. I/We acknowledge that approval may take 5-7 business days depending on reference responses.</p>
-                    <p>5. I/We agree that Specialist Sales Pty Ltd may conduct credit checks and obtain information from credit reporting agencies.</p>
-                    <p>6. I/We authorize Specialist Sales Pty Ltd to contact the references provided for verification purposes.</p>
-                    <p>7. I/We understand that false or misleading information may result in rejection of this application.</p>
+                <!-- Trade References -->
+                <div class="form-section">
+                    <h2>Trade References</h2>
+                    <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Provide details of companies you currently trade with or have traded with recently.</p>
+                    
+                    <div id="referencesContainer"></div>
 
-                    <h3>Personal Guarantee</h3>
-                    <p>I/We, the undersigned, in consideration of Specialist Sales Pty Ltd extending credit facilities, hereby personally guarantee and undertake to be jointly and severally liable for the due and punctual payment of all debts, liabilities and obligations of the above company to Specialist Sales Pty Ltd. This guarantee is unconditional and enforceable against me/us whether or not the company is still in existence or whether the company is still a customer of Specialist Sales Pty Ltd.</p>
-
-                    <h3>Confidentiality & Privacy</h3>
-                    <p>1. I understand my personal information will be collected, used and disclosed for the purposes of processing this application.</p>
-                    <p>2. Information will be handled in accordance with the Privacy Act and related legislation.</p>
-                    <p>3. Specialist Sales Pty Ltd may share information with credit reporting agencies and trade referees.</p>
-                    <p>4. I can request access to my personal information or lodge a privacy complaint if needed.</p>
-                    <p>5. Information will be retained for the duration of any credit relationship plus 7 years.</p>
+                    <button type="button" class="btn-submit add-reference-btn" onclick="addReference()">+ Add Another Reference</button>
                 </div>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
-                    <label for="agreeTerms">I agree to the Terms & Conditions and Personal Guarantee above and confirm all information provided is accurate.</label>
+                <!-- Signature -->
+                <div class="form-section">
+                    <h2>Digital Signature</h2>
+                    <div class="signature-section">
+                        <p style="margin-bottom: 15px; font-size: 13px; color: #666;">Please sign below to confirm your application:</p>
+                        <canvas id="signaturePad" width="600" height="150"></canvas>
+                        <div class="signature-buttons">
+                            <button type="button" class="btn-clear" onclick="clearSignature()">Clear Signature</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Submit -->
-            <div class="form-section">
-                <div class="button-group">
-                    <button type="submit" class="btn-submit">
-                        <span class="spinner" id="spinner"></span>
-                        Submit Application
-                    </button>
-                    <button type="reset" class="btn-reset">Clear Form</button>
+                <!-- Legal & Declarations -->
+                <div class="form-section">
+                    <h2>Terms & Conditions</h2>
+                    
+                    <div class="legal-text">
+                        <h3>Application Terms</h3>
+                        <p>1. I/We declare that all information provided in this application is true and correct.</p>
+                        <p>2. I/We consent to Specialist Sales Pty Ltd obtaining credit references from the suppliers listed above.</p>
+                        <p>3. I/We understand that the provision of credit is conditional on satisfactory references and creditworthiness assessment.</p>
+                        <p>4. I/We acknowledge that approval may take 5-7 business days depending on reference responses.</p>
+                        <p>5. I/We agree that Specialist Sales Pty Ltd may conduct credit checks and obtain information from credit reporting agencies.</p>
+                        <p>6. I/We authorize Specialist Sales Pty Ltd to contact the references provided for verification purposes.</p>
+                        <p>7. I/We understand that false or misleading information may result in rejection of this application.</p>
+
+                        <h3>Personal Guarantee</h3>
+                        <p>I/We, the undersigned, in consideration of Specialist Sales Pty Ltd extending credit facilities, hereby personally guarantee and undertake to be jointly and severally liable for the due and punctual payment of all debts, liabilities and obligations of the above company to Specialist Sales Pty Ltd. This guarantee is unconditional and enforceable against me/us whether or not the company is still in existence or whether the company is still a customer of Specialist Sales Pty Ltd.</p>
+
+                        <h3>Confidentiality & Privacy</h3>
+                        <p>1. I understand my personal information will be collected, used and disclosed for the purposes of processing this application.</p>
+                        <p>2. Information will be handled in accordance with the Privacy Act and related legislation.</p>
+                        <p>3. Specialist Sales Pty Ltd may share information with credit reporting agencies and trade referees.</p>
+                        <p>4. I can request access to my personal information or lodge a privacy complaint if needed.</p>
+                        <p>5. Information will be retained for the duration of any credit relationship plus 7 years.</p>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                        <label for="agreeTerms">I agree to the Terms & Conditions and Personal Guarantee above and confirm all information provided is accurate.</label>
+                    </div>
                 </div>
-            </div>
-        </form>
+
+                <!-- Submit -->
+                <div class="form-section">
+                    <div class="button-group">
+                        <button type="submit" class="btn-submit">
+                            <span class="spinner" id="spinner"></span>
+                            Submit Application
+                        </button>
+                        <button type="reset" class="btn-reset">Clear Form</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -653,6 +950,36 @@
             }
         }
 
+        // Populate and display completion page
+        function showCompletionPage(application) {
+            document.getElementById('completionAppId').textContent = application.id;
+            document.getElementById('summaryCompanyName').textContent = application.applicant.companyName;
+            document.getElementById('summaryABN').textContent = application.applicant.abn;
+            document.getElementById('summaryBusinessType').textContent = application.applicant.businessType;
+            document.getElementById('summaryYears').textContent = application.financial.yearsInBusiness;
+            document.getElementById('summaryAddress').textContent = `${application.applicant.businessAddress}, ${application.applicant.suburb} ${application.applicant.state} ${application.applicant.postcode}`;
+            
+            document.getElementById('summaryOwnerName').textContent = application.owner.name;
+            document.getElementById('summaryOwnerTitle').textContent = application.owner.title;
+            document.getElementById('summaryOwnerEmail').textContent = application.owner.email;
+            document.getElementById('summaryOwnerPhone').textContent = application.owner.phone;
+            
+            document.getElementById('summaryCredit').textContent = `$${application.financial.creditLimit.toLocaleString()}`;
+            
+            const referencesHtml = application.references.map(ref => `
+                <div class="reference-item">
+                    <div class="reference-company">${ref.company}</div>
+                    <div class="reference-contact">${ref.contact} | ${ref.email}</div>
+                </div>
+            `).join('');
+            document.getElementById('summaryReferences').innerHTML = referencesHtml;
+            
+            document.getElementById('formPage').style.display = 'none';
+            document.getElementById('completionPage').classList.add('show');
+            
+            window.scrollTo(0, 0);
+        }
+
         // Form submission
         document.getElementById('applicationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -733,9 +1060,8 @@
             applications.push(application);
             localStorage.setItem('applications', JSON.stringify(applications));
 
-            // Show success message
-            document.getElementById('applicationId').textContent = applicationId;
-            document.getElementById('successMessage').style.display = 'block';
+            // Show completion page
+            showCompletionPage(application);
 
             // Try to send emails
             try {
@@ -743,27 +1069,28 @@
                 spinner.style.display = 'inline-block';
                 document.querySelector('.btn-submit').disabled = true;
 
+                // Construct reference emails data
+                const referenceEmails = references.map(ref => ({
+                    email: ref.email,
+                    contactName: ref.contact,
+                    company: ref.company,
+                    applicantCompany: application.applicant.companyName,
+                    link: `${window.location.origin}/reference.html?app=${applicationId}&ref=${ref.id}&refCompany=${encodeURIComponent(ref.company)}&applicantCompany=${encodeURIComponent(application.applicant.companyName)}`
+                }));
+
                 const response = await fetch('/api/send-emails', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         applicationId,
-                        applicant: application.applicant,
-                        owner: application.owner,
-                        references: application.references
+                        applicantEmail: application.owner.email,
+                        applicantCompany: application.applicant.companyName,
+                        referenceEmails: referenceEmails
                     })
                 });
 
                 spinner.style.display = 'none';
                 document.querySelector('.btn-submit').disabled = false;
-
-                if (response.ok) {
-                    // Reset form
-                    document.getElementById('applicationForm').reset();
-                    renderReferences();
-                    clearSignature();
-                    window.scrollTo(0, 0);
-                }
             } catch (error) {
                 console.log('Application saved locally. Email sending skipped (development mode).');
             }
