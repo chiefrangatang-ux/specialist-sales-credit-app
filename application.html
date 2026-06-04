@@ -894,9 +894,7 @@
         // Initialize EmailJS
         console.log('EmailJS availability:', typeof emailjs);
         if (typeof emailjs !== 'undefined') {
-            emailjs.init({
-    publicKey: 'xdj8WYm0g7fq6Tj9V'
-});
+            emailjs.init('xdj8WYm0g7fq6Tj9V');
             console.log('EmailJS initialized successfully');
         } else {
             console.warn('EmailJS library failed to load from CDN');
