@@ -887,13 +887,17 @@
             localStorage.setItem('applications', JSON.stringify(applications));
         }
 
-        // Initialize when DOM is definitely loaded - add the 2 reference fields
+            // Initialize when DOM is definitely loaded - add the 2 reference fields
         addReferenceField();
         addReferenceField();
 
-        // Initialize EmailJS safely (library may still be loading from CDN)
+        // Initialize EmailJS
+        console.log('EmailJS availability:', typeof emailjs);
         if (typeof emailjs !== 'undefined') {
             emailjs.init('xdj8WYm0g7fq6Tj9V');
+            console.log('EmailJS initialized successfully');
+        } else {
+            console.warn('EmailJS library failed to load from CDN');
         }
     </script>
 </body>
