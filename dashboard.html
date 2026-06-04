@@ -113,6 +113,13 @@
             border-radius: 5px;
             text-align: center;
             border-left: 4px solid #00aba9;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background: #f0f5f7;
         }
 
         .stat-card h3 {
@@ -171,14 +178,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .warning-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: help;
-        }
-
         .application-info {
             flex: 1;
         }
@@ -215,6 +214,11 @@
         .status-ready {
             background: #d1ecf1;
             color: #0c5460;
+        }
+
+        .status-requires-review {
+            background: #f8d7da;
+            color: #721c24;
         }
 
         .status-approved {
@@ -635,21 +639,16 @@
 
         // BULLETPROOF: Check if reference response is unfavourable
         function isUnfavourableResponse(response) {
-            // Guard against null, undefined, or non-objects
             if (response === null || response === undefined) return false;
             if (typeof response !== 'object') return false;
             
             try {
-                // Safe property access with fallbacks
                 const q5_continue = (response && response.q5_continue) ? response.q5_continue : (response && response.q6_continue) ? response.q6_continue : null;
                 const q2_payment = (response && response.q2_payment) ? response.q2_payment : (response && response.q3_payment) ? response.q3_payment : null;
                 const rawDaysOverdue = (response && response.q3_daysOverdue) ? response.q3_daysOverdue : (response && response.q4_daysOverdue) ? response.q4_daysOverdue : 0;
                 const q3_daysOverdue = parseInt(rawDaysOverdue) || 0;
                 
-                // Check if no to continue
                 if (q5_continue === 'no') return true;
-                
-                // Check if late AND more than 5 days
                 if (q2_payment === 'late' && q3_daysOverdue > 5) return true;
                 
                 return false;
@@ -661,7 +660,6 @@
 
         // BULLETPROOF: Check if application has unfavourable references
         function hasUnfavourableReferences(app) {
-            // Guard against null/undefined/not an array
             if (!app) return false;
             if (!Array.isArray(app.responses)) return false;
             if (app.responses.length === 0) return false;
@@ -747,28 +745,38 @@
         function renderStats() {
             const stats = getStats();
             const statsHtml = `
-                <div class="stat-card">
+                <div class="stat-card" onclick="switchTab('open')">
                     <h3>${stats.open}</h3>
                     <p>Open</p>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="switchTab('approved')">
                     <h3>${stats.approved}</h3>
                     <p>Approved</p>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="switchTab('deleted')">
                     <h3>${stats.deleted}</h3>
                     <p>Deleted</p>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="switchTab('open')">
                     <h3>${stats.awaiting}</h3>
                     <p>Awaiting Refs</p>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="switchTab('open')">
                     <h3>${stats.ready}</h3>
                     <p>Ready to Review</p>
                 </div>
             `;
             document.getElementById('stats').innerHTML = statsHtml;
+        }
+
+        // Switch tab programmatically
+        function switchTab(tabName) {
+            currentTab = tabName;
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            render();
         }
 
         // Render applications
@@ -789,6 +797,7 @@
             exportSection.style.display = 'flex';
             container.innerHTML = filtered.map(app => {
                 const responded = app.references.filter(r => r.responded).length;
+                const totalRefs = app.references.length;
                 const isReviewed = reviewedApplications.has(app.id);
                 const canApprove = responded >= 2 && isReviewed;
                 const isUnfavourable = hasUnfavourableReferences(app);
@@ -796,20 +805,16 @@
                 let statusBadge = '';
                 if (responded < 2) {
                     statusBadge = `<span class="status-badge status-awaiting">Awaiting ${2 - responded} Reference${2 - responded !== 1 ? 's' : ''}</span>`;
-                } else if (app.status !== 'approved') {
-                    statusBadge = `<span class="status-badge status-ready">Ready for Review</span>`;
-                } else {
+                } else if (app.status === 'approved') {
                     statusBadge = `<span class="status-badge status-approved">Approved</span>`;
-                }
-
-                let warningBadge = '';
-                if (isUnfavourable) {
-                    warningBadge = `<div class="warning-badge" title="Unfavourable reference response detected">⚠️</div>`;
+                } else if (isUnfavourable) {
+                    statusBadge = `<span class="status-badge status-requires-review">⚠️ Requires Manual Review</span>`;
+                } else {
+                    statusBadge = `<span class="status-badge status-ready">Ready for Review</span>`;
                 }
 
                 return `
                     <div class="application-card">
-                        ${warningBadge}
                         <div class="application-info">
                             <div class="application-company">${app.applicant.companyName}</div>
                             <div class="application-details">
@@ -820,7 +825,7 @@
                             </div>
                             <div>
                                 ${statusBadge}
-                                <span style="font-size: 11px; color: #999;">References: ${responded}/2</span>
+                                <span style="font-size: 11px; color: #999;">References: ${responded}/${totalRefs}</span>
                             </div>
                         </div>
                         <div class="application-actions">
@@ -1081,7 +1086,7 @@
                 </div>
 
                 <div class="modal-section">
-                    <h3>Trade References (${responded}/2 responded)</h3>
+                    <h3>Trade References (${responded}/${app.references.length} responded)</h3>
                     ${referencesHtml}
                 </div>
 
@@ -1155,12 +1160,7 @@
         // Tab switching
         document.querySelectorAll('.tab-button').forEach(btn => {
             btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentTab = this.dataset.tab;
-                searchQuery = '';
-                document.getElementById('searchInput').value = '';
-                render();
+                switchTab(this.dataset.tab);
             });
         });
 
