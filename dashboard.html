@@ -635,17 +635,22 @@
         let reviewedApplications = new Set();
 
         // Check if reference response is unfavourable
-        function isUnfavourableResponse(response) {
-            // If they said no to continuing credit
-            if (response.q5_continue === 'no') {
-                return true;
-            }
-            // If payment is late AND days overdue > 5
-            if (response.q2_payment === 'late' && response.q3_daysOverdue > 5) {
-                return true;
-            }
-            return false;
-        }
+function isUnfavourableResponse(response) {
+    // Handle both old and new field names for backwards compatibility
+    const q5_continue = response.q5_continue || response.q6_continue;
+    const q2_payment = response.q2_payment || response.q3_payment;
+    const q3_daysOverdue = response.q3_daysOverdue || response.q4_daysOverdue;
+    
+    // If they said no to continuing credit
+    if (q5_continue === 'no') {
+        return true;
+    }
+    // If payment is late AND days overdue > 5
+    if (q2_payment === 'late' && q3_daysOverdue > 5) {
+        return true;
+    }
+    return false;
+}
 
         // Check if application has unfavourable references
         function hasUnfavourableReferences(app) {
