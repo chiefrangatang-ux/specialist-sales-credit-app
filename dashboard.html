@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Dashboard - Specialist Sales Credit Applications</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/build/index.min.js"></script>
+    <title>Team Dashboard - Specialist Sales</title>
     <style>
         * {
             margin: 0;
@@ -16,6 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #f5f5f5 0%, #eef2f5 100%);
             color: #333;
+            min-height: 100vh;
         }
 
         .container {
@@ -61,48 +61,70 @@
             margin-top: 5px;
         }
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        .dashboard-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #eee;
             margin-bottom: 30px;
         }
 
-        .dashboard-card {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-            border-top: 4px solid #1b75bc;
-        }
-
-        .dashboard-card h3 {
-            color: #1b75bc;
-            margin-bottom: 10px;
-            font-size: 14px;
+        .tab-button {
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 15px;
             font-weight: 600;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+            bottom: -2px;
+        }
+
+        .tab-button:hover {
+            color: #1b75bc;
+        }
+
+        .tab-button.active {
+            color: #1b75bc;
+            border-bottom-color: #1b75bc;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #f8fafb;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            border-left: 4px solid #00aba9;
+        }
+
+        .stat-card h3 {
+            font-size: 28px;
+            color: #1b75bc;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 12px;
+            color: #666;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .dashboard-card .stat {
-            font-size: 36px;
-            font-weight: bold;
-            color: #1b75bc;
-        }
-
-        .form-section {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-        }
-
-        .form-section h2 {
-            color: #1b75bc;
-            margin-bottom: 20px;
-            font-size: 20px;
+            font-weight: 600;
         }
 
         .search-box {
@@ -111,7 +133,7 @@
 
         .search-box input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: 1.5px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
@@ -124,113 +146,178 @@
             box-shadow: 0 0 0 3px rgba(27, 117, 188, 0.1);
         }
 
-        .app-list {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        .applications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        .app-list-item {
+        .application-card {
+            background: #f8fafb;
             padding: 20px;
-            border-bottom: 1px solid #eee;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            align-items: center;
-            gap: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #00aba9;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            transition: all 0.3s;
         }
 
-        .app-list-item:last-child {
-            border-bottom: none;
+        .application-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .app-list-item-content h3 {
+        .application-info {
+            flex: 1;
+        }
+
+        .application-company {
+            font-size: 16px;
+            font-weight: 600;
             color: #1b75bc;
             margin-bottom: 5px;
-            font-size: 15px;
-            font-weight: 600;
         }
 
-        .app-list-item-content p {
+        .application-details {
             font-size: 13px;
             color: #666;
-            margin: 3px 0;
+            margin-bottom: 8px;
+            line-height: 1.5;
         }
 
-        .app-status {
+        .status-badge {
             display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
             font-weight: 600;
+            text-transform: uppercase;
+            margin-right: 8px;
         }
 
-        .status-submitted {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-
-        .status-pending {
+        .status-awaiting {
             background: #fff3cd;
             color: #856404;
         }
 
         .status-ready {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-approved {
             background: #d4edda;
             color: #155724;
         }
 
-        .status-review {
-            background: #f8d7da;
-            color: #721c24;
+        .application-actions {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
         }
 
-        button.btn-secondary {
+        button.btn-small {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-view {
             background: #1b75bc;
             color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-weight: 500;
         }
 
-        button.btn-secondary:hover {
+        .btn-view:hover {
             background: #1565a0;
         }
 
-        button.btn-danger {
-            background: #dc3545;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-weight: 500;
-        }
-
-        button.btn-danger:hover {
-            background: #c82333;
-        }
-
-        button.btn-success {
+        .btn-approve {
             background: #28a745;
             color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-weight: 500;
         }
 
-        button.btn-success:hover {
+        .btn-approve:hover:not(:disabled) {
             background: #218838;
+        }
+
+        .btn-approve:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .menu-button:hover {
+            color: #1b75bc;
+        }
+
+        .context-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            min-width: 150px;
+            top: 100%;
+            right: 0;
+        }
+
+        .context-menu.show {
+            display: block;
+        }
+
+        .context-menu button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .context-menu button:first-child {
+            border-radius: 4px 4px 0 0;
+        }
+
+        .context-menu button:last-child {
+            border-radius: 0 0 4px 4px;
+        }
+
+        .context-menu button:hover {
+            background: #f0f0f0;
+        }
+
+        .context-menu button.danger {
+            color: #dc3545;
+        }
+
+        .context-menu button.danger:hover {
+            background: #ffe6e6;
         }
 
         .modal {
@@ -238,126 +325,149 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            z-index: 2000;
             align-items: center;
             justify-content: center;
         }
 
-        .modal.active {
+        .modal.show {
             display: flex;
         }
 
         .modal-content {
             background: white;
-            padding: 35px;
             border-radius: 8px;
-            max-width: 700px;
-            max-height: 85vh;
+            padding: 30px;
+            max-width: 800px;
+            max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .modal-close {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            color: #1b75bc;
+            font-size: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
             cursor: pointer;
             color: #999;
-            margin-bottom: 20px;
         }
 
-        .modal-close:hover {
+        .close-btn:hover {
             color: #333;
         }
 
-        .modal h2 {
-            color: #1b75bc;
-            margin-bottom: 20px;
-            clear: both;
+        .modal-section {
+            margin-bottom: 25px;
         }
 
-        .modal h3 {
+        .modal-section h3 {
             color: #1b75bc;
-            margin-top: 25px;
-            margin-bottom: 12px;
-            font-size: 15px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
-        }
-
-        .modal p {
-            margin: 8px 0;
             font-size: 14px;
-            line-height: 1.6;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
 
-        .reference-item {
-            background: #f8fafb;
-            padding: 15px;
-            margin: 10px 0;
-            border-left: 4px solid #ddd;
-            border-radius: 4px;
+        .modal-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .modal-item {
             font-size: 13px;
         }
 
-        .reference-item.responded {
-            border-left-color: #28a745;
-            background: #f0fdf4;
+        .modal-item label {
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 3px;
         }
 
-        .reference-item.pending {
-            border-left-color: #ffc107;
-            background: #fffbf0;
+        .modal-item p {
+            color: #333;
         }
 
-        .reference-item strong {
-            color: #1b75bc;
-        }
-
-        .admin-section {
+        .reference-status {
             background: #f8fafb;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        .admin-section h3 {
-            color: #1b75bc;
-            margin-bottom: 15px;
-            font-size: 15px;
-        }
-
-        .admin-buttons {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .admin-buttons button {
-            flex: 0 1 auto;
+        .reference-company {
+            font-weight: 600;
+            color: #1b75bc;
+            margin-bottom: 3px;
+        }
+
+        .reference-contact {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .signature-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state h3 {
+            color: #1b75bc;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 768px) {
-            header {
+            .modal-row {
+                grid-template-columns: 1fr;
+            }
+
+            .application-card {
                 flex-direction: column;
-                text-align: center;
-                gap: 15px;
             }
 
-            .dashboard-grid {
-                grid-template-columns: 1fr;
+            .application-actions {
+                width: 100%;
             }
 
-            .app-list-item {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-content {
-                margin: 20px;
-                max-height: 90vh;
+            .tabs {
+                flex-wrap: wrap;
             }
         }
     </style>
@@ -368,289 +478,381 @@
             <div class="logo-placeholder">SS</div>
             <div>
                 <h1>Specialist Sales</h1>
-                <p>Credit Applications Team Dashboard</p>
+                <p>Credit Application Team Dashboard</p>
             </div>
         </header>
 
-        <div class="dashboard-grid">
-            <div class="dashboard-card">
-                <h3>Total Applications</h3>
-                <div class="stat" id="stat-total">0</div>
+        <div class="dashboard-section">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="open">📋 Open Applications</button>
+                <button class="tab-button" data-tab="approved">✅ Approved Applications</button>
+                <button class="tab-button" data-tab="deleted">🗑️ Deleted Applications</button>
             </div>
-            <div class="dashboard-card">
-                <h3>Awaiting References</h3>
-                <div class="stat" id="stat-pending">0</div>
-            </div>
-            <div class="dashboard-card">
-                <h3>Ready for Review</h3>
-                <div class="stat" id="stat-ready">0</div>
-            </div>
-            <div class="dashboard-card">
-                <h3>Manual Review Needed</h3>
-                <div class="stat" id="stat-review">0</div>
-            </div>
-        </div>
 
-        <div class="form-section">
-            <h2>Applications</h2>
+            <div id="stats" class="stats-grid"></div>
+
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by company name or ABN...">
+                <input type="text" id="searchInput" placeholder="Search applications by company name...">
             </div>
-            <div id="applicationsList" class="app-list">
-                <!-- Applications will be listed here -->
-            </div>
-        </div>
 
-        <div class="form-section admin-section">
-            <h3>Admin Controls</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Export your data to CSV for use in spreadsheets and other applications.</p>
-            <div class="admin-buttons">
-                <button onclick="exportDataCSV()" class="btn-success">📥 Export to CSV</button>
-                <button onclick="clearAllData()" class="btn-danger" style="flex: 0;">🗑️ Clear All Data</button>
+            <div id="applicationsContainer" class="applications-list"></div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <h3>No applications found</h3>
+                <p>There are no applications in this category yet.</p>
             </div>
         </div>
     </div>
 
-    <div id="applicationModal" class="modal">
+    <!-- Details Modal -->
+    <div id="detailsModal" class="modal">
         <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2>Application Details</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
             <div id="modalBody"></div>
         </div>
     </div>
 
     <script>
-        function updateDashboard() {
-            const apps = getAllApplications();
-            let totalApps = apps.length;
-            let pendingApps = 0;
-            let readyApps = 0;
-            let reviewApps = 0;
+        let applications = [];
+        let currentTab = 'open';
+        let searchQuery = '';
+        let reviewedApplications = new Set();
 
-            apps.forEach(app => {
-                const status = calculateApplicationStatus(app);
-                if (status === 'pending') pendingApps++;
-                if (status === 'ready') readyApps++;
-                if (status === 'review') reviewApps++;
+        // Load reviewed applications from localStorage
+        function loadReviewedApplications() {
+            const reviewed = localStorage.getItem('reviewedApplications');
+            reviewedApplications = new Set(JSON.parse(reviewed || '[]'));
+        }
+
+        // Save reviewed applications to localStorage
+        function saveReviewedApplications() {
+            localStorage.setItem('reviewedApplications', JSON.stringify(Array.from(reviewedApplications)));
+        }
+
+        // Load applications
+        function loadApplications() {
+            applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            loadReviewedApplications();
+            render();
+        }
+
+        // Get filtered applications
+        function getFilteredApplications() {
+            let filtered = applications.filter(app => {
+                const status = app.status || 'open';
+                return status === currentTab;
             });
 
-            document.getElementById('stat-total').textContent = totalApps;
-            document.getElementById('stat-pending').textContent = pendingApps;
-            document.getElementById('stat-ready').textContent = readyApps;
-            document.getElementById('stat-review').textContent = reviewApps;
+            if (searchQuery) {
+                filtered = filtered.filter(app => 
+                    app.applicant.companyName.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }
 
-            const listContainer = document.getElementById('applicationsList');
-            if (apps.length === 0) {
-                listContainer.innerHTML = '<div style="padding: 40px; text-align: center; color: #999;">No applications yet</div>';
+            return filtered;
+        }
+
+        // Get statistics
+        function getStats() {
+            return {
+                open: applications.filter(app => (app.status || 'open') === 'open').length,
+                approved: applications.filter(app => app.status === 'approved').length,
+                deleted: applications.filter(app => app.status === 'deleted').length,
+                awaiting: applications.filter(app => {
+                    const responded = app.references.filter(r => r.responded).length;
+                    return responded < 2;
+                }).length,
+                ready: applications.filter(app => {
+                    const responded = app.references.filter(r => r.responded).length;
+                    return responded >= 2 && (app.status || 'open') === 'open';
+                }).length,
+            };
+        }
+
+        // Render dashboard
+        function render() {
+            renderStats();
+            renderApplications();
+        }
+
+        // Render statistics
+        function renderStats() {
+            const stats = getStats();
+            const statsHtml = `
+                <div class="stat-card">
+                    <h3>${stats.open}</h3>
+                    <p>Open</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${stats.approved}</h3>
+                    <p>Approved</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${stats.deleted}</h3>
+                    <p>Deleted</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${stats.awaiting}</h3>
+                    <p>Awaiting Refs</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${stats.ready}</h3>
+                    <p>Ready to Review</p>
+                </div>
+            `;
+            document.getElementById('stats').innerHTML = statsHtml;
+        }
+
+        // Render applications
+        function renderApplications() {
+            const filtered = getFilteredApplications();
+            const container = document.getElementById('applicationsContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
                 return;
             }
 
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = apps.filter(app => 
-                app.applicant.companyName.toLowerCase().includes(searchTerm) ||
-                app.applicant.abn.includes(searchTerm)
-            );
+            emptyState.style.display = 'none';
+            container.innerHTML = filtered.map(app => {
+                const responded = app.references.filter(r => r.responded).length;
+                const isReviewed = reviewedApplications.has(app.id);
+                const canApprove = responded >= 2 && isReviewed;
 
-            listContainer.innerHTML = filtered.map(app => {
-                const status = calculateApplicationStatus(app);
-                const statusLabel = {
-                    'submitted': 'Submitted',
-                    'pending': 'Awaiting References',
-                    'ready': 'Ready for Review',
-                    'review': 'Manual Review Needed'
-                }[status];
-
-                const statusClass = `status-${status}`;
-                const respondedCount = app.references.filter(r => r.responded).length;
-                const totalRefs = app.references.length;
+                let statusBadge = '';
+                if (responded < 2) {
+                    statusBadge = `<span class="status-badge status-awaiting">Awaiting ${2 - responded} Reference${2 - responded !== 1 ? 's' : ''}</span>`;
+                } else if (app.status !== 'approved') {
+                    statusBadge = `<span class="status-badge status-ready">Ready for Review</span>`;
+                } else {
+                    statusBadge = `<span class="status-badge status-approved">Approved</span>`;
+                }
 
                 return `
-                    <div class="app-list-item">
-                        <div class="app-list-item-content">
-                            <h3>${app.applicant.companyName}</h3>
-                            <p><strong>ABN:</strong> ${app.applicant.abn}</p>
-                            <p><strong>Applied:</strong> ${new Date(app.timestamp).toLocaleDateString()}</p>
-                            <p><strong>Credit Limit:</strong> $${app.financial.creditLimit.toLocaleString()}</p>
-                            <p style="color: #666; font-size: 12px;">References: ${respondedCount}/${totalRefs} responded</p>
+                    <div class="application-card">
+                        <div class="application-info">
+                            <div class="application-company">${app.applicant.companyName}</div>
+                            <div class="application-details">
+                                <strong>ABN:</strong> ${app.applicant.abn} | 
+                                <strong>Requested:</strong> $${app.financial.creditLimit.toLocaleString()} | 
+                                <strong>Owner:</strong> ${app.owner.name}
+                            </div>
+                            <div>
+                                ${statusBadge}
+                                <span style="font-size: 11px; color: #999;">References: ${responded}/2</span>
+                            </div>
                         </div>
-                        <div style="text-align: right;">
-                            <span class="app-status ${statusClass}">${statusLabel}</span>
-                            <button onclick="viewApplication('${app.id}')" class="btn-secondary" style="margin-top: 10px; width: 100%; padding: 8px;">View Details</button>
+                        <div class="application-actions">
+                            <button class="btn-small btn-view" onclick="viewDetails('${app.id}')">View Details</button>
+                            ${responded >= 2 ? `<button class="btn-small btn-approve" ${canApprove ? '' : 'disabled'} onclick="approveApplication('${app.id}')" title="${canApprove ? 'Approve this application' : 'Review application details first'}">Approve</button>` : ''}
+                            <div style="position: relative;">
+                                <button class="menu-button" onclick="toggleMenu(event, '${app.id}')">⋯</button>
+                                <div class="context-menu" id="menu-${app.id}">
+                                    <button class="danger" onclick="removeApplication('${app.id}')">Remove Application</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function calculateApplicationStatus(app) {
-            const allReferenced = app.references.length > 0 && app.references.every(r => r.responded);
-            
-            if (!allReferenced) {
-                return 'pending';
-            }
-
-            const allPositive = app.responses.every(r => {
-                return (r.q3_payment === 'early' || r.q3_payment === 'on-time') &&
-                       r.q5_creditHold === 'no' &&
-                       r.q6_continueCredit === 'yes' &&
-                       r.q7_disputes !== 'yes';
-            });
-
-            return allPositive ? 'ready' : 'review';
-        }
-
-        function viewApplication(appId) {
-            const app = getApplication(appId);
+        // View application details
+        function viewDetails(appId) {
+            const app = applications.find(a => a.id === appId);
             if (!app) return;
 
-            const status = calculateApplicationStatus(app);
-            const statusLabel = {
-                'submitted': 'Submitted',
-                'pending': 'Awaiting References',
-                'ready': 'Ready for Review',
-                'review': 'Manual Review Needed'
-            }[status];
+            // Mark as reviewed
+            reviewedApplications.add(appId);
+            saveReviewedApplications();
+            render();
 
-            let html = `
-                <h2>${app.applicant.companyName}</h2>
+            const responded = app.references.filter(r => r.responded).length;
+            
+            let referencesHtml = app.references.map(ref => {
+                const status = ref.responded ? '✅ Responded' : '⏳ Pending';
+                const responseData = ref.responded ? app.responses.find(r => r.referenceId === ref.id) : null;
                 
-                <div style="margin: 20px 0; padding: 15px; background: #f8fafb; border-radius: 5px;">
-                    <strong>Status: <span class="app-status status-${status}">${statusLabel}</span></strong>
+                let responseDetails = '';
+                if (responseData) {
+                    responseDetails = `
+                        <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                            <p><strong>Duration:</strong> ${responseData.response.q1_duration}</p>
+                            <p><strong>Recommended Limit:</strong> ${responseData.response.q2_creditLimit}</p>
+                            <p><strong>Payment:</strong> ${responseData.response.q3_payment}</p>
+                            <p><strong>Days Overdue:</strong> ${responseData.response.q4_daysOverdue}</p>
+                            <p><strong>Would Continue:</strong> ${responseData.response.q6_continue}</p>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="reference-status">
+                        <div>
+                            <div class="reference-company">${ref.company}</div>
+                            <div class="reference-contact">${ref.contact} | ${ref.email}</div>
+                            ${responseDetails}
+                        </div>
+                        <div style="text-align: right; font-size: 13px;">${status}</div>
+                    </div>
+                `;
+            }).join('');
+
+            const modalBody = `
+                <div class="modal-section">
+                    <h3>Applicant Information</h3>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Company Name</label>
+                            <p>${app.applicant.companyName}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>ABN</label>
+                            <p>${app.applicant.abn}</p>
+                        </div>
+                    </div>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Business Type</label>
+                            <p>${app.applicant.businessType}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>Years in Business</label>
+                            <p>${app.financial.yearsInBusiness}</p>
+                        </div>
+                    </div>
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Address</label>
+                            <p>${app.applicant.businessAddress}, ${app.applicant.suburb} ${app.applicant.state} ${app.applicant.postcode}</p>
+                        </div>
+                    </div>
                 </div>
 
-                <h3>Applicant Details</h3>
-                <p><strong>Company:</strong> ${app.applicant.companyName}</p>
-                <p><strong>ABN:</strong> ${app.applicant.abn}</p>
-                <p><strong>Type:</strong> ${app.applicant.businessType}</p>
-                <p><strong>Address:</strong> ${app.applicant.businessAddress}, ${app.applicant.suburb} ${app.applicant.state} ${app.applicant.postcode}</p>
-                <p><strong>Phone:</strong> ${app.applicant.phone}</p>
-                <p><strong>Email:</strong> ${app.applicant.email}</p>
-
-                <h3>Principal/Owner</h3>
-                <p><strong>Name:</strong> ${app.owner.name}</p>
-                <p><strong>Title:</strong> ${app.owner.title}</p>
-                <p><strong>Phone:</strong> ${app.owner.phone}</p>
-                <p><strong>Email:</strong> ${app.owner.email}</p>
-
-                <h3>Financial Information</h3>
-                <p><strong>Credit Limit Requested:</strong> $${app.financial.creditLimit.toLocaleString()}</p>
-                <p><strong>Years in Business:</strong> ${app.financial.yearsInBusiness}</p>
-                ${app.financial.bankDetails ? `<p><strong>Bank Details:</strong> ${app.financial.bankDetails}</p>` : ''}
-
-                <h3>Trade References</h3>
-                ${app.references.map((ref, idx) => `
-                    <div class="reference-item ${ref.responded ? 'responded' : 'pending'}">
-                        <p><strong>${idx + 1}. ${ref.company}</strong></p>
-                        <p><strong>Contact:</strong> ${ref.contact} (${ref.email}, ${ref.phone})</p>
-                        <p><strong>Status:</strong> ${ref.responded ? '✅ Responded' : '⏳ Pending'}</p>
-                        ${ref.responded ? `<p><strong>Response Date:</strong> ${new Date(ref.responseDate).toLocaleString()}</p>` : ''}
+                <div class="modal-section">
+                    <h3>Principal/Owner</h3>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Name</label>
+                            <p>${app.owner.name}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>Position</label>
+                            <p>${app.owner.title}</p>
+                        </div>
                     </div>
-                `).join('')}
-
-                <h3>Reference Responses</h3>
-                ${app.responses.length > 0 ? app.responses.map((resp, idx) => `
-                    <div style="background: #f8fafb; padding: 15px; margin: 10px 0; border-radius: 5px;">
-                        <p><strong>Reference ${idx + 1}: ${resp.refCompanyName}</strong></p>
-                        <p><strong>Contact:</strong> ${resp.refContactName} (${resp.refContactEmail})</p>
-                        <p><strong>Relationship:</strong> ${resp.q1_duration}</p>
-                        <p><strong>Credit Limit Extended:</strong> $${resp.q2_creditLimit}</p>
-                        <p><strong>Payment Behaviour:</strong> <span style="color: ${['early', 'on-time'].includes(resp.q3_payment) ? '#28a745' : '#dc3545'}; font-weight: bold;">${resp.q3_payment}</span></p>
-                        ${resp.q4_daysOverdue ? `<p><strong>Days Overdue (avg):</strong> ${resp.q4_daysOverdue}</p>` : ''}
-                        <p><strong>Credit Hold:</strong> ${resp.q5_creditHold === 'yes' ? '❌ Yes' : '✅ No'}</p>
-                        <p><strong>Continue Credit:</strong> ${resp.q6_continueCredit}</p>
-                        ${resp.q8_comments ? `<p><strong>Comments:</strong> ${resp.q8_comments}</p>` : ''}
-                        <p style="font-size: 12px; color: #999; margin-top: 10px;"><strong>Response Date:</strong> ${new Date(resp.timestamp).toLocaleString()}</p>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Email</label>
+                            <p>${app.owner.email}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>Phone</label>
+                            <p>${app.owner.phone}</p>
+                        </div>
                     </div>
-                `).join('') : '<p style="color: #999;">No responses yet</p>'}
+                </div>
 
-                <h3>Applicant Signature</h3>
-                <img src="${app.signature}" style="border: 1px solid #ddd; border-radius: 4px; max-width: 100%; height: auto;">
+                <div class="modal-section">
+                    <h3>Financial</h3>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Credit Limit Requested</label>
+                            <p>$${app.financial.creditLimit.toLocaleString()}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>Bank Details</label>
+                            <p>${app.financial.bankDetails || 'Not provided'}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Trade References (${responded}/2 responded)</h3>
+                    ${referencesHtml}
+                </div>
+
+                <div class="modal-section">
+                    <h3>Signature</h3>
+                    <img src="${app.signature}" class="signature-image" alt="Signature">
+                </div>
             `;
 
-            document.getElementById('modalBody').innerHTML = html;
-            document.getElementById('applicationModal').classList.add('active');
+            document.getElementById('modalBody').innerHTML = modalBody;
+            document.getElementById('detailsModal').classList.add('show');
         }
 
-        function closeModal() {
-            document.getElementById('applicationModal').classList.remove('active');
+        // Approve application
+        function approveApplication(appId) {
+            const app = applications.find(a => a.id === appId);
+            if (!app) return;
+
+            app.status = 'approved';
+            localStorage.setItem('applications', JSON.stringify(applications));
+            render();
+            document.getElementById('detailsModal').classList.remove('show');
         }
 
-        function getAllApplications() {
-            return JSON.parse(localStorage.getItem('applications') || '[]');
-        }
-
-        function getApplication(id) {
-            return getAllApplications().find(app => app.id === id);
-        }
-
-        function exportDataCSV() {
-            const apps = getAllApplications();
-            
-            const headers = [
-                'Application ID',
-                'Company Name',
-                'ABN',
-                'Business Type',
-                'Contact Email',
-                'Contact Phone',
-                'Owner Name',
-                'Credit Limit Requested',
-                'Years in Business',
-                'Applied Date',
-                'Status',
-                'References Responded',
-                'Total References'
-            ];
-            
-            const rows = apps.map(app => {
-                const status = calculateApplicationStatus(app);
-                const respondedCount = app.references.filter(r => r.responded).length;
-                const totalRefs = app.references.length;
-                
-                return [
-                    app.id,
-                    app.applicant.companyName,
-                    app.applicant.abn,
-                    app.applicant.businessType,
-                    app.applicant.email,
-                    app.applicant.phone,
-                    app.owner.name,
-                    app.financial.creditLimit,
-                    app.financial.yearsInBusiness,
-                    new Date(app.timestamp).toLocaleString(),
-                    status,
-                    `${respondedCount}/${totalRefs}`,
-                    totalRefs
-                ];
-            });
-            
-            const csvContent = [
-                headers.join(','),
-                ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-            ].join('\n');
-            
-            const csvBlob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
-            const url = URL.createObjectURL(csvBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `credit-applications-${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-        }
-
-        function clearAllData() {
-            if (confirm('⚠️ Are you sure? This will delete ALL applications and cannot be undone.')) {
-                if (confirm('Really delete everything?')) {
-                    localStorage.removeItem('applications');
-                    alert('✅ All data cleared');
-                    location.reload();
+        // Remove application
+        function removeApplication(appId) {
+            if (confirm('Are you sure you want to remove this application?')) {
+                const app = applications.find(a => a.id === appId);
+                if (app) {
+                    app.status = 'deleted';
+                    localStorage.setItem('applications', JSON.stringify(applications));
+                    render();
+                    closeMenu();
                 }
             }
         }
 
-        document.getElementById('searchInput').addEventListener('input', updateDashboard);
+        // Toggle context menu
+        function toggleMenu(event, appId) {
+            event.stopPropagation();
+            const menu = document.getElementById(`menu-${appId}`);
+            menu.classList.toggle('show');
+        }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            updateDashboard();
+        // Close menu
+        function closeMenu() {
+            document.querySelectorAll('.context-menu').forEach(m => m.classList.remove('show'));
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTab = this.dataset.tab;
+                searchQuery = '';
+                document.getElementById('searchInput').value = '';
+                render();
+            });
         });
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            searchQuery = this.value;
+            render();
+        });
+
+        // Modal close
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('detailsModal').classList.remove('show');
+        });
+
+        // Close menu on outside click
+        document.addEventListener('click', function() {
+            closeMenu();
+        });
+
+        // Initial load
+        loadApplications();
     </script>
 </body>
 </html>
