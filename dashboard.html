@@ -164,10 +164,20 @@
             align-items: flex-start;
             gap: 15px;
             transition: all 0.3s;
+            position: relative;
         }
 
         .application-card:hover {
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .warning-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: help;
+            title: "Unfavourable reference response";
         }
 
         .application-info {
@@ -252,6 +262,15 @@
             background: #ccc;
             cursor: not-allowed;
             opacity: 0.6;
+        }
+
+        .btn-remove-approval {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-remove-approval:hover {
+            background: #e0a800;
         }
 
         .menu-button {
@@ -494,7 +513,13 @@
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            border-left: 4px solid #00aba9;
+        }
+
+        .reference-status.unfavourable {
+            border-left-color: #dc3545;
+            background: #ffe6e6;
         }
 
         .reference-company {
@@ -609,6 +634,24 @@
         let searchQuery = '';
         let reviewedApplications = new Set();
 
+        // Check if reference response is unfavourable
+        function isUnfavourableResponse(response) {
+            // If they said no to continuing credit
+            if (response.q5_continue === 'no') {
+                return true;
+            }
+            // If payment is late AND days overdue > 5
+            if (response.q2_payment === 'late' && response.q3_daysOverdue > 5) {
+                return true;
+            }
+            return false;
+        }
+
+        // Check if application has unfavourable references
+        function hasUnfavourableReferences(app) {
+            return app.responses.some(resp => isUnfavourableResponse(resp.response));
+        }
+
         // Load reviewed applications from localStorage
         function loadReviewedApplications() {
             const reviewed = localStorage.getItem('reviewedApplications');
@@ -719,6 +762,7 @@
                 const responded = app.references.filter(r => r.responded).length;
                 const isReviewed = reviewedApplications.has(app.id);
                 const canApprove = responded >= 2 && isReviewed;
+                const isUnfavourable = hasUnfavourableReferences(app);
 
                 let statusBadge = '';
                 if (responded < 2) {
@@ -729,8 +773,14 @@
                     statusBadge = `<span class="status-badge status-approved">Approved</span>`;
                 }
 
+                let warningBadge = '';
+                if (isUnfavourable) {
+                    warningBadge = `<div class="warning-badge" title="Unfavourable reference response detected">⚠️</div>`;
+                }
+
                 return `
                     <div class="application-card">
+                        ${warningBadge}
                         <div class="application-info">
                             <div class="application-company">${app.applicant.companyName}</div>
                             <div class="application-details">
@@ -745,7 +795,8 @@
                         </div>
                         <div class="application-actions">
                             <button class="btn-small btn-view" onclick="viewDetails('${app.id}')">View Details</button>
-                            ${responded >= 2 ? `<button class="btn-small btn-approve" ${canApprove ? '' : 'disabled'} onclick="approveApplication('${app.id}')">Approve</button>` : ''}
+                            ${responded >= 2 && app.status !== 'approved' ? `<button class="btn-small btn-approve" ${canApprove ? '' : 'disabled'} onclick="approveApplication('${app.id}')">Approve</button>` : ''}
+                            ${app.status === 'approved' ? `<button class="btn-small btn-remove-approval" onclick="removeApproval('${app.id}')">Remove Approval</button>` : ''}
                             <div style="position: relative;">
                                 <button class="menu-button" onclick="toggleMenu(event, '${app.id}')">⋯</button>
                                 <div class="context-menu" id="menu-${app.id}">
@@ -813,7 +864,7 @@
                     app.financial.creditLimit,
                     app.financial.yearsInBusiness,
                     app.status || 'open',
-                    `"${ref1.company || ''}"`,
+                    `"${ref1.company || ''}\"`,
                     `"${ref1.contact || ''}"`,
                     ref1.email || '',
                     ref1.responded ? 'Yes' : 'No',
@@ -891,20 +942,23 @@
                 const status = ref.responded ? '✅ Responded' : '⏳ Pending';
                 const responseData = ref.responded ? app.responses.find(r => r.referenceId === ref.id) : null;
                 
+                let isUnfav = false;
                 let responseDetails = '';
                 if (responseData) {
+                    isUnfav = isUnfavourableResponse(responseData.response);
                     responseDetails = `
                         <div style="margin-top: 10px; font-size: 12px; color: #666;">
                             <p><strong>Duration:</strong> ${responseData.response.q1_duration}</p>
-                            <p><strong>Payment:</strong> ${responseData.response.q3_payment}</p>
-                            <p><strong>Days Overdue:</strong> ${responseData.response.q4_daysOverdue}</p>
-                            <p><strong>Would Continue:</strong> ${responseData.response.q6_continue}</p>
+                            <p><strong>Payment:</strong> ${responseData.response.q2_payment}</p>
+                            <p><strong>Days Overdue:</strong> ${responseData.response.q3_daysOverdue}</p>
+                            <p><strong>Would Continue:</strong> ${responseData.response.q5_continue}</p>
                         </div>
                     `;
                 }
 
+                const refClass = isUnfav ? 'unfavourable' : '';
                 return `
-                    <div class="reference-status">
+                    <div class="reference-status ${refClass}">
                         <div>
                             <div class="reference-company">${ref.company}</div>
                             <div class="reference-contact">${ref.contact} | ${ref.email}</div>
@@ -1008,6 +1062,19 @@
             localStorage.setItem('applications', JSON.stringify(applications));
             render();
             document.getElementById('detailsModal').classList.remove('show');
+        }
+
+        // Remove approval
+        function removeApproval(appId) {
+            if (confirm('Remove approval from this application and move back to open?')) {
+                const app = applications.find(a => a.id === appId);
+                if (app) {
+                    app.status = 'open';
+                    localStorage.setItem('applications', JSON.stringify(applications));
+                    render();
+                    closeMenu();
+                }
+            }
         }
 
         // Remove application
