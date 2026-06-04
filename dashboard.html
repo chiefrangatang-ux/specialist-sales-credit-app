@@ -755,8 +755,10 @@
                     return responded < 2;
                 }).length,
                 ready: applications.filter(app => {
+                    if ((app.status || 'open') !== 'open') return false;
                     const responded = app.references.filter(r => r.responded).length;
-                    return responded >= 2 && (app.status || 'open') === 'open';
+                    if (responded < 2) return false;
+                    return !hasUnfavourableReferences(app);
                 }).length,
             };
         }
