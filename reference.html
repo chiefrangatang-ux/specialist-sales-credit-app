@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade Reference Assessment - Specialist Sales</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/build/index.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -20,7 +19,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -65,6 +64,7 @@
         .form-section {
             background: white;
             padding: 35px;
+            margin-bottom: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
         }
@@ -75,17 +75,39 @@
             font-size: 20px;
         }
 
-        .form-section > p:first-of-type {
-            color: #666;
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #1b75bc;
+            padding: 15px;
             margin-bottom: 25px;
-            font-size: 14px;
-            line-height: 1.6;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            color: #1b75bc;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .info-box .company-name {
+            font-size: 18px;
+            color: #1b75bc;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            margin-bottom: 20px;
         }
 
         label {
@@ -99,6 +121,7 @@
         input[type="email"],
         input[type="tel"],
         input[type="number"],
+        select,
         textarea {
             padding: 11px 12px;
             border: 1.5px solid #ddd;
@@ -109,6 +132,7 @@
         }
 
         input:focus,
+        select:focus,
         textarea:focus {
             outline: none;
             border-color: #00aba9;
@@ -120,71 +144,49 @@
             min-height: 80px;
         }
 
-        hr {
-            margin: 30px 0;
-            border: none;
-            border-top: 1px solid #eee;
-        }
-
-        .question-section {
-            margin-bottom: 28px;
-        }
-
-        .question-label {
+        h3 {
             color: #1b75bc;
-            font-size: 15px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #eef2f5;
+            padding-bottom: 10px;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 12px;
+        }
+
+        .question-group {
+            background: #f8fafb;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #00aba9;
+            border-radius: 5px;
+        }
+
+        .question-group label {
             display: block;
+            margin-bottom: 12px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .radio-group {
             display: flex;
             gap: 20px;
-            flex-wrap: wrap;
+            margin-bottom: 15px;
         }
 
         .radio-group label {
-            margin: 0;
             display: flex;
             align-items: center;
             gap: 8px;
+            margin: 0;
             font-weight: normal;
-            font-size: 14px;
-            color: #333;
             cursor: pointer;
         }
 
-        .radio-group input[type="radio"] {
-            margin: 0;
+        input[type="radio"] {
             cursor: pointer;
-        }
-
-        .dollar-input-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dollar-input-group span {
-            font-size: 16px;
-            font-weight: bold;
-            color: #1b75bc;
-        }
-
-        .dollar-input-group input {
-            flex: 1;
-        }
-
-        .error-text {
-            color: #dc3545;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .error-text.show {
-            display: block;
         }
 
         button.btn-primary {
@@ -199,7 +201,6 @@
             transition: all 0.3s;
             width: 100%;
             box-shadow: 0 2px 8px rgba(0, 171, 169, 0.2);
-            margin-top: 20px;
         }
 
         button.btn-primary:hover {
@@ -208,20 +209,75 @@
             transform: translateY(-2px);
         }
 
+        button.btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
             display: none;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 20px;
         }
 
         .success-message.show {
             display: block;
         }
 
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-spinner.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1b75bc;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            display: none;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
         @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
             header {
                 flex-direction: column;
                 text-align: center;
@@ -230,11 +286,6 @@
 
             .form-section {
                 padding: 25px;
-            }
-
-            .radio-group {
-                flex-direction: column;
-                gap: 12px;
             }
         }
     </style>
@@ -251,214 +302,200 @@
 
         <div class="form-section">
             <h2>Trade Reference Assessment</h2>
-            <p>Thank you for taking the time to complete this reference assessment. Your honest feedback helps us make informed credit decisions. This should take only 2-3 minutes to complete.</p>
-
-            <div style="background: #e8f4f8; padding: 15px; border-left: 4px solid #1b75bc; border-radius: 5px; margin-bottom: 20px; display: none;" id="applicantContext">
-                <p style="font-size: 13px; color: #1b75bc; margin: 0;"><strong>Applicant Company:</strong> <span id="applicantCompanyDisplay"></span></p>
+            
+            <div class="info-box">
+                <p>We're assessing the following applicant:</p>
+                <div class="company-name" id="applicantCompany"></div>
             </div>
 
-            <div class="success-message" id="successMessage">
-                ✅ Thank you! Your reference assessment has been submitted successfully.
-            </div>
+            <div class="error-message" id="errorMessage"></div>
 
-            <form id="referenceResponseForm">
-                <input type="hidden" id="refAppId" name="appId">
-
-                <div class="form-group">
-                    <label>Your Company Name *</label>
-                    <input type="text" id="refCompanyName" name="refCompanyName" required>
+            <form id="referenceForm">
+                <h3>Your Company Details</h3>
+                
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label>Your Company Name *</label>
+                        <input type="text" name="yourCompany" id="yourCompany" readonly required>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Your Name *</label>
-                    <input type="text" id="refContactName" name="refContactName" required>
+                <h3>Assessment Questions</h3>
+
+                <div class="question-group">
+                    <label>1. How long have you been trading with this company? *</label>
+                    <select name="q1_duration" required>
+                        <option value="">Select...</option>
+                        <option value="less-than-6-months">Less than 6 months</option>
+                        <option value="6-12-months">6-12 months</option>
+                        <option value="1-2-years">1-2 years</option>
+                        <option value="2-5-years">2-5 years</option>
+                        <option value="more-than-5-years">More than 5 years</option>
+                    </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Your Email *</label>
-                    <input type="email" id="refContactEmail" name="refContactEmail" required>
+                <div class="question-group">
+                    <label>2. What credit limit would you recommend? *</label>
+                    <input type="text" name="q2_creditLimit" placeholder="e.g., $5,000" required>
                 </div>
 
-                <div class="form-group">
-                    <label>Your Phone *</label>
-                    <input type="tel" id="refContactPhone" name="refContactPhone" required>
-                    <div class="error-text" id="refphone-error">Phone number must be 10 digits</div>
-                </div>
-
-                <hr>
-
-                <div class="question-section">
-                    <label class="question-label">How long have you been supplying the applicant? *</label>
+                <div class="question-group">
+                    <label>3. How would you describe their payment behaviour? *</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="q1_duration" value="less-6-months" required> Less than 6 months</label>
-                        <label><input type="radio" name="q1_duration" value="6-12-months" required> 6-12 months</label>
-                        <label><input type="radio" name="q1_duration" value="1-2-years" required> 1-2 years</label>
-                        <label><input type="radio" name="q1_duration" value="2-plus-years" required> 2+ years</label>
+                        <label><input type="radio" name="q3_payment" value="early" required> Early</label>
+                        <label><input type="radio" name="q3_payment" value="on-time" required> On time</label>
+                        <label><input type="radio" name="q3_payment" value="late" required> Late</label>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>What is the credit limit you have extended to them? *</label>
-                    <div class="dollar-input-group">
-                        <span>$</span>
-                        <input type="text" id="q2_creditLimit" name="q2_creditLimit" required>
-                    </div>
+                <div class="question-group">
+                    <label>4. If late, how many days typically? *</label>
+                    <input type="number" name="q4_daysOverdue" placeholder="0" min="0" required>
                 </div>
 
-                <div class="question-section">
-                    <label class="question-label">What is their typical payment behaviour? *</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="q3_payment" value="early" required> Pay early</label>
-                        <label><input type="radio" name="q3_payment" value="on-time" required> Pay on time</label>
-                        <label><input type="radio" name="q3_payment" value="sometimes-late" required> Sometimes late</label>
-                        <label><input type="radio" name="q3_payment" value="frequently-late" required> Frequently late</label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>If late, what is the average number of days overdue?</label>
-                    <input type="number" id="q4_daysOverdue" name="q4_daysOverdue" min="0">
-                </div>
-
-                <div class="question-section">
-                    <label class="question-label">Have they ever been placed on credit hold? *</label>
+                <div class="question-group">
+                    <label>5. Have you ever placed them on credit hold? *</label>
                     <div class="radio-group">
                         <label><input type="radio" name="q5_creditHold" value="yes" required> Yes</label>
                         <label><input type="radio" name="q5_creditHold" value="no" required> No</label>
                     </div>
                 </div>
 
-                <div class="question-section">
-                    <label class="question-label">Would you continue to extend credit to this company? *</label>
+                <div class="question-group">
+                    <label>6. Would you continue to trade with them on credit terms? *</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="q6_continueCredit" value="yes" required> Yes</label>
-                        <label><input type="radio" name="q6_continueCredit" value="conditional" required> Yes, conditionally</label>
-                        <label><input type="radio" name="q6_continueCredit" value="no" required> No</label>
+                        <label><input type="radio" name="q6_continue" value="yes" required> Yes</label>
+                        <label><input type="radio" name="q6_continue" value="no" required> No</label>
                     </div>
                 </div>
 
-                <div class="question-section">
-                    <label class="question-label">Have there been any disputes regarding invoices or quality?</label>
+                <div class="question-group">
+                    <label>7. Have there been any disputes or issues? *</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="q7_disputes" value="yes"> Yes</label>
-                        <label><input type="radio" name="q7_disputes" value="no"> No</label>
+                        <label><input type="radio" name="q7_disputes" value="yes" required> Yes</label>
+                        <label><input type="radio" name="q7_disputes" value="no" required> No</label>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Any other comments about their creditworthiness?</label>
-                    <textarea id="q8_comments" name="q8_comments" placeholder="Optional comments..."></textarea>
+                <div class="question-group">
+                    <label>8. Any additional comments?</label>
+                    <textarea name="q8_comments" placeholder="Optional - any additional information..."></textarea>
                 </div>
 
-                <button type="submit" class="btn-primary">Submit Reference Assessment</button>
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 10px; color: #666;">Submitting your assessment...</p>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">Submit Assessment</button>
+
+                <div class="success-message" id="successMessage">
+                    <h3>✅ Thank You!</h3>
+                    <p>Your trade reference assessment has been submitted successfully.</p>
+                    <p>Specialist Sales will use this information to assess the credit application.</p>
+                </div>
             </form>
         </div>
     </div>
 
     <script>
-        function validateAndFormatPhone(phone) {
-            let digits = phone.replace(/\D/g, '');
-            if (digits.startsWith('61')) {
-                digits = '0' + digits.substring(2);
-            }
-            return digits.length === 10 ? digits : null;
+        // Get URL parameters
+        function getUrlParameter(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
         }
 
-        document.getElementById('refContactPhone').addEventListener('blur', function() {
-            if (this.value) {
-                const formatted = validateAndFormatPhone(this.value);
-                const error = document.getElementById('refphone-error');
-                if (formatted) {
-                    error.classList.remove('show');
-                } else {
-                    error.classList.add('show');
-                }
-            }
-        });
+        const applicationId = getUrlParameter('app');
+        const referenceId = getUrlParameter('ref');
+        const refCompany = getUrlParameter('refCompany');
+        const applicantCompany = getUrlParameter('applicantCompany');
 
-        document.getElementById('referenceResponseForm').addEventListener('submit', function(e) {
+        // Validate we have required parameters
+        if (!applicationId || !referenceId) {
+            document.getElementById('errorMessage').textContent = 'Invalid reference link. Please check the URL and try again.';
+            document.getElementById('errorMessage').classList.add('show');
+            document.getElementById('referenceForm').style.display = 'none';
+        }
+
+        // Set company names
+        if (refCompany) {
+            document.getElementById('yourCompany').value = decodeURIComponent(refCompany);
+        }
+        if (applicantCompany) {
+            document.getElementById('applicantCompany').textContent = decodeURIComponent(applicantCompany);
+        }
+
+        // Form submission
+        document.getElementById('referenceForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const phone = document.getElementById('refContactPhone').value;
-            const formattedPhone = validateAndFormatPhone(phone);
-            if (!formattedPhone) {
-                alert('Phone number must be 10 digits');
+            // Show loading spinner
+            document.getElementById('loadingSpinner').classList.add('show');
+            document.getElementById('submitBtn').disabled = true;
+
+            const formData = new FormData(this);
+            
+            const response = {
+                q1_duration: formData.get('q1_duration'),
+                q2_creditLimit: formData.get('q2_creditLimit'),
+                q3_payment: formData.get('q3_payment'),
+                q4_daysOverdue: parseInt(formData.get('q4_daysOverdue')) || 0,
+                q5_creditHold: formData.get('q5_creditHold'),
+                q6_continue: formData.get('q6_continue'),
+                q7_disputes: formData.get('q7_disputes'),
+                q8_comments: formData.get('q8_comments'),
+            };
+
+            // Get application from localStorage
+            let applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            
+            // Find the application by ID
+            const appIndex = applications.findIndex(app => app.id === applicationId);
+            
+            if (appIndex === -1) {
+                document.getElementById('errorMessage').textContent = 'Application not found. Please try again.';
+                document.getElementById('errorMessage').classList.add('show');
+                document.getElementById('loadingSpinner').classList.remove('show');
+                document.getElementById('submitBtn').disabled = false;
                 return;
             }
 
-            const appId = document.getElementById('refAppId').value;
-            const responses = {
-                refCompanyName: document.getElementById('refCompanyName').value,
-                refContactName: document.getElementById('refContactName').value,
-                refContactEmail: document.getElementById('refContactEmail').value,
-                refContactPhone: formattedPhone,
-                q1_duration: document.querySelector('input[name="q1_duration"]:checked').value,
-                q2_creditLimit: document.getElementById('q2_creditLimit').value,
-                q3_payment: document.querySelector('input[name="q3_payment"]:checked').value,
-                q4_daysOverdue: document.getElementById('q4_daysOverdue').value || '0',
-                q5_creditHold: document.querySelector('input[name="q5_creditHold"]:checked').value,
-                q6_continueCredit: document.querySelector('input[name="q6_continueCredit"]:checked').value,
-                q7_disputes: document.querySelector('input[name="q7_disputes"]:checked')?.value || 'not-answered',
-                q8_comments: document.getElementById('q8_comments').value,
+            const application = applications[appIndex];
+
+            // Find the specific reference by ID and mark as responded
+            const refIndex = application.references.findIndex(ref => ref.id === referenceId);
+            
+            if (refIndex === -1) {
+                document.getElementById('errorMessage').textContent = 'Reference not found in application. Please try again.';
+                document.getElementById('errorMessage').classList.add('show');
+                document.getElementById('loadingSpinner').classList.remove('show');
+                document.getElementById('submitBtn').disabled = false;
+                return;
+            }
+
+            // Update the reference as responded
+            application.references[refIndex].responded = true;
+            application.references[refIndex].responseDate = new Date().toISOString();
+
+            // Add response to application
+            application.responses.push({
+                referenceId: referenceId,
+                referenceCompany: application.references[refIndex].company,
                 timestamp: new Date().toISOString(),
-            };
+                response: response
+            });
 
-            saveReferenceResponse(appId, responses);
-            
+            // Save back to localStorage
+            applications[appIndex] = application;
+            localStorage.setItem('applications', JSON.stringify(applications));
+
+            // Hide loading spinner
+            document.getElementById('loadingSpinner').classList.remove('show');
+            document.getElementById('submitBtn').disabled = false;
+
+            // Show success message
+            document.getElementById('referenceForm').style.display = 'none';
             document.getElementById('successMessage').classList.add('show');
-            this.reset();
-            
-            setTimeout(() => {
-                document.getElementById('successMessage').classList.remove('show');
-            }, 5000);
-        });
-
-        function saveReferenceResponse(appId, responses) {
-            let applications = JSON.parse(localStorage.getItem('applications') || '[]');
-            let app = applications.find(a => a.id === appId);
-            
-            if (app) {
-                app.responses.push(responses);
-
-                const matchingRef = app.references.find(r => 
-                    r.email === responses.refContactEmail
-                );
-                if (matchingRef) {
-                    matchingRef.responded = true;
-                    matchingRef.responseDate = new Date().toISOString();
-                }
-
-                localStorage.setItem('applications', JSON.stringify(applications));
-            }
-        }
-
-        // Get parameters from URL and pre-fill form
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            // Pre-fill with URL parameters
-            const appId = urlParams.get('app');
-            const refCompanyName = urlParams.get('refCompany');
-            const applicantCompanyName = urlParams.get('applicantCompany');
-            
-            if (appId) {
-                document.getElementById('refAppId').value = appId;
-            }
-            
-            if (refCompanyName) {
-                document.getElementById('refCompanyName').value = decodeURIComponent(refCompanyName);
-                document.getElementById('refCompanyName').disabled = true;
-                document.getElementById('refCompanyName').style.backgroundColor = '#f8fafb';
-                document.getElementById('refCompanyName').style.cursor = 'not-allowed';
-            }
-            
-            // Update context to show which applicant is being assessed
-            if (applicantCompanyName) {
-                const context = document.getElementById('applicantContext');
-                const display = document.getElementById('applicantCompanyDisplay');
-                display.textContent = decodeURIComponent(applicantCompanyName);
-                context.style.display = 'block';
-            }
         });
     </script>
 </body>
