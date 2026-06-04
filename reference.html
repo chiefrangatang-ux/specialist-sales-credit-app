@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade Reference Assessment - Specialist Sales</title>
+    <title>Trade Reference - Specialist Sales</title>
     <style>
         * {
             margin: 0;
@@ -15,11 +15,11 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #f5f5f5 0%, #eef2f5 100%);
             color: #333;
-            min-height: 100vh;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 700px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -31,99 +31,64 @@
             margin-bottom: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .logo-placeholder {
-            width: 60px;
-            height: 60px;
-            background: white;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #1b75bc;
-            font-size: 24px;
-            flex-shrink: 0;
+            text-align: center;
         }
 
         header h1 {
             font-size: 24px;
-            font-weight: 600;
+            margin-bottom: 5px;
         }
 
         header p {
             opacity: 0.95;
             font-size: 14px;
-            margin-top: 5px;
         }
 
         .form-section {
             background: white;
-            padding: 35px;
-            margin-bottom: 20px;
             border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
         }
 
-        .form-section h2 {
-            color: #1b75bc;
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
-
         .info-box {
-            background: #e8f4f8;
+            background: #f0f8ff;
             border-left: 4px solid #1b75bc;
             padding: 15px;
-            margin-bottom: 25px;
-            border-radius: 5px;
-        }
-
-        .info-box p {
-            color: #1b75bc;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .info-box .company-name {
-            font-size: 18px;
-            color: #1b75bc;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
             margin-bottom: 20px;
-        }
-
-        .form-row.full {
-            grid-template-columns: 1fr;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1b75bc;
+            border-radius: 4px;
             font-size: 14px;
         }
 
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="number"],
-        select,
-        textarea {
-            padding: 11px 12px;
+        .info-box strong {
+            color: #1b75bc;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group.required label::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
             border: 1.5px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
@@ -131,122 +96,134 @@
             transition: all 0.3s;
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: #00aba9;
-            box-shadow: 0 0 0 3px rgba(0, 171, 169, 0.1);
+            border-color: #1b75bc;
+            box-shadow: 0 0 0 3px rgba(27, 117, 188, 0.1);
         }
 
-        textarea {
+        .form-group textarea {
             resize: vertical;
             min-height: 80px;
         }
 
-        h3 {
-            color: #1b75bc;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #eef2f5;
-            padding-bottom: 10px;
-            font-size: 16px;
-            font-weight: 600;
+        .form-group input[type="text"]:disabled,
+        .form-group input[type="email"]:disabled {
+            background: #f8f8f8;
+            color: #666;
+            cursor: not-allowed;
         }
 
         .question-group {
             background: #f8fafb;
             padding: 20px;
+            border-radius: 5px;
             margin-bottom: 20px;
             border-left: 4px solid #00aba9;
-            border-radius: 5px;
         }
 
-        .question-group label {
-            display: block;
-            margin-bottom: 12px;
-            color: #333;
-            font-weight: 600;
+        .question-group h3 {
+            color: #1b75bc;
             font-size: 14px;
+            margin-bottom: 15px;
         }
 
         .radio-group {
             display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .radio-group label {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin: 0;
+            gap: 10px;
             font-weight: normal;
+            margin-bottom: 0;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
             cursor: pointer;
         }
 
-        input[type="radio"] {
-            cursor: pointer;
+        .select-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        button.btn-primary {
-            background: linear-gradient(135deg, #00aba9 0%, #009995 100%);
-            color: white;
-            padding: 13px 28px;
+        .select-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: normal;
+            margin-bottom: 0;
+        }
+
+        .select-group select {
+            width: auto;
+            padding: 8px 12px;
+        }
+
+        button {
+            padding: 12px 24px;
             border: none;
             border-radius: 5px;
-            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
+            font-size: 15px;
             transition: all 0.3s;
+        }
+
+        .btn-submit {
+            background: #1b75bc;
+            color: white;
             width: 100%;
-            box-shadow: 0 2px 8px rgba(0, 171, 169, 0.2);
         }
 
-        button.btn-primary:hover {
-            background: linear-gradient(135deg, #0092d4 0%, #007eb8 100%);
-            box-shadow: 0 4px 12px rgba(0, 146, 212, 0.3);
-            transform: translateY(-2px);
+        .btn-submit:hover:not(:disabled) {
+            background: #1565a0;
         }
 
-        button.btn-primary:disabled {
+        button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
 
-        .success-message {
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffe6e6;
+            border-radius: 4px;
             display: none;
+        }
+
+        .success-message {
             background: #d4edda;
             border: 1px solid #c3e6cb;
             color: #155724;
-            padding: 20px;
+            padding: 15px;
             border-radius: 5px;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .success-message.show {
-            display: block;
-        }
-
-        .loading-spinner {
+            margin-bottom: 20px;
             display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .loading-spinner.show {
-            display: block;
         }
 
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #1b75bc;
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
         }
 
         @keyframes spin {
@@ -254,38 +231,21 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error-message {
+        .conditional-section {
             display: none;
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
         }
 
-        .error-message.show {
+        .conditional-section.show {
             display: block;
         }
 
         @media (max-width: 768px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .radio-group {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
+            header h1 {
+                font-size: 20px;
             }
 
             .form-section {
-                padding: 25px;
+                padding: 20px;
             }
         }
     </style>
@@ -293,203 +253,214 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo-placeholder">SS</div>
-            <div>
-                <h1>Specialist Sales</h1>
-                <p>Trade Reference Assessment Form</p>
-            </div>
+            <h1>Trade Reference</h1>
+            <p>Specialist Sales Credit Application</p>
         </header>
 
-        <div class="form-section">
-            <h2>Trade Reference Assessment</h2>
-            
-            <div class="info-box">
-                <p>We're assessing the following applicant:</p>
-                <div class="company-name" id="applicantCompany"></div>
+        <div class="success-message" id="successMessage">
+            <strong>✓ Thank you!</strong>
+            <p>Your response has been received and recorded.</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <form id="referenceForm">
+            <!-- Applicant Info -->
+            <div class="form-section">
+                <div class="info-box">
+                    <strong>Applicant:</strong>
+                    <span id="applicantName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Company Name</label>
+                    <input type="text" id="yourCompanyName" disabled>
+                </div>
             </div>
 
-            <div class="error-message" id="errorMessage"></div>
+            <!-- Questions -->
+            <div class="form-section">
+                <h2 style="color: #1b75bc; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee;">Reference Questions</h2>
 
-            <form id="referenceForm">
-                <h3>Your Company Details</h3>
-                
-                <div class="form-row full">
+                <!-- Q1: Duration -->
+                <div class="question-group">
+                    <h3>1. How long have you been trading with this company?</h3>
+                    <div class="select-group">
+                        <label>
+                            <select id="q1_duration" name="q1_duration" required>
+                                <option value="">Select...</option>
+                                <option value="Less than 6 months">Less than 6 months</option>
+                                <option value="6 months to 1 year">6 months to 1 year</option>
+                                <option value="1 to 2 years">1 to 2 years</option>
+                                <option value="2 to 5 years">2 to 5 years</option>
+                                <option value="More than 5 years">More than 5 years</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q2: Payment Behaviour -->
+                <div class="question-group">
+                    <h3>2. How would you describe their payment behaviour?</h3>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="q2_payment" value="Early" required>
+                            Early
+                        </label>
+                        <label>
+                            <input type="radio" name="q2_payment" value="On time" required>
+                            On time
+                        </label>
+                        <label>
+                            <input type="radio" name="q2_payment" value="late" required>
+                            Late
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q3: Days Overdue (Conditional) -->
+                <div class="question-group conditional-section" id="q3_section">
+                    <h3>3. If late, how many days overdue on average?</h3>
                     <div class="form-group">
-                        <label>Your Company Name *</label>
-                        <input type="text" name="yourCompany" id="yourCompany" readonly required>
+                        <input type="number" id="q3_daysOverdue" name="q3_daysOverdue" min="0" placeholder="Number of days">
                     </div>
                 </div>
 
-                <h3>Assessment Questions</h3>
-
+                <!-- Q4: Credit Hold -->
                 <div class="question-group">
-                    <label>1. How long have you been trading with this company? *</label>
-                    <select name="q1_duration" required>
-                        <option value="">Select...</option>
-                        <option value="less-than-6-months">Less than 6 months</option>
-                        <option value="6-12-months">6-12 months</option>
-                        <option value="1-2-years">1-2 years</option>
-                        <option value="2-5-years">2-5 years</option>
-                        <option value="more-than-5-years">More than 5 years</option>
-                    </select>
-                </div>
-
-                <div class="question-group">
-                    <label>2. How would you describe their payment behaviour? *</label>
+                    <h3>4. Have they ever been placed on credit hold?</h3>
                     <div class="radio-group">
-                        <label><input type="radio" name="q2_payment" value="early" required> Early</label>
-                        <label><input type="radio" name="q2_payment" value="on-time" required> On time</label>
-                        <label><input type="radio" name="q2_payment" value="late" required> Late</label>
+                        <label>
+                            <input type="radio" name="q4_creditHold" value="Yes" required>
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="q4_creditHold" value="No" required>
+                            No
+                        </label>
                     </div>
                 </div>
 
+                <!-- Q5: Continue to Trade -->
                 <div class="question-group">
-                    <label>3. If late, how many days typically? *</label>
-                    <input type="number" name="q3_daysOverdue" placeholder="0" min="0" required>
-                </div>
-
-                <div class="question-group">
-                    <label>4. Have you ever placed them on credit hold? *</label>
+                    <h3>5. Would you continue to trade with them on credit terms?</h3>
                     <div class="radio-group">
-                        <label><input type="radio" name="q4_creditHold" value="yes" required> Yes</label>
-                        <label><input type="radio" name="q4_creditHold" value="no" required> No</label>
+                        <label>
+                            <input type="radio" name="q5_continue" value="yes" required>
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="q5_continue" value="no" required>
+                            No
+                        </label>
                     </div>
                 </div>
 
+                <!-- Q6: Disputes -->
                 <div class="question-group">
-                    <label>5. Would you continue to trade with them on credit terms? *</label>
+                    <h3>6. Have there been any disputes or issues?</h3>
                     <div class="radio-group">
-                        <label><input type="radio" name="q5_continue" value="yes" required> Yes</label>
-                        <label><input type="radio" name="q5_continue" value="no" required> No</label>
+                        <label>
+                            <input type="radio" name="q6_disputes" value="Yes" required>
+                            Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="q6_disputes" value="No" required>
+                            No
+                        </label>
                     </div>
                 </div>
 
+                <!-- Q7: Comments -->
                 <div class="question-group">
-                    <label>6. Have there been any disputes or issues? *</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="q6_disputes" value="yes" required> Yes</label>
-                        <label><input type="radio" name="q6_disputes" value="no" required> No</label>
-                    </div>
+                    <h3>7. Additional Comments (Optional)</h3>
+                    <textarea id="q7_comments" name="q7_comments" placeholder="Any additional information..."></textarea>
                 </div>
+            </div>
 
-                <div class="question-group">
-                    <label>7. Any additional comments?</label>
-                    <textarea name="q7_comments" placeholder="Optional - any additional information..."></textarea>
-                </div>
-
-                <div class="loading-spinner" id="loadingSpinner">
-                    <div class="spinner"></div>
-                    <p style="margin-top: 10px; color: #666;">Submitting your assessment...</p>
-                </div>
-
-                <button type="submit" class="btn-primary" id="submitBtn">Submit Assessment</button>
-
-                <div class="success-message" id="successMessage">
-                    <h3>✅ Thank You!</h3>
-                    <p>Your trade reference assessment has been submitted successfully.</p>
-                    <p>Specialist Sales will use this information to assess the credit application.</p>
-                </div>
-            </form>
-        </div>
+            <!-- Submit -->
+            <div class="form-section">
+                <button type="submit" class="btn-submit">
+                    <span class="spinner" id="spinner"></span>
+                    Submit Response
+                </button>
+            </div>
+        </form>
     </div>
 
     <script>
         // Get URL parameters
-        function getUrlParameter(name) {
-            const params = new URLSearchParams(window.location.search);
-            return params.get(name);
-        }
+        const params = new URLSearchParams(window.location.search);
+        const appId = params.get('app');
+        const refId = params.get('ref');
+        const refCompany = params.get('refCompany');
+        const applicantCompany = params.get('applicantCompany');
 
-        const applicationId = getUrlParameter('app');
-        const referenceId = getUrlParameter('ref');
-        const refCompany = getUrlParameter('refCompany');
-        const applicantCompany = getUrlParameter('applicantCompany');
+        // Pre-fill company name
+        document.getElementById('yourCompanyName').value = refCompany || '';
+        document.getElementById('applicantName').textContent = applicantCompany || 'N/A';
 
-        // Validate we have required parameters
-        if (!applicationId || !referenceId) {
-            document.getElementById('errorMessage').textContent = 'Invalid reference link. Please check the URL and try again.';
-            document.getElementById('errorMessage').classList.add('show');
-            document.getElementById('referenceForm').style.display = 'none';
-        }
-
-        // Set company names
-        if (refCompany) {
-            document.getElementById('yourCompany').value = decodeURIComponent(refCompany);
-        }
-        if (applicantCompany) {
-            document.getElementById('applicantCompany').textContent = decodeURIComponent(applicantCompany);
-        }
+        // Show/hide Q3 based on Q2 answer
+        document.querySelectorAll('input[name="q2_payment"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const q3Section = document.getElementById('q3_section');
+                if (this.value === 'late') {
+                    q3Section.classList.add('show');
+                } else {
+                    q3Section.classList.remove('show');
+                }
+            });
+        });
 
         // Form submission
-        document.getElementById('referenceForm').addEventListener('submit', function(e) {
+        document.getElementById('referenceForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Show loading spinner
-            document.getElementById('loadingSpinner').classList.add('show');
-            document.getElementById('submitBtn').disabled = true;
-
-            const formData = new FormData(this);
-            
+            // Collect form data
             const response = {
-                q1_duration: formData.get('q1_duration'),
-                q2_payment: formData.get('q2_payment'),
-                q3_daysOverdue: parseInt(formData.get('q3_daysOverdue')) || 0,
-                q4_creditHold: formData.get('q4_creditHold'),
-                q5_continue: formData.get('q5_continue'),
-                q6_disputes: formData.get('q6_disputes'),
-                q7_comments: formData.get('q7_comments'),
+                q1_duration: document.getElementById('q1_duration').value,
+                q2_payment: document.querySelector('input[name="q2_payment"]:checked')?.value,
+                q3_daysOverdue: parseInt(document.getElementById('q3_daysOverdue').value) || 0,
+                q4_creditHold: document.querySelector('input[name="q4_creditHold"]:checked')?.value,
+                q5_continue: document.querySelector('input[name="q5_continue"]:checked')?.value,
+                q6_disputes: document.querySelector('input[name="q6_disputes"]:checked')?.value,
+                q7_comments: document.getElementById('q7_comments').value
             };
 
-            // Get application from localStorage
-            let applications = JSON.parse(localStorage.getItem('applications') || '[]');
-            
-            // Find the application by ID
-            const appIndex = applications.findIndex(app => app.id === applicationId);
-            
-            if (appIndex === -1) {
-                document.getElementById('errorMessage').textContent = 'Application not found. Please try again.';
-                document.getElementById('errorMessage').classList.add('show');
-                document.getElementById('loadingSpinner').classList.remove('show');
-                document.getElementById('submitBtn').disabled = false;
+            // Validate required fields
+            if (!response.q1_duration || !response.q2_payment || !response.q4_creditHold || !response.q5_continue || !response.q6_disputes) {
+                const errorMsg = document.getElementById('errorMessage');
+                errorMsg.textContent = 'Please answer all required questions.';
+                errorMsg.style.display = 'block';
                 return;
             }
 
-            const application = applications[appIndex];
-
-            // Find the specific reference by ID and mark as responded
-            const refIndex = application.references.findIndex(ref => ref.id === referenceId);
+            // Save to localStorage
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            const app = applications.find(a => a.id === appId);
             
-            if (refIndex === -1) {
-                document.getElementById('errorMessage').textContent = 'Reference not found in application. Please try again.';
-                document.getElementById('errorMessage').classList.add('show');
-                document.getElementById('loadingSpinner').classList.remove('show');
-                document.getElementById('submitBtn').disabled = false;
-                return;
+            if (app) {
+                // Mark reference as responded
+                const ref = app.references.find(r => r.id === refId);
+                if (ref) {
+                    ref.responded = true;
+                }
+
+                // Add response
+                app.responses.push({
+                    referenceId: refId,
+                    referenceCompany: refCompany,
+                    response: response,
+                    submittedAt: new Date().toISOString()
+                });
+
+                localStorage.setItem('applications', JSON.stringify(applications));
             }
-
-            // Update the reference as responded
-            application.references[refIndex].responded = true;
-            application.references[refIndex].responseDate = new Date().toISOString();
-
-            // Add response to application
-            application.responses.push({
-                referenceId: referenceId,
-                referenceCompany: application.references[refIndex].company,
-                timestamp: new Date().toISOString(),
-                response: response
-            });
-
-            // Save back to localStorage
-            applications[appIndex] = application;
-            localStorage.setItem('applications', JSON.stringify(applications));
-
-            // Hide loading spinner
-            document.getElementById('loadingSpinner').classList.remove('show');
-            document.getElementById('submitBtn').disabled = false;
 
             // Show success message
+            document.getElementById('successMessage').style.display = 'block';
             document.getElementById('referenceForm').style.display = 'none';
-            document.getElementById('successMessage').classList.add('show');
+            window.scrollTo(0, 0);
         });
     </script>
 </body>
