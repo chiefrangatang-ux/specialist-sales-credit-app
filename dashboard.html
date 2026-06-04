@@ -827,8 +827,9 @@
                 const responded = app.references.filter(r => r.responded).length;
                 const totalRefs = app.references.length;
                 const isReviewed = reviewedApplications.has(app.id);
-                const canApprove = responded >= 2 && isReviewed;
                 const isUnfavourable = hasUnfavourableReferences(app);
+                // Only require "View Details" if application has unfavourable references
+                const canApprove = responded >= 2 && (isUnfavourable ? isReviewed : true);
 
                 let statusBadge = '';
                 if (responded < 2) {
