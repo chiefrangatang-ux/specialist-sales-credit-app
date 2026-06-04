@@ -10,20 +10,20 @@
             padding: 0;
             box-sizing: border-box;
         }
- 
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #f5f5f5 0%, #eef2f5 100%);
             color: #333;
-            min-height: 100vh;
+            line-height: 1.6;
         }
- 
+
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
- 
+
         header {
             background: linear-gradient(135deg, #1b75bc 0%, #1565a0 100%);
             color: white;
@@ -31,346 +31,303 @@
             margin-bottom: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            text-align: center;
         }
- 
-        .logo-placeholder {
-            width: 60px;
-            height: 60px;
-            background: white;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #1b75bc;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
- 
+
         header h1 {
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 5px;
         }
- 
+
         header p {
             opacity: 0.95;
-            font-size: 14px;
-            margin-top: 5px;
         }
- 
+
         .form-section {
             background: white;
-            padding: 35px;
-            margin-bottom: 20px;
             border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
         }
- 
+
         .form-section h2 {
             color: #1b75bc;
-            margin-bottom: 10px;
-            font-size: 20px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
         }
- 
-        .form-section > p:first-of-type {
-            color: #666;
-            margin-bottom: 25px;
-            font-size: 14px;
-            line-height: 1.6;
-        }
- 
+
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin-bottom: 20px;
         }
- 
+
         .form-row.full {
             grid-template-columns: 1fr;
         }
- 
+
         .form-group {
             display: flex;
             flex-direction: column;
         }
- 
-        label {
+
+        .form-group label {
             font-weight: 600;
             margin-bottom: 8px;
-            color: #1b75bc;
+            color: #333;
             font-size: 14px;
         }
- 
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="number"],
-        input[type="date"],
-        select,
-        textarea {
-            padding: 11px 12px;
+
+        .form-group.required label::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 12px;
             border: 1.5px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
             font-family: inherit;
             transition: all 0.3s;
         }
- 
-        input:focus,
-        select:focus,
-        textarea:focus {
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: #00aba9;
-            box-shadow: 0 0 0 3px rgba(0, 171, 169, 0.1);
+            border-color: #1b75bc;
+            box-shadow: 0 0 0 3px rgba(27, 117, 188, 0.1);
         }
- 
-        textarea {
+
+        .form-group textarea {
             resize: vertical;
             min-height: 80px;
         }
- 
-        h3 {
-            color: #1b75bc;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #eef2f5;
-            padding-bottom: 10px;
-            font-size: 16px;
-            font-weight: 600;
+
+        .info-box {
+            background: #f0f8ff;
+            border-left: 4px solid #1b75bc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 13px;
         }
- 
-        .signature-pad {
-            border: 2px solid #ddd;
+
+        .signature-section {
+            background: #f8fafb;
+            padding: 20px;
             border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #signaturePad {
+            border: 2px solid #ddd;
+            border-radius: 4px;
             cursor: crosshair;
             background: white;
             display: block;
-            touch-action: none;
-            margin-top: 12px;
+            margin: 0 auto 15px;
         }
- 
+
         .signature-buttons {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            justify-content: center;
         }
- 
+
         .signature-buttons button {
-            padding: 9px 16px;
-            font-size: 13px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
-            background: #f0f0f0;
-            color: #333;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
- 
-        .signature-buttons button:hover {
-            background: #e0e0e0;
-        }
- 
-        button.btn-primary {
-            background: linear-gradient(135deg, #00aba9 0%, #009995 100%);
-            color: white;
-            padding: 13px 28px;
-            border: none;
-            border-radius: 5px;
-            font-size: 15px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            box-shadow: 0 2px 8px rgba(0, 171, 169, 0.2);
-        }
- 
-        button.btn-primary:hover {
-            background: linear-gradient(135deg, #0092d4 0%, #007eb8 100%);
-            box-shadow: 0 4px 12px rgba(0, 146, 212, 0.3);
-            transform: translateY(-2px);
-        }
- 
-        button.btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
- 
-        button.btn-secondary {
-            background: #999;
-            color: white;
-            padding: 11px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-weight: 500;
-        }
- 
-        button.btn-secondary:hover {
-            background: #888;
-        }
- 
-        button.btn-danger {
-            background: #dc3545;
-            color: white;
-            padding: 9px 16px;
-            border: none;
-            border-radius: 5px;
             font-size: 13px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-weight: 500;
+            transition: all 0.3s;
         }
- 
-        button.btn-danger:hover {
-            background: #c82333;
+
+        .btn-clear {
+            background: #6c757d;
+            color: white;
         }
- 
-        .error-text {
-            color: #dc3545;
+
+        .btn-clear:hover {
+            background: #5a6268;
+        }
+
+        .legal-text {
+            background: #f8fafb;
+            padding: 20px;
+            border-radius: 5px;
             font-size: 12px;
-            margin-top: 5px;
-            display: none;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
         }
- 
-        .error-text.show {
-            display: block;
-        }
- 
-        .dollar-input-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
- 
-        .dollar-input-group span {
-            font-size: 16px;
-            font-weight: bold;
+
+        .legal-text h3 {
             color: #1b75bc;
+            font-size: 13px;
+            margin-top: 15px;
+            margin-bottom: 10px;
         }
- 
-        .dollar-input-group input {
-            flex: 1;
+
+        .legal-text h3:first-child {
+            margin-top: 0;
         }
- 
+
         .checkbox-group {
             display: flex;
             align-items: flex-start;
             gap: 10px;
-            margin: 15px 0;
+            margin-bottom: 15px;
         }
- 
+
         .checkbox-group input[type="checkbox"] {
-            width: auto;
-            margin: 5px 0 0 0;
-            flex-shrink: 0;
+            margin-top: 4px;
             cursor: pointer;
+            width: 18px;
+            height: 18px;
         }
- 
+
         .checkbox-group label {
             margin: 0;
             font-weight: normal;
-            line-height: 1.5;
             cursor: pointer;
-        }
- 
-        .legal-text {
-            background: #f8fafb;
-            padding: 20px;
-            border-left: 4px solid #00aba9;
-            border-radius: 5px;
-            margin: 20px 0;
-            font-size: 13px;
-            line-height: 1.7;
-        }
- 
-        .legal-text h4 {
-            color: #1b75bc;
-            margin-bottom: 10px;
-            margin-top: 15px;
             font-size: 14px;
-            font-weight: 600;
         }
- 
-        .legal-text h4:first-child {
-            margin-top: 0;
-        }
- 
-        .legal-text p {
-            margin-bottom: 10px;
-        }
- 
-        .reference-item {
-            background: #f8fafb;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #00aba9;
-            border-radius: 5px;
-        }
- 
-        .reference-item h4 {
-            color: #1b75bc;
-            margin-bottom: 15px;
+
+        .button-group {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 15px;
-        }
- 
-        .action-buttons {
-            display: flex;
-            gap: 10px;
+            gap: 15px;
             margin-top: 30px;
         }
- 
-        .action-buttons button {
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-submit {
+            background: #1b75bc;
+            color: white;
             flex: 1;
         }
- 
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 20px;
+
+        .btn-submit:hover:not(:disabled) {
+            background: #1565a0;
         }
- 
-        .loading-spinner.show {
-            display: block;
+
+        .btn-reset {
+            background: #6c757d;
+            color: white;
         }
- 
+
+        .btn-reset:hover {
+            background: #5a6268;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #1b75bc;
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
         }
- 
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
- 
+
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .reference-group {
+            background: #f8fafb;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00aba9;
+        }
+
+        .reference-group h4 {
+            color: #1b75bc;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .add-reference-btn {
+            background: #00aba9;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .add-reference-btn:hover {
+            background: #008a88;
+        }
+
+        .remove-ref-btn {
+            background: #dc3545;
+            color: white;
+            padding: 6px 12px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .remove-ref-btn:hover {
+            background: #c82333;
+        }
+
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
             }
- 
-            header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
+
+            header h1 {
+                font-size: 22px;
             }
- 
-            .form-section {
-                padding: 25px;
+
+            .button-group {
+                flex-direction: column;
             }
         }
     </style>
@@ -378,553 +335,442 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo-placeholder">SS</div>
-            <div>
-                <h1>Specialist Sales</h1>
-                <p>30-Day Credit Application Form</p>
-            </div>
+            <h1>Specialist Sales Pty Ltd</h1>
+            <p>Credit Application Form</p>
         </header>
- 
-        <div class="form-section">
-            <h2>Credit Application</h2>
-            <p>Please complete all fields below. Once submitted, our accounts team will contact your trade references to confirm your suitability for credit terms.</p>
- 
-            <form id="creditApplicationForm">
-                <h3>Applicant Details</h3>
+
+        <div class="success-message" id="successMessage">
+            <strong>✓ Application submitted successfully!</strong>
+            <p>Your application ID is: <strong id="applicationId"></strong></p>
+            <p>Our accounts team will be in touch shortly.</p>
+        </div>
+
+        <form id="applicationForm">
+            <!-- Applicant Information -->
+            <div class="form-section">
+                <h2>Applicant Information</h2>
                 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Company Name *</label>
-                        <input type="text" name="companyName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>ABN (11 digits) *</label>
-                        <input type="text" name="abn" maxlength="11" placeholder="00000000000" required>
-                        <div class="error-text" id="abn-error">ABN must be exactly 11 digits</div>
+                <div class="form-row full">
+                    <div class="form-group required">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" id="companyName" name="companyName" required>
+                        <span class="error-message">Company name is required</span>
                     </div>
                 </div>
- 
+
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>ACN (if applicable)</label>
-                        <input type="text" name="acn">
+                    <div class="form-group required">
+                        <label for="abn">ABN</label>
+                        <input type="text" id="abn" name="abn" placeholder="11 digits" maxlength="11" required>
+                        <span class="error-message">ABN must be 11 digits</span>
                     </div>
                     <div class="form-group">
-                        <label>Business Type *</label>
-                        <select name="businessType" required>
-                            <option value="">Select...</option>
-                            <option value="sole-trader">Sole Trader</option>
-                            <option value="partnership">Partnership</option>
-                            <option value="pty-ltd">Pty Ltd</option>
-                            <option value="company">Company</option>
-                            <option value="trust">Trust</option>
-                            <option value="other">Other</option>
+                        <label for="acn">ACN</label>
+                        <input type="text" id="acn" name="acn" placeholder="9 digits" maxlength="9">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label for="businessType">Business Type</label>
+                        <select id="businessType" name="businessType" required>
+                            <option value="">Select type...</option>
+                            <option value="Sole Trader">Sole Trader</option>
+                            <option value="Partnership">Partnership</option>
+                            <option value="Pty Ltd">Pty Ltd</option>
+                            <option value="Trust">Trust</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
+                    <div class="form-group required">
+                        <label for="yearsInBusiness">Years in Business</label>
+                        <input type="number" id="yearsInBusiness" name="yearsInBusiness" min="0" required>
+                        <span class="error-message">Years in business is required</span>
+                    </div>
                 </div>
- 
+
                 <div class="form-row full">
-                    <div class="form-group">
-                        <label>Business Address *</label>
-                        <input type="text" name="businessAddress" required>
+                    <div class="form-group required">
+                        <label for="businessAddress">Business Address</label>
+                        <input type="text" id="businessAddress" name="businessAddress" required>
                     </div>
                 </div>
- 
+
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Suburb/City *</label>
-                        <input type="text" name="suburb" required>
+                    <div class="form-group required">
+                        <label for="suburb">Suburb/City</label>
+                        <input type="text" id="suburb" name="suburb" required>
                     </div>
-                    <div class="form-group">
-                        <label>State *</label>
-                        <select name="state" required>
-                            <option value="">Select State</option>
+                    <div class="form-group required">
+                        <label for="state">State</label>
+                        <select id="state" name="state" required>
+                            <option value="">Select...</option>
+                            <option value="QLD">QLD</option>
                             <option value="NSW">NSW</option>
                             <option value="VIC">VIC</option>
-                            <option value="QLD">QLD</option>
-                            <option value="SA">SA</option>
                             <option value="WA">WA</option>
+                            <option value="SA">SA</option>
                             <option value="TAS">TAS</option>
-                            <option value="ACT">ACT</option>
                             <option value="NT">NT</option>
+                            <option value="ACT">ACT</option>
                         </select>
                     </div>
+                    <div class="form-group required">
+                        <label for="postcode">Postcode</label>
+                        <input type="text" id="postcode" name="postcode" maxlength="4" required>
+                    </div>
                 </div>
- 
+
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Postcode *</label>
-                        <input type="text" name="postcode" required>
+                    <div class="form-group required">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" required>
                     </div>
-                    <div class="form-group">
-                        <label>Phone Number *</label>
-                        <input type="tel" name="phone" placeholder="02 1234 5678 or 0412 345 678" required>
-                        <div class="error-text" id="phone-error">Phone number must be 10 digits</div>
-                    </div>
-                </div>
- 
-                <div class="form-row full">
-                    <div class="form-group">
-                        <label>Email Address *</label>
-                        <input type="email" name="email" required>
+                    <div class="form-group required">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
                     </div>
                 </div>
- 
-                <h3>Principal/Owner Details</h3>
-                
+            </div>
+
+            <!-- Owner/Principal Information -->
+            <div class="form-section">
+                <h2>Principal/Owner</h2>
+
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Full Name *</label>
-                        <input type="text" name="ownerName" required>
+                    <div class="form-group required">
+                        <label for="ownerName">Full Name</label>
+                        <input type="text" id="ownerName" name="ownerName" required>
                     </div>
-                    <div class="form-group">
-                        <label>Title/Position *</label>
-                        <input type="text" name="ownerTitle" required>
-                    </div>
-                </div>
- 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Personal Phone *</label>
-                        <input type="tel" name="ownerPhone" placeholder="02 1234 5678 or 0412 345 678" required>
-                        <div class="error-text" id="ownerphone-error">Phone number must be 10 digits</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Personal Email *</label>
-                        <input type="email" name="ownerEmail" required>
+                    <div class="form-group required">
+                        <label for="ownerTitle">Position/Title</label>
+                        <input type="text" id="ownerTitle" name="ownerTitle" required>
                     </div>
                 </div>
- 
-                <h3>Financial Information</h3>
-                
+
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Credit Limit Requested *</label>
-                        <div class="dollar-input-group">
-                            <span>$</span>
-                            <input type="number" name="creditLimit" required min="0" step="100">
+                    <div class="form-group required">
+                        <label for="ownerEmail">Personal Email</label>
+                        <input type="email" id="ownerEmail" name="ownerEmail" required>
+                    </div>
+                    <div class="form-group required">
+                        <label for="ownerPhone">Personal Phone</label>
+                        <input type="tel" id="ownerPhone" name="ownerPhone" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Information -->
+            <div class="form-section">
+                <h2>Financial Information</h2>
+
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label for="creditLimit">Credit Limit Requested</label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 12px; top: 10px; font-weight: 600;">$</span>
+                            <input type="number" id="creditLimit" name="creditLimit" style="padding-left: 30px;" min="0" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Years in Business *</label>
-                        <input type="number" name="yearsInBusiness" required min="0">
-                    </div>
                 </div>
- 
+
                 <div class="form-row full">
                     <div class="form-group">
-                        <label>Bank Details (optional)</label>
-                        <input type="text" name="bankDetails" placeholder="Account name, BSB, Account number">
+                        <label for="bankDetails">Bank Details (Optional)</label>
+                        <textarea id="bankDetails" name="bankDetails" placeholder="Bank name, account number, etc."></textarea>
                     </div>
                 </div>
- 
-                <h3>Trade References (Minimum 2)</h3>
+            </div>
+
+            <!-- Trade References -->
+            <div class="form-section">
+                <h2>Trade References</h2>
+                <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Provide details of companies you currently trade with or have traded with recently.</p>
                 
                 <div id="referencesContainer"></div>
- 
-                <button type="button" id="addReferenceBtn" class="btn-secondary" style="width: auto; margin-bottom: 20px;">+ Add Another Reference</button>
- 
-                <h3>Terms, Conditions & Personal Guarantee</h3>
-                
-                <div class="legal-text">
-                    <h4>Application Declaration</h4>
-                    <p>1. I apply for a Credit Account and agree to be bound by the Terms & Conditions of Trading unless otherwise agreed in writing.</p>
-                    <p>2. I warrant that my company is solvent and has the future ability to pay all of its debts as and when they fall due.</p>
-                    <p>3. I represent and warrant that the information set out in this application is true and correct and that I am duly authorised to sign this Application on behalf of the company.</p>
-                    <p>4. I authorise Specialist Sales Pty Ltd to obtain credit reports and business information to assess this application.</p>
-                    <p>5. I declare that any credit will be used wholly or predominantly for commercial, business and/or investment purposes, not for personal, domestic or household purposes.</p>
-                    <p>6. I understand that if I fail to provide requested information or do not agree to these terms, this application may not be accepted.</p>
-                    <p>7. I will notify Specialist Sales Pty Ltd at least 14 days prior to any proposed change of ownership, shareholding, or effective control.</p>
- 
-                    <h4>Terms & Conditions of Trading</h4>
-                    <p>• Unless otherwise agreed in writing, all goods or services are supplied on stated conditions.</p>
-                    <p>• Payment must be made by the 25th of the month following invoice.</p>
-                    <p>• If payment is late, overdue account keeping fees of 1.5% per month will be charged on the outstanding balance.</p>
-                    <p>• Property in goods does not pass to the customer until all accounts owed have been paid in full.</p>
-                    <p>• Specialist Sales Pty Ltd may terminate supply on credit if a default event occurs.</p>
-                    <p>• The contract is governed by the laws of Queensland.</p>
- 
-                    <h4>Personal Guarantee & Indemnity</h4>
-                    <p>I personally guarantee payment of all monies owed by the company and guarantee the company's performance of all terms and conditions. This guarantee remains in effect until all amounts owing are paid in full. I indemnify Specialist Sales Pty Ltd against any loss, damages, costs or expenses arising from the company's failure to meet any obligation.</p>
-                </div>
- 
-                <h3>Signature & Authority</h3>
-                
-                <p style="color: #666; margin-bottom: 15px; font-size: 14px;">I declare that I have read and agree to all the above terms and conditions. I sign this application and personal guarantee.</p>
- 
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label>Signature (please sign below) *</label>
-                    <canvas id="signaturePad" class="signature-pad" width="500" height="200"></canvas>
+
+                <button type="button" class="btn-submit add-reference-btn" onclick="addReference()">+ Add Another Reference</button>
+            </div>
+
+            <!-- Signature -->
+            <div class="form-section">
+                <h2>Digital Signature</h2>
+                <div class="signature-section">
+                    <p style="margin-bottom: 15px; font-size: 13px; color: #666;">Please sign below to confirm your application:</p>
+                    <canvas id="signaturePad" width="600" height="150"></canvas>
                     <div class="signature-buttons">
-                        <button type="button" id="clearSignature" class="btn-secondary">Clear</button>
-                        <button type="button" id="undoSignature" class="btn-secondary">Undo</button>
+                        <button type="button" class="btn-clear" onclick="clearSignature()">Clear Signature</button>
                     </div>
                 </div>
- 
+            </div>
+
+            <!-- Legal & Declarations -->
+            <div class="form-section">
+                <h2>Terms & Conditions</h2>
+                
+                <div class="legal-text">
+                    <h3>Application Terms</h3>
+                    <p>1. I/We declare that all information provided in this application is true and correct.</p>
+                    <p>2. I/We consent to Specialist Sales Pty Ltd obtaining credit references from the suppliers listed above.</p>
+                    <p>3. I/We understand that the provision of credit is conditional on satisfactory references and creditworthiness assessment.</p>
+                    <p>4. I/We acknowledge that approval may take 5-7 business days depending on reference responses.</p>
+                    <p>5. I/We agree that Specialist Sales Pty Ltd may conduct credit checks and obtain information from credit reporting agencies.</p>
+                    <p>6. I/We authorize Specialist Sales Pty Ltd to contact the references provided for verification purposes.</p>
+                    <p>7. I/We understand that false or misleading information may result in rejection of this application.</p>
+
+                    <h3>Personal Guarantee</h3>
+                    <p>I/We, the undersigned, in consideration of Specialist Sales Pty Ltd extending credit facilities, hereby personally guarantee and undertake to be jointly and severally liable for the due and punctual payment of all debts, liabilities and obligations of the above company to Specialist Sales Pty Ltd. This guarantee is unconditional and enforceable against me/us whether or not the company is still in existence or whether the company is still a customer of Specialist Sales Pty Ltd.</p>
+
+                    <h3>Confidentiality & Privacy</h3>
+                    <p>1. I understand my personal information will be collected, used and disclosed for the purposes of processing this application.</p>
+                    <p>2. Information will be handled in accordance with the Privacy Act and related legislation.</p>
+                    <p>3. Specialist Sales Pty Ltd may share information with credit reporting agencies and trade referees.</p>
+                    <p>4. I can request access to my personal information or lodge a privacy complaint if needed.</p>
+                    <p>5. Information will be retained for the duration of any credit relationship plus 7 years.</p>
+                </div>
+
                 <div class="checkbox-group">
-                    <input type="checkbox" id="acceptTerms" required>
-                    <label for="acceptTerms">I confirm the information above is correct, I have read and agree to all terms and conditions, and I have signed above *</label>
+                    <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                    <label for="agreeTerms">I agree to the Terms & Conditions and Personal Guarantee above and confirm all information provided is accurate.</label>
                 </div>
- 
-                <div class="loading-spinner" id="loadingSpinner">
-                    <div class="spinner"></div>
-                    <p style="margin-top: 10px; color: #666;">Submitting application and sending emails...</p>
+            </div>
+
+            <!-- Submit -->
+            <div class="form-section">
+                <div class="button-group">
+                    <button type="submit" class="btn-submit">
+                        <span class="spinner" id="spinner"></span>
+                        Submit Application
+                    </button>
+                    <button type="reset" class="btn-reset">Clear Form</button>
                 </div>
- 
-                <div class="action-buttons">
-                    <button type="submit" class="btn-primary" id="submitBtn">Submit Application</button>
-                    <button type="reset" class="btn-secondary">Clear Form</button>
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
- 
+
     <script>
-        // Signature pad setup
+        // Generate SS-prefixed ID (SS + 6 alphanumeric characters)
+        function generateApplicationId() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let id = 'SS';
+            for (let i = 0; i < 6; i++) {
+                id += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return id;
+        }
+
+        // Initialize signature pad
         const canvas = document.getElementById('signaturePad');
         const ctx = canvas.getContext('2d');
         let isDrawing = false;
-        let hasSignature = false;
-        let signatureHistory = [];
- 
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
-        canvas.addEventListener('touchstart', handleTouch);
-        canvas.addEventListener('touchmove', handleTouch);
-        canvas.addEventListener('touchend', stopDrawing);
- 
-        function getCoordinates(e) {
+        let lastX = 0;
+        let lastY = 0;
+
+        canvas.addEventListener('mousedown', (e) => {
             const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            
-            let x, y;
-            if (e.touches) {
-                x = (e.touches[0].clientX - rect.left) * scaleX;
-                y = (e.touches[0].clientY - rect.top) * scaleY;
-            } else {
-                x = (e.clientX - rect.left) * scaleX;
-                y = (e.clientY - rect.top) * scaleY;
-            }
-            return { x, y };
-        }
- 
-        function startDrawing(e) {
             isDrawing = true;
-            saveSignatureState();
-            const { x, y } = getCoordinates(e);
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = '#000';
-            hasSignature = true;
-        }
- 
-        function draw(e) {
+            lastX = e.clientX - rect.left;
+            lastY = e.clientY - rect.top;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
             if (!isDrawing) return;
-            e.preventDefault();
-            const { x, y } = getCoordinates(e);
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            ctx.strokeStyle = '#1b75bc';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
             ctx.lineTo(x, y);
             ctx.stroke();
-        }
- 
-        function stopDrawing() {
+
+            lastX = x;
+            lastY = y;
+        });
+
+        canvas.addEventListener('mouseup', () => {
             isDrawing = false;
-            ctx.closePath();
-        }
- 
-        function handleTouch(e) {
-            e.preventDefault();
-        }
- 
-        function saveSignatureState() {
-            signatureHistory.push(canvas.toDataURL());
-        }
- 
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            isDrawing = false;
+        });
+
         function clearSignature() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            hasSignature = false;
-            signatureHistory = [];
         }
- 
-        function undoSignature() {
-            if (signatureHistory.length > 0) {
-                signatureHistory.pop();
-                if (signatureHistory.length > 0) {
-                    const img = new Image();
-                    img.src = signatureHistory[signatureHistory.length - 1];
-                    img.onload = function() {
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(img, 0, 0);
-                    };
-                } else {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    hasSignature = false;
-                }
-            }
-        }
- 
-        document.getElementById('clearSignature').addEventListener('click', (e) => {
-            e.preventDefault();
-            clearSignature();
-        });
- 
-        document.getElementById('undoSignature').addEventListener('click', (e) => {
-            e.preventDefault();
-            undoSignature();
-        });
- 
-        // Validation
-        function validateABN(abn) {
-            return /^\d{11}$/.test(abn);
-        }
- 
-        function validateAndFormatPhone(phone) {
-            let digits = phone.replace(/\D/g, '');
-            if (digits.startsWith('61')) {
-                digits = '0' + digits.substring(2);
-            }
-            return digits.length === 10 ? digits : null;
-        }
- 
-        document.querySelectorAll('input[name="abn"]').forEach(input => {
-            input.addEventListener('blur', function() {
-                const error = document.getElementById('abn-error');
-                if (this.value && !validateABN(this.value)) {
-                    error.classList.add('show');
-                } else {
-                    error.classList.remove('show');
-                }
-            });
-        });
- 
-        document.querySelectorAll('input[name="phone"], input[name="ownerPhone"]').forEach(input => {
-            input.addEventListener('blur', function() {
-                if (this.value) {
-                    const formatted = validateAndFormatPhone(this.value);
-                    const errorId = this.name === 'phone' ? 'phone-error' : 'ownerphone-error';
-                    const error = document.getElementById(errorId);
-                    if (formatted) {
-                        error.classList.remove('show');
-                    } else {
-                        error.classList.add('show');
-                    }
-                }
-            });
-        });
- 
-        // References management
-        let referenceCount = 0;
- 
-        function addReferenceField() {
-            referenceCount++;
-            const container = document.getElementById('referencesContainer');
-            const referenceHTML = `
-                <div class="reference-item" id="reference-${referenceCount}">
-                    <h4>
-                        Trade Reference ${referenceCount}
-                        <button type="button" class="btn-danger" style="flex: 0;" onclick="removeReference(${referenceCount})">Remove</button>
-                    </h4>
-                    
+
+        // Reference template
+        function createReferenceHTML(index) {
+            return `
+                <div class="reference-group" id="reference-${index}">
+                    <h4>Trade Reference ${index + 1}</h4>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>Company Name *</label>
-                            <input type="text" name="ref${referenceCount}_company" required>
+                        <div class="form-group required">
+                            <label>Company Name</label>
+                            <input type="text" class="ref-company" data-index="${index}" required>
                         </div>
-                        <div class="form-group">
-                            <label>Contact Person *</label>
-                            <input type="text" name="ref${referenceCount}_contact" required>
+                        <div class="form-group required">
+                            <label>Contact Person</label>
+                            <input type="text" class="ref-contact" data-index="${index}" required>
                         </div>
                     </div>
- 
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>Email Address *</label>
-                            <input type="email" name="ref${referenceCount}_email" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone Number *</label>
-                            <input type="tel" name="ref${referenceCount}_phone" required>
+                        <div class="form-group required">
+                            <label>Email</label>
+                            <input type="email" class="ref-email" data-index="${index}" required>
                         </div>
                     </div>
+                    ${index > 1 ? `<button type="button" class="remove-ref-btn" onclick="removeReference(${index})">Remove Reference</button>` : ''}
                 </div>
             `;
-            container.insertAdjacentHTML('beforeend', referenceHTML);
         }
- 
-        function removeReference(num) {
-            const ref = document.getElementById(`reference-${num}`);
-            if (ref) ref.remove();
-        }
- 
-        document.getElementById('addReferenceBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            addReferenceField();
-        });
- 
-        // Form submission with email integration
-        document.getElementById('creditApplicationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
- 
-            if (!hasSignature) {
-                alert('Please sign the form to continue');
-                return;
+
+        function renderReferences() {
+            const container = document.getElementById('referencesContainer');
+            const existingCount = container.children.length;
+            
+            if (existingCount === 0) {
+                container.innerHTML = createReferenceHTML(0) + createReferenceHTML(1);
             }
- 
-            const abn = document.querySelector('input[name="abn"]').value;
-            if (!validateABN(abn)) {
+        }
+
+        function addReference() {
+            const container = document.getElementById('referencesContainer');
+            const newIndex = container.children.length;
+            const newRef = document.createElement('div');
+            newRef.innerHTML = createReferenceHTML(newIndex);
+            container.appendChild(newRef.firstElementChild);
+        }
+
+        function removeReference(index) {
+            const ref = document.getElementById(`reference-${index}`);
+            if (ref) {
+                ref.remove();
+            }
+        }
+
+        // Form submission
+        document.getElementById('applicationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Validate ABN
+            const abn = document.getElementById('abn').value;
+            if (!/^\d{11}$/.test(abn)) {
                 alert('ABN must be exactly 11 digits');
                 return;
             }
- 
-            const phone = document.querySelector('input[name="phone"]').value;
-            const formattedPhone = validateAndFormatPhone(phone);
-            if (!formattedPhone) {
-                alert('Phone number must be 10 digits');
+
+            // Validate signature
+            const imageData = canvas.toDataURL();
+            if (imageData === 'data:,') {
+                alert('Please provide a signature');
                 return;
             }
- 
-            const ownerPhone = document.querySelector('input[name="ownerPhone"]').value;
-            const formattedOwnerPhone = validateAndFormatPhone(ownerPhone);
-            if (!formattedOwnerPhone) {
-                alert('Owner phone number must be 10 digits');
+
+            // Collect references
+            const references = [];
+            document.querySelectorAll('.reference-group').forEach((group, idx) => {
+                const company = group.querySelector('.ref-company').value;
+                const contact = group.querySelector('.ref-contact').value;
+                const email = group.querySelector('.ref-email').value;
+                
+                if (company && contact && email) {
+                    references.push({
+                        id: generateApplicationId().replace('SS', 'REF'),
+                        company,
+                        contact,
+                        email,
+                        responded: false
+                    });
+                }
+            });
+
+            if (references.length < 2) {
+                alert('Please provide at least 2 trade references');
                 return;
             }
- 
-            // Show loading spinner
-            document.getElementById('loadingSpinner').classList.add('show');
-            document.getElementById('submitBtn').disabled = true;
- 
-            const formData = new FormData(this);
-            const applicationId = generateUUID();
-            
-            const data = {
+
+            // Build application object
+            const applicationId = generateApplicationId();
+            const application = {
                 id: applicationId,
-                timestamp: new Date().toISOString(),
-                status: 'submitted',
-                signature: canvas.toDataURL(),
+                dateSubmitted: new Date().toISOString(),
+                status: 'open',
                 applicant: {
-                    companyName: formData.get('companyName'),
-                    abn: formData.get('abn'),
-                    acn: formData.get('acn'),
-                    businessType: formData.get('businessType'),
-                    businessAddress: formData.get('businessAddress'),
-                    suburb: formData.get('suburb'),
-                    state: formData.get('state'),
-                    postcode: formData.get('postcode'),
-                    phone: formattedPhone,
-                    email: formData.get('email'),
+                    companyName: document.getElementById('companyName').value,
+                    abn: document.getElementById('abn').value,
+                    acn: document.getElementById('acn').value || '',
+                    businessType: document.getElementById('businessType').value,
+                    businessAddress: document.getElementById('businessAddress').value,
+                    suburb: document.getElementById('suburb').value,
+                    state: document.getElementById('state').value,
+                    postcode: document.getElementById('postcode').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value
                 },
                 owner: {
-                    name: formData.get('ownerName'),
-                    title: formData.get('ownerTitle'),
-                    phone: formattedOwnerPhone,
-                    email: formData.get('ownerEmail'),
+                    name: document.getElementById('ownerName').value,
+                    title: document.getElementById('ownerTitle').value,
+                    email: document.getElementById('ownerEmail').value,
+                    phone: document.getElementById('ownerPhone').value
                 },
                 financial: {
-                    creditLimit: parseFloat(formData.get('creditLimit')),
-                    yearsInBusiness: parseInt(formData.get('yearsInBusiness')),
-                    bankDetails: formData.get('bankDetails'),
+                    creditLimit: parseInt(document.getElementById('creditLimit').value),
+                    yearsInBusiness: parseInt(document.getElementById('yearsInBusiness').value),
+                    bankDetails: document.getElementById('bankDetails').value || ''
                 },
-                references: [],
+                references: references,
                 responses: [],
+                signature: imageData
             };
- 
-            // Collect references and generate links
-            const referenceEmails = [];
-            for (let i = 1; i <= referenceCount; i++) {
-                const refCompany = formData.get(`ref${i}_company`);
-                if (refCompany) {
-                    const refEmail = formData.get(`ref${i}_email`);
-                    const refContact = formData.get(`ref${i}_contact`);
-                    const refId = generateUUID();
-                    
-                    const referenceLink = `${window.location.origin}/reference.html?app=${applicationId}&ref=${refId}&refCompany=${encodeURIComponent(refCompany)}&applicantCompany=${encodeURIComponent(data.applicant.companyName)}`;
-                    
-                    data.references.push({
-                        id: refId,
-                        company: refCompany,
-                        contact: refContact,
-                        email: refEmail,
-                        phone: formData.get(`ref${i}_phone`),
-                        responded: false,
-                        responseDate: null,
-                        reminderSent: false,
-                        reminderDate: null,
-                    });
- 
-                    referenceEmails.push({
-                        email: refEmail,
-                        contactName: refContact,
-                        company: refCompany,
-                        applicantCompany: data.applicant.companyName,
-                        link: referenceLink
-                    });
-                }
-            }
- 
-            // Save application
-            saveApplication(data);
- 
-            // Send emails via serverless function
+
+            // Save to localStorage
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            applications.push(application);
+            localStorage.setItem('applications', JSON.stringify(applications));
+
+            // Show success message
+            document.getElementById('applicationId').textContent = applicationId;
+            document.getElementById('successMessage').style.display = 'block';
+
+            // Try to send emails
             try {
-                const emailResponse = await fetch('/api/send-emails', {
+                const spinner = document.getElementById('spinner');
+                spinner.style.display = 'inline-block';
+                document.querySelector('.btn-submit').disabled = true;
+
+                const response = await fetch('/api/send-emails', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        applicantEmail: data.applicant.email,
-                        applicantCompany: data.applicant.companyName,
-                        applicationId: applicationId,
-                        referenceEmails: referenceEmails
+                        applicationId,
+                        applicant: application.applicant,
+                        owner: application.owner,
+                        references: application.references
                     })
                 });
- 
-                if (!emailResponse.ok) {
-                    console.error('Email sending failed:', await emailResponse.text());
+
+                spinner.style.display = 'none';
+                document.querySelector('.btn-submit').disabled = false;
+
+                if (response.ok) {
+                    // Reset form
+                    document.getElementById('applicationForm').reset();
+                    renderReferences();
+                    clearSignature();
+                    window.scrollTo(0, 0);
                 }
             } catch (error) {
-                console.error('Error sending emails:', error);
+                console.log('Application saved locally. Email sending skipped (development mode).');
             }
- 
-            // Hide loading spinner
-            document.getElementById('loadingSpinner').classList.remove('show');
-            document.getElementById('submitBtn').disabled = false;
- 
-            // Show success message
-            alert(`✅ Application submitted successfully!\n\nApplication ID: ${applicationId}\n\nThank you for your application. Our accounts team will be in contact to update you on the status of your application.`);
- 
-            // Reset form
-            this.reset();
-            clearSignature();
-            referenceCount = 0;
-            document.getElementById('referencesContainer').innerHTML = '';
-            addReferenceField();
-            addReferenceField();
         });
- 
-        function generateUUID() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                const r = Math.random() * 16 | 0;
-                const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-        }
- 
-        function saveApplication(data) {
-            let applications = JSON.parse(localStorage.getItem('applications') || '[]');
-            applications.push(data);
-            localStorage.setItem('applications', JSON.stringify(applications));
-        }
- 
-        // Initialize - add the 2 reference fields
-        addReferenceField();
-        addReferenceField();
+
+        // Initialize
+        renderReferences();
     </script>
 </body>
 </html>
