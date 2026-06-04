@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Dashboard - Specialist Sales Credit Applications</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/build/index.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #eef2f5 100%);
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1b75bc 0%, #1565a0 100%);
+            color: white;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-placeholder {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1b75bc;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        header p {
+            opacity: 0.95;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #1b75bc;
+        }
+
+        .dashboard-card h3 {
+            color: #1b75bc;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dashboard-card .stat {
+            font-size: 36px;
+            font-weight: bold;
+            color: #1b75bc;
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .form-section h2 {
+            color: #1b75bc;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #1b75bc;
+            box-shadow: 0 0 0 3px rgba(27, 117, 188, 0.1);
+        }
+
+        .app-list {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .app-list-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .app-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .app-list-item-content h3 {
+            color: #1b75bc;
+            margin-bottom: 5px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .app-list-item-content p {
+            font-size: 13px;
+            color: #666;
+            margin: 3px 0;
+        }
+
+        .app-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-submitted {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-ready {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-review {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        button.btn-secondary {
+            background: #1b75bc;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+
+        button.btn-secondary:hover {
+            background: #1565a0;
+        }
+
+        button.btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+
+        button.btn-danger:hover {
+            background: #c82333;
+        }
+
+        button.btn-success {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+
+        button.btn-success:hover {
+            background: #218838;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 35px;
+            border-radius: 8px;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal h2 {
+            color: #1b75bc;
+            margin-bottom: 20px;
+            clear: both;
+        }
+
+        .modal h3 {
+            color: #1b75bc;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .modal p {
+            margin: 8px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .reference-item {
+            background: #f8fafb;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .reference-item.responded {
+            border-left-color: #28a745;
+            background: #f0fdf4;
+        }
+
+        .reference-item.pending {
+            border-left-color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .reference-item strong {
+            color: #1b75bc;
+        }
+
+        .admin-section {
+            background: #f8fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .admin-section h3 {
+            color: #1b75bc;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .admin-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-buttons button {
+            flex: 0 1 auto;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .app-list-item {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 20px;
+                max-height: 90vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-placeholder">SS</div>
+            <div>
+                <h1>Specialist Sales</h1>
+                <p>Credit Applications Team Dashboard</p>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h3>Total Applications</h3>
+                <div class="stat" id="stat-total">0</div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Awaiting References</h3>
+                <div class="stat" id="stat-pending">0</div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Ready for Review</h3>
+                <div class="stat" id="stat-ready">0</div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Manual Review Needed</h3>
+                <div class="stat" id="stat-review">0</div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Applications</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search by company name or ABN...">
+            </div>
+            <div id="applicationsList" class="app-list">
+                <!-- Applications will be listed here -->
+            </div>
+        </div>
+
+        <div class="form-section admin-section">
+            <h3>Admin Controls</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Export your data to CSV for use in spreadsheets and other applications.</p>
+            <div class="admin-buttons">
+                <button onclick="exportDataCSV()" class="btn-success">📥 Export to CSV</button>
+                <button onclick="clearAllData()" class="btn-danger" style="flex: 0;">🗑️ Clear All Data</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="applicationModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        function updateDashboard() {
+            const apps = getAllApplications();
+            let totalApps = apps.length;
+            let pendingApps = 0;
+            let readyApps = 0;
+            let reviewApps = 0;
+
+            apps.forEach(app => {
+                const status = calculateApplicationStatus(app);
+                if (status === 'pending') pendingApps++;
+                if (status === 'ready') readyApps++;
+                if (status === 'review') reviewApps++;
+            });
+
+            document.getElementById('stat-total').textContent = totalApps;
+            document.getElementById('stat-pending').textContent = pendingApps;
+            document.getElementById('stat-ready').textContent = readyApps;
+            document.getElementById('stat-review').textContent = reviewApps;
+
+            const listContainer = document.getElementById('applicationsList');
+            if (apps.length === 0) {
+                listContainer.innerHTML = '<div style="padding: 40px; text-align: center; color: #999;">No applications yet</div>';
+                return;
+            }
+
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = apps.filter(app => 
+                app.applicant.companyName.toLowerCase().includes(searchTerm) ||
+                app.applicant.abn.includes(searchTerm)
+            );
+
+            listContainer.innerHTML = filtered.map(app => {
+                const status = calculateApplicationStatus(app);
+                const statusLabel = {
+                    'submitted': 'Submitted',
+                    'pending': 'Awaiting References',
+                    'ready': 'Ready for Review',
+                    'review': 'Manual Review Needed'
+                }[status];
+
+                const statusClass = `status-${status}`;
+                const respondedCount = app.references.filter(r => r.responded).length;
+                const totalRefs = app.references.length;
+
+                return `
+                    <div class="app-list-item">
+                        <div class="app-list-item-content">
+                            <h3>${app.applicant.companyName}</h3>
+                            <p><strong>ABN:</strong> ${app.applicant.abn}</p>
+                            <p><strong>Applied:</strong> ${new Date(app.timestamp).toLocaleDateString()}</p>
+                            <p><strong>Credit Limit:</strong> $${app.financial.creditLimit.toLocaleString()}</p>
+                            <p style="color: #666; font-size: 12px;">References: ${respondedCount}/${totalRefs} responded</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="app-status ${statusClass}">${statusLabel}</span>
+                            <button onclick="viewApplication('${app.id}')" class="btn-secondary" style="margin-top: 10px; width: 100%; padding: 8px;">View Details</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function calculateApplicationStatus(app) {
+            const allReferenced = app.references.length > 0 && app.references.every(r => r.responded);
+            
+            if (!allReferenced) {
+                return 'pending';
+            }
+
+            const allPositive = app.responses.every(r => {
+                return (r.q3_payment === 'early' || r.q3_payment === 'on-time') &&
+                       r.q5_creditHold === 'no' &&
+                       r.q6_continueCredit === 'yes' &&
+                       r.q7_disputes !== 'yes';
+            });
+
+            return allPositive ? 'ready' : 'review';
+        }
+
+        function viewApplication(appId) {
+            const app = getApplication(appId);
+            if (!app) return;
+
+            const status = calculateApplicationStatus(app);
+            const statusLabel = {
+                'submitted': 'Submitted',
+                'pending': 'Awaiting References',
+                'ready': 'Ready for Review',
+                'review': 'Manual Review Needed'
+            }[status];
+
+            let html = `
+                <h2>${app.applicant.companyName}</h2>
+                
+                <div style="margin: 20px 0; padding: 15px; background: #f8fafb; border-radius: 5px;">
+                    <strong>Status: <span class="app-status status-${status}">${statusLabel}</span></strong>
+                </div>
+
+                <h3>Applicant Details</h3>
+                <p><strong>Company:</strong> ${app.applicant.companyName}</p>
+                <p><strong>ABN:</strong> ${app.applicant.abn}</p>
+                <p><strong>Type:</strong> ${app.applicant.businessType}</p>
+                <p><strong>Address:</strong> ${app.applicant.businessAddress}, ${app.applicant.suburb} ${app.applicant.state} ${app.applicant.postcode}</p>
+                <p><strong>Phone:</strong> ${app.applicant.phone}</p>
+                <p><strong>Email:</strong> ${app.applicant.email}</p>
+
+                <h3>Principal/Owner</h3>
+                <p><strong>Name:</strong> ${app.owner.name}</p>
+                <p><strong>Title:</strong> ${app.owner.title}</p>
+                <p><strong>Phone:</strong> ${app.owner.phone}</p>
+                <p><strong>Email:</strong> ${app.owner.email}</p>
+
+                <h3>Financial Information</h3>
+                <p><strong>Credit Limit Requested:</strong> $${app.financial.creditLimit.toLocaleString()}</p>
+                <p><strong>Years in Business:</strong> ${app.financial.yearsInBusiness}</p>
+                ${app.financial.bankDetails ? `<p><strong>Bank Details:</strong> ${app.financial.bankDetails}</p>` : ''}
+
+                <h3>Trade References</h3>
+                ${app.references.map((ref, idx) => `
+                    <div class="reference-item ${ref.responded ? 'responded' : 'pending'}">
+                        <p><strong>${idx + 1}. ${ref.company}</strong></p>
+                        <p><strong>Contact:</strong> ${ref.contact} (${ref.email}, ${ref.phone})</p>
+                        <p><strong>Status:</strong> ${ref.responded ? '✅ Responded' : '⏳ Pending'}</p>
+                        ${ref.responded ? `<p><strong>Response Date:</strong> ${new Date(ref.responseDate).toLocaleString()}</p>` : ''}
+                    </div>
+                `).join('')}
+
+                <h3>Reference Responses</h3>
+                ${app.responses.length > 0 ? app.responses.map((resp, idx) => `
+                    <div style="background: #f8fafb; padding: 15px; margin: 10px 0; border-radius: 5px;">
+                        <p><strong>Reference ${idx + 1}: ${resp.refCompanyName}</strong></p>
+                        <p><strong>Contact:</strong> ${resp.refContactName} (${resp.refContactEmail})</p>
+                        <p><strong>Relationship:</strong> ${resp.q1_duration}</p>
+                        <p><strong>Credit Limit Extended:</strong> $${resp.q2_creditLimit}</p>
+                        <p><strong>Payment Behaviour:</strong> <span style="color: ${['early', 'on-time'].includes(resp.q3_payment) ? '#28a745' : '#dc3545'}; font-weight: bold;">${resp.q3_payment}</span></p>
+                        ${resp.q4_daysOverdue ? `<p><strong>Days Overdue (avg):</strong> ${resp.q4_daysOverdue}</p>` : ''}
+                        <p><strong>Credit Hold:</strong> ${resp.q5_creditHold === 'yes' ? '❌ Yes' : '✅ No'}</p>
+                        <p><strong>Continue Credit:</strong> ${resp.q6_continueCredit}</p>
+                        ${resp.q8_comments ? `<p><strong>Comments:</strong> ${resp.q8_comments}</p>` : ''}
+                        <p style="font-size: 12px; color: #999; margin-top: 10px;"><strong>Response Date:</strong> ${new Date(resp.timestamp).toLocaleString()}</p>
+                    </div>
+                `).join('') : '<p style="color: #999;">No responses yet</p>'}
+
+                <h3>Applicant Signature</h3>
+                <img src="${app.signature}" style="border: 1px solid #ddd; border-radius: 4px; max-width: 100%; height: auto;">
+            `;
+
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('applicationModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('applicationModal').classList.remove('active');
+        }
+
+        function getAllApplications() {
+            return JSON.parse(localStorage.getItem('applications') || '[]');
+        }
+
+        function getApplication(id) {
+            return getAllApplications().find(app => app.id === id);
+        }
+
+        function exportDataCSV() {
+            const apps = getAllApplications();
+            
+            const headers = [
+                'Application ID',
+                'Company Name',
+                'ABN',
+                'Business Type',
+                'Contact Email',
+                'Contact Phone',
+                'Owner Name',
+                'Credit Limit Requested',
+                'Years in Business',
+                'Applied Date',
+                'Status',
+                'References Responded',
+                'Total References'
+            ];
+            
+            const rows = apps.map(app => {
+                const status = calculateApplicationStatus(app);
+                const respondedCount = app.references.filter(r => r.responded).length;
+                const totalRefs = app.references.length;
+                
+                return [
+                    app.id,
+                    app.applicant.companyName,
+                    app.applicant.abn,
+                    app.applicant.businessType,
+                    app.applicant.email,
+                    app.applicant.phone,
+                    app.owner.name,
+                    app.financial.creditLimit,
+                    app.financial.yearsInBusiness,
+                    new Date(app.timestamp).toLocaleString(),
+                    status,
+                    `${respondedCount}/${totalRefs}`,
+                    totalRefs
+                ];
+            });
+            
+            const csvContent = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+            ].join('\n');
+            
+            const csvBlob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+            const url = URL.createObjectURL(csvBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `credit-applications-${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Are you sure? This will delete ALL applications and cannot be undone.')) {
+                if (confirm('Really delete everything?')) {
+                    localStorage.removeItem('applications');
+                    alert('✅ All data cleared');
+                    location.reload();
+                }
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', updateDashboard);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>

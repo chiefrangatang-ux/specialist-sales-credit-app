@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Reference Assessment - Specialist Sales</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/build/index.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #eef2f5 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1b75bc 0%, #1565a0 100%);
+            color: white;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-placeholder {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1b75bc;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        header p {
+            opacity: 0.95;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-section h2 {
+            color: #1b75bc;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .form-section > p:first-of-type {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1b75bc;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        textarea {
+            padding: 11px 12px;
+            border: 1.5px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #00aba9;
+            box-shadow: 0 0 0 3px rgba(0, 171, 169, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        hr {
+            margin: 30px 0;
+            border: none;
+            border-top: 1px solid #eee;
+        }
+
+        .question-section {
+            margin-bottom: 28px;
+        }
+
+        .question-label {
+            color: #1b75bc;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .radio-group input[type="radio"] {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .dollar-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dollar-input-group span {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1b75bc;
+        }
+
+        .dollar-input-group input {
+            flex: 1;
+        }
+
+        .error-text {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-text.show {
+            display: block;
+        }
+
+        button.btn-primary {
+            background: linear-gradient(135deg, #00aba9 0%, #009995 100%);
+            color: white;
+            padding: 13px 28px;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 171, 169, 0.2);
+            margin-top: 20px;
+        }
+
+        button.btn-primary:hover {
+            background: linear-gradient(135deg, #0092d4 0%, #007eb8 100%);
+            box-shadow: 0 4px 12px rgba(0, 146, 212, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .form-section {
+                padding: 25px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-placeholder">SS</div>
+            <div>
+                <h1>Specialist Sales</h1>
+                <p>Trade Reference Assessment Form</p>
+            </div>
+        </header>
+
+        <div class="form-section">
+            <h2>Trade Reference Assessment</h2>
+            <p>Thank you for taking the time to complete this reference assessment. Your honest feedback helps us make informed credit decisions. This should take only 2-3 minutes to complete.</p>
+
+            <div style="background: #e8f4f8; padding: 15px; border-left: 4px solid #1b75bc; border-radius: 5px; margin-bottom: 20px; display: none;" id="applicantContext">
+                <p style="font-size: 13px; color: #1b75bc; margin: 0;"><strong>Applicant Company:</strong> <span id="applicantCompanyDisplay"></span></p>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                ✅ Thank you! Your reference assessment has been submitted successfully.
+            </div>
+
+            <form id="referenceResponseForm">
+                <input type="hidden" id="refAppId" name="appId">
+
+                <div class="form-group">
+                    <label>Your Company Name *</label>
+                    <input type="text" id="refCompanyName" name="refCompanyName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" id="refContactName" name="refContactName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Email *</label>
+                    <input type="email" id="refContactEmail" name="refContactEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Phone *</label>
+                    <input type="tel" id="refContactPhone" name="refContactPhone" required>
+                    <div class="error-text" id="refphone-error">Phone number must be 10 digits</div>
+                </div>
+
+                <hr>
+
+                <div class="question-section">
+                    <label class="question-label">How long have you been supplying the applicant? *</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q1_duration" value="less-6-months" required> Less than 6 months</label>
+                        <label><input type="radio" name="q1_duration" value="6-12-months" required> 6-12 months</label>
+                        <label><input type="radio" name="q1_duration" value="1-2-years" required> 1-2 years</label>
+                        <label><input type="radio" name="q1_duration" value="2-plus-years" required> 2+ years</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>What is the credit limit you have extended to them? *</label>
+                    <div class="dollar-input-group">
+                        <span>$</span>
+                        <input type="text" id="q2_creditLimit" name="q2_creditLimit" required>
+                    </div>
+                </div>
+
+                <div class="question-section">
+                    <label class="question-label">What is their typical payment behaviour? *</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q3_payment" value="early" required> Pay early</label>
+                        <label><input type="radio" name="q3_payment" value="on-time" required> Pay on time</label>
+                        <label><input type="radio" name="q3_payment" value="sometimes-late" required> Sometimes late</label>
+                        <label><input type="radio" name="q3_payment" value="frequently-late" required> Frequently late</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>If late, what is the average number of days overdue?</label>
+                    <input type="number" id="q4_daysOverdue" name="q4_daysOverdue" min="0">
+                </div>
+
+                <div class="question-section">
+                    <label class="question-label">Have they ever been placed on credit hold? *</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q5_creditHold" value="yes" required> Yes</label>
+                        <label><input type="radio" name="q5_creditHold" value="no" required> No</label>
+                    </div>
+                </div>
+
+                <div class="question-section">
+                    <label class="question-label">Would you continue to extend credit to this company? *</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q6_continueCredit" value="yes" required> Yes</label>
+                        <label><input type="radio" name="q6_continueCredit" value="conditional" required> Yes, conditionally</label>
+                        <label><input type="radio" name="q6_continueCredit" value="no" required> No</label>
+                    </div>
+                </div>
+
+                <div class="question-section">
+                    <label class="question-label">Have there been any disputes regarding invoices or quality?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="q7_disputes" value="yes"> Yes</label>
+                        <label><input type="radio" name="q7_disputes" value="no"> No</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Any other comments about their creditworthiness?</label>
+                    <textarea id="q8_comments" name="q8_comments" placeholder="Optional comments..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary">Submit Reference Assessment</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function validateAndFormatPhone(phone) {
+            let digits = phone.replace(/\D/g, '');
+            if (digits.startsWith('61')) {
+                digits = '0' + digits.substring(2);
+            }
+            return digits.length === 10 ? digits : null;
+        }
+
+        document.getElementById('refContactPhone').addEventListener('blur', function() {
+            if (this.value) {
+                const formatted = validateAndFormatPhone(this.value);
+                const error = document.getElementById('refphone-error');
+                if (formatted) {
+                    error.classList.remove('show');
+                } else {
+                    error.classList.add('show');
+                }
+            }
+        });
+
+        document.getElementById('referenceResponseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const phone = document.getElementById('refContactPhone').value;
+            const formattedPhone = validateAndFormatPhone(phone);
+            if (!formattedPhone) {
+                alert('Phone number must be 10 digits');
+                return;
+            }
+
+            const appId = document.getElementById('refAppId').value;
+            const responses = {
+                refCompanyName: document.getElementById('refCompanyName').value,
+                refContactName: document.getElementById('refContactName').value,
+                refContactEmail: document.getElementById('refContactEmail').value,
+                refContactPhone: formattedPhone,
+                q1_duration: document.querySelector('input[name="q1_duration"]:checked').value,
+                q2_creditLimit: document.getElementById('q2_creditLimit').value,
+                q3_payment: document.querySelector('input[name="q3_payment"]:checked').value,
+                q4_daysOverdue: document.getElementById('q4_daysOverdue').value || '0',
+                q5_creditHold: document.querySelector('input[name="q5_creditHold"]:checked').value,
+                q6_continueCredit: document.querySelector('input[name="q6_continueCredit"]:checked').value,
+                q7_disputes: document.querySelector('input[name="q7_disputes"]:checked')?.value || 'not-answered',
+                q8_comments: document.getElementById('q8_comments').value,
+                timestamp: new Date().toISOString(),
+            };
+
+            saveReferenceResponse(appId, responses);
+            
+            document.getElementById('successMessage').classList.add('show');
+            this.reset();
+            
+            setTimeout(() => {
+                document.getElementById('successMessage').classList.remove('show');
+            }, 5000);
+        });
+
+        function saveReferenceResponse(appId, responses) {
+            let applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            let app = applications.find(a => a.id === appId);
+            
+            if (app) {
+                app.responses.push(responses);
+
+                const matchingRef = app.references.find(r => 
+                    r.email === responses.refContactEmail
+                );
+                if (matchingRef) {
+                    matchingRef.responded = true;
+                    matchingRef.responseDate = new Date().toISOString();
+                }
+
+                localStorage.setItem('applications', JSON.stringify(applications));
+            }
+        }
+
+        // Get parameters from URL and pre-fill form
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Pre-fill with URL parameters
+            const appId = urlParams.get('app');
+            const refCompanyName = urlParams.get('refCompany');
+            const applicantCompanyName = urlParams.get('applicantCompany');
+            
+            if (appId) {
+                document.getElementById('refAppId').value = appId;
+            }
+            
+            if (refCompanyName) {
+                document.getElementById('refCompanyName').value = decodeURIComponent(refCompanyName);
+                document.getElementById('refCompanyName').disabled = true;
+                document.getElementById('refCompanyName').style.backgroundColor = '#f8fafb';
+                document.getElementById('refCompanyName').style.cursor = 'not-allowed';
+            }
+            
+            // Update context to show which applicant is being assessed
+            if (applicantCompanyName) {
+                const context = document.getElementById('applicantContext');
+                const display = document.getElementById('applicantCompanyDisplay');
+                display.textContent = decodeURIComponent(applicantCompanyName);
+                context.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
