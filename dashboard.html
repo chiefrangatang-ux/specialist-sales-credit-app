@@ -643,13 +643,28 @@
             if (typeof response !== 'object') return false;
             
             try {
-                const q5_continue = (response && response.q5_continue) ? response.q5_continue : (response && response.q6_continue) ? response.q6_continue : null;
+                const q1_duration = (response && response.q1_duration) ? response.q1_duration : null;
                 const q2_payment = (response && response.q2_payment) ? response.q2_payment : (response && response.q3_payment) ? response.q3_payment : null;
                 const rawDaysOverdue = (response && response.q3_daysOverdue) ? response.q3_daysOverdue : (response && response.q4_daysOverdue) ? response.q4_daysOverdue : 0;
                 const q3_daysOverdue = parseInt(rawDaysOverdue) || 0;
+                const q4_creditHold = (response && response.q4_creditHold) ? response.q4_creditHold : null;
+                const q5_continue = (response && response.q5_continue) ? response.q5_continue : (response && response.q6_continue) ? response.q6_continue : null;
+                const q6_disputes = (response && response.q6_disputes) ? response.q6_disputes : null;
                 
-                if (q5_continue === 'no') return true;
+                // Q1: Trading less than 6 months
+                if (q1_duration === 'Less than 6 months') return true;
+                
+                // Q2/Q3: Late payment with more than 5 days overdue
                 if (q2_payment === 'late' && q3_daysOverdue > 5) return true;
+                
+                // Q4: Ever been on credit hold
+                if (q4_creditHold === 'Yes') return true;
+                
+                // Q5: Would not continue to trade
+                if (q5_continue === 'no') return true;
+                
+                // Q6: Disputes or issues
+                if (q6_disputes === 'Yes') return true;
                 
                 return false;
             } catch (err) {
