@@ -67,6 +67,66 @@
             margin-bottom: 5px;
         }
 
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .success-message h2 {
+            margin-bottom: 10px;
+            color: #155724;
+        }
+
+        .success-message p {
+            margin-bottom: 10px;
+        }
+
+        .success-message a {
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .already-submitted-message {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1b75bc;
+        }
+
+        .already-submitted-message h2 {
+            margin-bottom: 10px;
+            color: #0c5460;
+        }
+
+        .already-submitted-message p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .already-submitted-message .contact-info {
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            border-left: 4px solid #00aba9;
+        }
+
+        .already-submitted-message .contact-info p {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .already-submitted-message strong {
+            color: #0c5460;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -204,16 +264,6 @@
             display: none;
         }
 
-        .success-message {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
         .spinner {
             display: none;
             width: 16px;
@@ -257,15 +307,31 @@
             <p>Specialist Sales Credit Application</p>
         </header>
 
-        <div class="success-message" id="successMessage">
-            <strong>✓ Thank you!</strong>
-            <p>Your response has been received and recorded.</p>
+        <!-- Already Submitted Message -->
+        <div class="already-submitted-message" id="alreadySubmittedMessage" style="display: none;">
+            <h2>✓ Reference Already Submitted</h2>
+            <p>Thank you! This reference has already been successfully submitted for this application.</p>
+            <p>If you have any additional feedback or information to add, please contact our accounts department:</p>
+            <div class="contact-info">
+                <p><strong>Specialist Sales Pty Ltd</strong></p>
+                <p>📧 Email: <a href="mailto:accounts@specialistsales.com.au">accounts@specialistsales.com.au</a></p>
+                <p>📞 Phone: 1800 780 317 or 07 4633 5654</p>
+            </div>
         </div>
 
-        <div class="error-message" id="errorMessage"></div>
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage" style="display: none;">
+            <h2>✓ Thank you!</h2>
+            <p>Your response has been received and recorded.</p>
+            <p>If you have any additional feedback or information to add, please contact our accounts department:</p>
+            <div class="contact-info" style="background: rgba(255,255,255,0.3); margin-top: 15px;">
+                <p style="margin-bottom: 5px;">📧 <a href="mailto:accounts@specialistsales.com.au" style="color: #155724;">accounts@specialistsales.com.au</a></p>
+                <p style="margin-bottom: 0;">📞 1800 780 317 or 07 4633 5654</p>
+            </div>
+        </div>
 
-        <form id="referenceForm">
-            <!-- Applicant Info -->
+        <!-- Form Section -->
+        <div id="formSection">
             <div class="form-section">
                 <div class="info-box">
                     <strong>Applicant:</strong>
@@ -278,114 +344,117 @@
                 </div>
             </div>
 
-            <!-- Questions -->
-            <div class="form-section">
-                <h2 style="color: #1b75bc; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee;">Reference Questions</h2>
+            <form id="referenceForm">
+                <!-- Questions -->
+                <div class="form-section">
+                    <h2 style="color: #1b75bc; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee;">Reference Questions</h2>
 
-                <!-- Q1: Duration -->
-                <div class="question-group">
-                    <h3>1. How long have you been trading with this company?</h3>
-                    <div class="select-group">
-                        <label>
-                            <select id="q1_duration" name="q1_duration" required>
-                                <option value="">Select...</option>
-                                <option value="Less than 6 months">Less than 6 months</option>
-                                <option value="6 months to 1 year">6 months to 1 year</option>
-                                <option value="1 to 2 years">1 to 2 years</option>
-                                <option value="2 to 5 years">2 to 5 years</option>
-                                <option value="More than 5 years">More than 5 years</option>
-                            </select>
-                        </label>
+                    <!-- Q1: Duration -->
+                    <div class="question-group">
+                        <h3>1. How long have you been trading with this company?</h3>
+                        <div class="select-group">
+                            <label>
+                                <select id="q1_duration" name="q1_duration" required>
+                                    <option value="">Select...</option>
+                                    <option value="Less than 6 months">Less than 6 months</option>
+                                    <option value="6 months to 1 year">6 months to 1 year</option>
+                                    <option value="1 to 2 years">1 to 2 years</option>
+                                    <option value="2 to 5 years">2 to 5 years</option>
+                                    <option value="More than 5 years">More than 5 years</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q2: Payment Behaviour -->
+                    <div class="question-group">
+                        <h3>2. How would you describe their payment behaviour?</h3>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="q2_payment" value="Early" required>
+                                Early
+                            </label>
+                            <label>
+                                <input type="radio" name="q2_payment" value="On time" required>
+                                On time
+                            </label>
+                            <label>
+                                <input type="radio" name="q2_payment" value="late" required>
+                                Late
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q3: Days Overdue (Conditional) -->
+                    <div class="question-group conditional-section" id="q3_section">
+                        <h3>3. If late, how many days overdue on average?</h3>
+                        <div class="form-group">
+                            <input type="number" id="q3_daysOverdue" name="q3_daysOverdue" min="0" placeholder="Number of days">
+                        </div>
+                    </div>
+
+                    <!-- Q4: Credit Hold -->
+                    <div class="question-group">
+                        <h3>4. Have they ever been placed on credit hold?</h3>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="q4_creditHold" value="Yes" required>
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="q4_creditHold" value="No" required>
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q5: Continue to Trade -->
+                    <div class="question-group">
+                        <h3>5. Would you continue to trade with them on credit terms?</h3>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="q5_continue" value="yes" required>
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="q5_continue" value="no" required>
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q6: Disputes -->
+                    <div class="question-group">
+                        <h3>6. Have there been any disputes or issues?</h3>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="q6_disputes" value="Yes" required>
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" name="q6_disputes" value="No" required>
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Q7: Comments -->
+                    <div class="question-group">
+                        <h3>7. Additional Comments (Optional)</h3>
+                        <textarea id="q7_comments" name="q7_comments" placeholder="Any additional information..."></textarea>
                     </div>
                 </div>
 
-                <!-- Q2: Payment Behaviour -->
-                <div class="question-group">
-                    <h3>2. How would you describe their payment behaviour?</h3>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="q2_payment" value="Early" required>
-                            Early
-                        </label>
-                        <label>
-                            <input type="radio" name="q2_payment" value="On time" required>
-                            On time
-                        </label>
-                        <label>
-                            <input type="radio" name="q2_payment" value="late" required>
-                            Late
-                        </label>
-                    </div>
+                <!-- Submit -->
+                <div class="form-section">
+                    <button type="submit" class="btn-submit">
+                        <span class="spinner" id="spinner"></span>
+                        Submit Response
+                    </button>
+                    <div class="error-message" id="errorMessage"></div>
                 </div>
-
-                <!-- Q3: Days Overdue (Conditional) -->
-                <div class="question-group conditional-section" id="q3_section">
-                    <h3>3. If late, how many days overdue on average?</h3>
-                    <div class="form-group">
-                        <input type="number" id="q3_daysOverdue" name="q3_daysOverdue" min="0" placeholder="Number of days">
-                    </div>
-                </div>
-
-                <!-- Q4: Credit Hold -->
-                <div class="question-group">
-                    <h3>4. Have they ever been placed on credit hold?</h3>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="q4_creditHold" value="Yes" required>
-                            Yes
-                        </label>
-                        <label>
-                            <input type="radio" name="q4_creditHold" value="No" required>
-                            No
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Q5: Continue to Trade -->
-                <div class="question-group">
-                    <h3>5. Would you continue to trade with them on credit terms?</h3>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="q5_continue" value="yes" required>
-                            Yes
-                        </label>
-                        <label>
-                            <input type="radio" name="q5_continue" value="no" required>
-                            No
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Q6: Disputes -->
-                <div class="question-group">
-                    <h3>6. Have there been any disputes or issues?</h3>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="q6_disputes" value="Yes" required>
-                            Yes
-                        </label>
-                        <label>
-                            <input type="radio" name="q6_disputes" value="No" required>
-                            No
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Q7: Comments -->
-                <div class="question-group">
-                    <h3>7. Additional Comments (Optional)</h3>
-                    <textarea id="q7_comments" name="q7_comments" placeholder="Any additional information..."></textarea>
-                </div>
-            </div>
-
-            <!-- Submit -->
-            <div class="form-section">
-                <button type="submit" class="btn-submit">
-                    <span class="spinner" id="spinner"></span>
-                    Submit Response
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -399,6 +468,34 @@
         // Pre-fill company name
         document.getElementById('yourCompanyName').value = refCompany || '';
         document.getElementById('applicantName').textContent = applicantCompany || 'N/A';
+
+        // Check if this reference has already been submitted
+        function checkIfAlreadySubmitted() {
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            const app = applications.find(a => a.id === appId);
+            
+            if (!app) return false;
+            
+            // Check if this specific reference ID has already responded
+            const ref = app.references.find(r => r.id === refId);
+            if (!ref) return false;
+            
+            return ref.responded === true;
+        }
+
+        // Show appropriate message on page load
+        function initializePage() {
+            const formSection = document.getElementById('formSection');
+            const alreadySubmittedMessage = document.getElementById('alreadySubmittedMessage');
+            
+            if (checkIfAlreadySubmitted()) {
+                formSection.style.display = 'none';
+                alreadySubmittedMessage.style.display = 'block';
+            } else {
+                formSection.style.display = 'block';
+                alreadySubmittedMessage.style.display = 'none';
+            }
+        }
 
         // Show/hide Q3 based on Q2 answer
         document.querySelectorAll('input[name="q2_payment"]').forEach(radio => {
@@ -457,11 +554,15 @@
                 localStorage.setItem('applications', JSON.stringify(applications));
             }
 
-            // Show success message
-            document.getElementById('successMessage').style.display = 'block';
+            // Show success message and hide form
             document.getElementById('referenceForm').style.display = 'none';
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
             window.scrollTo(0, 0);
         });
+
+        // Initialize on page load
+        initializePage();
     </script>
 </body>
 </html>
