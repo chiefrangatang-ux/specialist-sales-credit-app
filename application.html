@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Application - Specialist Sales</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&family=Oswald:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-blue: #1b75bc;
+            --primary-dust: #b5481d;
+            --steel-grey: #8e8e8e;
+            --emerald: #00a651;
+            --light-green: #d7df23;
+            --orange: #faa21b;
+            --teal: #008ca9;
+            --deep-blue: #2a3990;
+            --forest-green: #006838;
+            --grass-green: #39b54a;
+            --burnt-sienna: #cf6825;
+            --deep-teal: #396e80;
+            --light-blue: #82caf0;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,10 +30,16 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #f5f5f5 0%, #eef2f5 100%);
             color: #333;
             line-height: 1.6;
+            font-weight: 400;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
         }
 
         .container {
@@ -25,22 +49,34 @@
         }
 
         header {
-            background: linear-gradient(135deg, #1b75bc 0%, #1565a0 100%);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1565a0 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 20px;
             margin-bottom: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        header h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
+        header img {
+            max-height: 60px;
+            width: auto;
+            margin-right: 20px;
         }
 
-        header p {
-            opacity: 0.95;
+        header .header-text h1 {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        header .header-text p {
+            margin: 0;
+            font-size: 12px;
+            opacity: 0.9;
         }
 
         .completion-page {
@@ -52,9 +88,9 @@
         }
 
         .success-header {
-            background: #d4edda;
-            border: 2px solid #28a745;
-            color: #155724;
+            background: #e8f5e9;
+            border: 2px solid var(--grass-green);
+            color: var(--forest-green);
             padding: 30px;
             border-radius: 8px;
             margin-bottom: 30px;
@@ -64,6 +100,7 @@
         .success-header h2 {
             font-size: 28px;
             margin-bottom: 10px;
+            font-weight: 700;
         }
 
         .success-header p {
@@ -73,7 +110,7 @@
 
         .app-id-box {
             background: white;
-            border: 2px solid #1b75bc;
+            border: 2px solid var(--primary-blue);
             padding: 20px;
             border-radius: 8px;
             text-align: center;
@@ -92,7 +129,7 @@
         .app-id-box .id-value {
             font-size: 24px;
             font-weight: 700;
-            color: #1b75bc;
+            color: var(--primary-dust);
             font-family: 'Courier New', monospace;
         }
 
@@ -105,7 +142,7 @@
         }
 
         .summary-section h3 {
-            color: #1b75bc;
+            color: var(--primary-blue);
             font-size: 16px;
             margin-bottom: 15px;
             padding-bottom: 10px;
@@ -260,11 +297,12 @@
         }
 
         .form-section h2 {
-            color: #1b75bc;
+            color: var(--primary-blue);
             font-size: 18px;
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid #eee;
+            font-weight: 700;
         }
 
         .form-row {
@@ -310,7 +348,7 @@
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #1b75bc;
+            border-color: var(--primary-blue);
             box-shadow: 0 0 0 3px rgba(27, 117, 188, 0.1);
         }
 
@@ -423,22 +461,22 @@
         }
 
         .btn-submit {
-            background: #1b75bc;
+            background: var(--primary-dust);
             color: white;
             flex: 1;
         }
 
         .btn-submit:hover:not(:disabled) {
-            background: #1565a0;
+            background: #a03815;
         }
 
         .btn-reset {
-            background: #6c757d;
+            background: var(--steel-grey);
             color: white;
         }
 
         .btn-reset:hover {
-            background: #5a6268;
+            background: #7a7a7a;
         }
 
         button:disabled {
@@ -475,23 +513,23 @@
             padding: 15px;
             border-radius: 5px;
             margin-bottom: 15px;
-            border-left: 4px solid #00aba9;
+            border-left: 4px solid var(--teal);
         }
 
         .reference-group h4 {
-            color: #1b75bc;
+            color: var(--primary-blue);
             font-size: 14px;
             margin-bottom: 15px;
         }
 
         .add-reference-btn {
-            background: #00aba9;
+            background: var(--teal);
             color: white;
             margin-top: 15px;
         }
 
         .add-reference-btn:hover {
-            background: #008a88;
+            background: #006a86;
         }
 
         .remove-ref-btn {
@@ -532,8 +570,11 @@
 <body>
     <div class="container">
         <header>
-            <h1>Specialist Sales Pty Ltd</h1>
-            <p>Credit Application Form</p>
+            <img src="https://specialistsales.com.au/wp-content/themes/specialistsales/img/logo-main-white.png" alt="Specialist Sales">
+            <div class="header-text">
+                <h1>Credit Application</h1>
+                <p>Specialist Sales Pty Ltd</p>
+            </div>
         </header>
 
         <!-- Completion Page -->
@@ -876,7 +917,7 @@
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
-            ctx.strokeStyle = '#1b75bc';
+            ctx.strokeStyle = '#b5481d';
             ctx.lineWidth = 2;
             ctx.lineCap = 'round';
             ctx.beginPath();
