@@ -26,7 +26,7 @@ export default async function handler(req, res) {
                 <p>Dear ${applicantCompany},</p>
                 <p>Thank you for submitting your credit application to Specialist Sales Pty Ltd.</p>
                 <p><strong>Application ID:</strong> ${applicationId}</p>
-                <p>Our accounts team will contact your provided trade references to verify your creditworthiness. We will be in touch within 3-5 business days to update you on the status of your application.</p>
+                <p>Our accounts team will contact your provided trade contacts to provide a reference. We will be in touch in the coming days to update you on the status of your application.</p>
                 <p>If you have any questions, please contact our accounts department at <strong>Accounts@SpecialistSales.com.au</strong> or call <strong>1800 780 317</strong>.</p>
                 <p>Kind regards,<br><strong>Specialist Sales Pty Ltd</strong><br>PO Box 382, Toowoomba QLD 4350</p>
               </div>
