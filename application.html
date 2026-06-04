@@ -546,13 +546,6 @@
     </div>
 
     <script>
-           // Initialize EmailJS when DOM is ready
-        window.addEventListener('DOMContentLoaded', () => {
-            emailjs.init('xdj8WYm0g7fq6Tj9V'); // Public Key
-            addReferenceField(); // Add first reference field
-            addReferenceField(); // Add second reference field
-        });
-
         // Signature pad setup
         const canvas = document.getElementById('signaturePad');
         const ctx = canvas.getContext('2d');
@@ -840,11 +833,13 @@
 
             // Send confirmation email to applicant
             try {
-                await emailjs.send('service_igs3nyi', 'template_e310ujc', {
-                    to_email: data.applicant.email,
-                    applicant_company: data.applicant.companyName,
-                    application_id: applicationId
-                });
+                if (typeof emailjs !== 'undefined') {
+                    await emailjs.send('service_igs3nyi', 'template_e310ujc', {
+                        to_email: data.applicant.email,
+                        applicant_company: data.applicant.companyName,
+                        application_id: applicationId
+                    });
+                }
             } catch (error) {
                 console.error('Error sending applicant confirmation email:', error);
             }
@@ -852,13 +847,15 @@
             // Send reference request emails to each reference
             for (const ref of referenceLinks) {
                 try {
-                    await emailjs.send('service_igs3nyi', 'template_fvnquyb', {
-                        to_email: ref.email,
-                        ref_contact_name: ref.contact,
-                        ref_company: ref.company,
-                        applicant_company: data.applicant.companyName,
-                        reference_link: ref.link
-                    });
+                    if (typeof emailjs !== 'undefined') {
+                        await emailjs.send('service_igs3nyi', 'template_fvnquyb', {
+                            to_email: ref.email,
+                            ref_contact_name: ref.contact,
+                            ref_company: ref.company,
+                            applicant_company: data.applicant.companyName,
+                            reference_link: ref.link
+                        });
+                    }
                 } catch (error) {
                     console.error(`Error sending reference email to ${ref.email}:`, error);
                 }
@@ -870,8 +867,9 @@
             // Reset form
             this.reset();
             clearSignature();
-            referenceCount = 1;
+            referenceCount = 0;
             document.getElementById('referencesContainer').innerHTML = '';
+            addReferenceField();
             addReferenceField();
         });
 
@@ -887,6 +885,15 @@
             let applications = JSON.parse(localStorage.getItem('applications') || '[]');
             applications.push(data);
             localStorage.setItem('applications', JSON.stringify(applications));
+        }
+
+        // Initialize when DOM is definitely loaded - add the 2 reference fields
+        addReferenceField();
+        addReferenceField();
+
+        // Initialize EmailJS safely (library may still be loading from CDN)
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init('xdj8WYm0g7fq6Tj9V');
         }
     </script>
 </body>
