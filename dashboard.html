@@ -177,7 +177,6 @@
             right: 10px;
             font-size: 24px;
             cursor: help;
-            title: "Unfavourable reference response";
         }
 
         .application-info {
@@ -635,25 +634,28 @@
         let reviewedApplications = new Set();
 
         // Check if reference response is unfavourable
-function isUnfavourableResponse(response) {
-    // Handle both old and new field names for backwards compatibility
-    const q5_continue = response.q5_continue || response.q6_continue;
-    const q2_payment = response.q2_payment || response.q3_payment;
-    const q3_daysOverdue = response.q3_daysOverdue || response.q4_daysOverdue;
-    
-    // If they said no to continuing credit
-    if (q5_continue === 'no') {
-        return true;
-    }
-    // If payment is late AND days overdue > 5
-    if (q2_payment === 'late' && q3_daysOverdue > 5) {
-        return true;
-    }
-    return false;
-}
+        function isUnfavourableResponse(response) {
+            if (!response) return false;
+            
+            // Handle both old and new field names for backwards compatibility
+            const q5_continue = response.q5_continue || response.q6_continue;
+            const q2_payment = response.q2_payment || response.q3_payment;
+            const q3_daysOverdue = response.q3_daysOverdue || response.q4_daysOverdue;
+            
+            // If they said no to continuing credit
+            if (q5_continue === 'no') {
+                return true;
+            }
+            // If payment is late AND days overdue > 5
+            if (q2_payment === 'late' && q3_daysOverdue > 5) {
+                return true;
+            }
+            return false;
+        }
 
         // Check if application has unfavourable references
         function hasUnfavourableReferences(app) {
+            if (!app.responses || app.responses.length === 0) return false;
             return app.responses.some(resp => isUnfavourableResponse(resp.response));
         }
 
@@ -789,6 +791,7 @@ function isUnfavourableResponse(response) {
                         <div class="application-info">
                             <div class="application-company">${app.applicant.companyName}</div>
                             <div class="application-details">
+                                <strong>ID:</strong> ${app.id} | 
                                 <strong>ABN:</strong> ${app.applicant.abn} | 
                                 <strong>Requested:</strong> $${app.financial.creditLimit.toLocaleString()} | 
                                 <strong>Owner:</strong> ${app.owner.name}
@@ -851,13 +854,14 @@ function isUnfavourableResponse(response) {
 
         // Export to CSV
         function exportToCSV(appsToExport, fileName) {
-            let csv = 'Company Name,ABN,ACN,Business Type,Address,Owner,Phone,Email,Credit Limit,Years,Status,Ref1 Company,Ref1 Contact,Ref1 Email,Ref1 Responded,Ref2 Company,Ref2 Contact,Ref2 Email,Ref2 Responded\n';
+            let csv = 'Application ID,Company Name,ABN,ACN,Business Type,Address,Owner,Phone,Email,Credit Limit,Years,Status,Ref1 Company,Ref1 Contact,Ref1 Email,Ref1 Responded,Ref2 Company,Ref2 Contact,Ref2 Email,Ref2 Responded\n';
 
             appsToExport.forEach(app => {
                 const ref1 = app.references[0] || {};
                 const ref2 = app.references[1] || {};
                 
                 const row = [
+                    app.id,
                     `"${app.applicant.companyName}"`,
                     app.applicant.abn,
                     app.applicant.acn || '',
@@ -869,7 +873,7 @@ function isUnfavourableResponse(response) {
                     app.financial.creditLimit,
                     app.financial.yearsInBusiness,
                     app.status || 'open',
-                    `"${ref1.company || ''}\"`,
+                    `"${ref1.company || ''}"`,
                     `"${ref1.contact || ''}"`,
                     ref1.email || '',
                     ref1.responded ? 'Yes' : 'No',
@@ -891,6 +895,7 @@ function isUnfavourableResponse(response) {
                 const ref2 = app.references[1] || {};
                 
                 return {
+                    'Application ID': app.id,
                     'Company Name': app.applicant.companyName,
                     'ABN': app.applicant.abn,
                     'ACN': app.applicant.acn || '',
@@ -954,9 +959,9 @@ function isUnfavourableResponse(response) {
                     responseDetails = `
                         <div style="margin-top: 10px; font-size: 12px; color: #666;">
                             <p><strong>Duration:</strong> ${responseData.response.q1_duration}</p>
-                            <p><strong>Payment:</strong> ${responseData.response.q2_payment}</p>
-                            <p><strong>Days Overdue:</strong> ${responseData.response.q3_daysOverdue}</p>
-                            <p><strong>Would Continue:</strong> ${responseData.response.q5_continue}</p>
+                            <p><strong>Payment:</strong> ${responseData.response.q2_payment || responseData.response.q3_payment}</p>
+                            <p><strong>Days Overdue:</strong> ${responseData.response.q3_daysOverdue || responseData.response.q4_daysOverdue}</p>
+                            <p><strong>Would Continue:</strong> ${responseData.response.q5_continue || responseData.response.q6_continue}</p>
                         </div>
                     `;
                 }
@@ -975,6 +980,11 @@ function isUnfavourableResponse(response) {
             }).join('');
 
             const modalBody = `
+                <div class="modal-section">
+                    <h3>Application ID</h3>
+                    <p style="font-size: 16px; font-weight: 600; color: #1b75bc;">${app.id}</p>
+                </div>
+
                 <div class="modal-section">
                     <h3>Applicant Information</h3>
                     <div class="modal-row">
