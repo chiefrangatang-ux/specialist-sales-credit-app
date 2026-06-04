@@ -546,10 +546,11 @@
     </div>
 
     <script>
-        // Initialize EmailJS when DOM is ready
+           // Initialize EmailJS when DOM is ready
         window.addEventListener('DOMContentLoaded', () => {
             emailjs.init('xdj8WYm0g7fq6Tj9V'); // Public Key
             addReferenceField(); // Add first reference field
+            addReferenceField(); // Add second reference field
         });
 
         // Signature pad setup
@@ -690,7 +691,7 @@
         });
 
         // References management
-        let referenceCount = 1;
+        let referenceCount = 0;
 
         function addReferenceField() {
             referenceCount++;
