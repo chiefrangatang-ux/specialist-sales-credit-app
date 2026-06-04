@@ -541,10 +541,12 @@
 
         // Get filtered applications
         function getFilteredApplications() {
-            let filtered = applications.filter(app => {
-                const status = app.status || 'open';
-                return status === currentTab;
-            });
+    let filtered = applications.filter(app => {
+        let status = app.status || 'open';
+        // Treat 'submitted' as 'open'
+        if (status === 'submitted') status = 'open';
+        return status === currentTab;
+    });
 
             if (searchQuery) {
                 filtered = filtered.filter(app => 
