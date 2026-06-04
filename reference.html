@@ -335,51 +335,46 @@
                 </div>
 
                 <div class="question-group">
-                    <label>2. What credit limit would you recommend? *</label>
-                    <input type="text" name="q2_creditLimit" placeholder="e.g., $5,000" required>
-                </div>
-
-                <div class="question-group">
-                    <label>3. How would you describe their payment behaviour? *</label>
+                    <label>2. How would you describe their payment behaviour? *</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="q3_payment" value="early" required> Early</label>
-                        <label><input type="radio" name="q3_payment" value="on-time" required> On time</label>
-                        <label><input type="radio" name="q3_payment" value="late" required> Late</label>
+                        <label><input type="radio" name="q2_payment" value="early" required> Early</label>
+                        <label><input type="radio" name="q2_payment" value="on-time" required> On time</label>
+                        <label><input type="radio" name="q2_payment" value="late" required> Late</label>
                     </div>
                 </div>
 
                 <div class="question-group">
-                    <label>4. If late, how many days typically? *</label>
-                    <input type="number" name="q4_daysOverdue" placeholder="0" min="0" required>
+                    <label>3. If late, how many days typically? *</label>
+                    <input type="number" name="q3_daysOverdue" placeholder="0" min="0" required>
                 </div>
 
                 <div class="question-group">
-                    <label>5. Have you ever placed them on credit hold? *</label>
+                    <label>4. Have you ever placed them on credit hold? *</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="q5_creditHold" value="yes" required> Yes</label>
-                        <label><input type="radio" name="q5_creditHold" value="no" required> No</label>
+                        <label><input type="radio" name="q4_creditHold" value="yes" required> Yes</label>
+                        <label><input type="radio" name="q4_creditHold" value="no" required> No</label>
                     </div>
                 </div>
 
                 <div class="question-group">
-                    <label>6. Would you continue to trade with them on credit terms? *</label>
+                    <label>5. Would you continue to trade with them on credit terms? *</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="q6_continue" value="yes" required> Yes</label>
-                        <label><input type="radio" name="q6_continue" value="no" required> No</label>
+                        <label><input type="radio" name="q5_continue" value="yes" required> Yes</label>
+                        <label><input type="radio" name="q5_continue" value="no" required> No</label>
                     </div>
                 </div>
 
                 <div class="question-group">
-                    <label>7. Have there been any disputes or issues? *</label>
+                    <label>6. Have there been any disputes or issues? *</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="q7_disputes" value="yes" required> Yes</label>
-                        <label><input type="radio" name="q7_disputes" value="no" required> No</label>
+                        <label><input type="radio" name="q6_disputes" value="yes" required> Yes</label>
+                        <label><input type="radio" name="q6_disputes" value="no" required> No</label>
                     </div>
                 </div>
 
                 <div class="question-group">
-                    <label>8. Any additional comments?</label>
-                    <textarea name="q8_comments" placeholder="Optional - any additional information..."></textarea>
+                    <label>7. Any additional comments?</label>
+                    <textarea name="q7_comments" placeholder="Optional - any additional information..."></textarea>
                 </div>
 
                 <div class="loading-spinner" id="loadingSpinner">
@@ -437,13 +432,12 @@
             
             const response = {
                 q1_duration: formData.get('q1_duration'),
-                q2_creditLimit: formData.get('q2_creditLimit'),
-                q3_payment: formData.get('q3_payment'),
-                q4_daysOverdue: parseInt(formData.get('q4_daysOverdue')) || 0,
-                q5_creditHold: formData.get('q5_creditHold'),
-                q6_continue: formData.get('q6_continue'),
-                q7_disputes: formData.get('q7_disputes'),
-                q8_comments: formData.get('q8_comments'),
+                q2_payment: formData.get('q2_payment'),
+                q3_daysOverdue: parseInt(formData.get('q3_daysOverdue')) || 0,
+                q4_creditHold: formData.get('q4_creditHold'),
+                q5_continue: formData.get('q5_continue'),
+                q6_disputes: formData.get('q6_disputes'),
+                q7_comments: formData.get('q7_comments'),
             };
 
             // Get application from localStorage
