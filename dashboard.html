@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Dashboard - Specialist Sales</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -150,6 +151,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            margin-bottom: 25px;
         }
 
         .application-card {
@@ -279,7 +281,7 @@
             border-radius: 4px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
             z-index: 1000;
-            min-width: 150px;
+            min-width: 180px;
             top: 100%;
             right: 0;
         }
@@ -300,14 +302,6 @@
             transition: all 0.2s;
         }
 
-        .context-menu button:first-child {
-            border-radius: 4px 4px 0 0;
-        }
-
-        .context-menu button:last-child {
-            border-radius: 0 0 4px 4px;
-        }
-
         .context-menu button:hover {
             background: #f0f0f0;
         }
@@ -318,6 +312,86 @@
 
         .context-menu button.danger:hover {
             background: #ffe6e6;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            min-width: 150px;
+            margin-left: 5px;
+        }
+
+        .context-menu button.has-submenu:hover + .submenu,
+        .submenu:hover {
+            display: block;
+        }
+
+        .submenu button {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .export-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .export-button {
+            position: relative;
+        }
+
+        .export-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            z-index: 500;
+            min-width: 140px;
+            top: 100%;
+            left: 0;
+            margin-top: 5px;
+        }
+
+        .export-menu.show {
+            display: block;
+        }
+
+        .export-menu button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .export-menu button:hover {
+            background: #f0f0f0;
+        }
+
+        .btn-export {
+            background: #6c757d;
+            color: white;
+            padding: 8px 14px;
+        }
+
+        .btn-export:hover {
+            background: #5a6268;
         }
 
         .modal {
@@ -469,6 +543,10 @@
             .tabs {
                 flex-wrap: wrap;
             }
+
+            .export-section {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -500,6 +578,16 @@
             <div id="emptyState" class="empty-state" style="display: none;">
                 <h3>No applications found</h3>
                 <p>There are no applications in this category yet.</p>
+            </div>
+
+            <div class="export-section" id="exportSection" style="display: none;">
+                <div class="export-button">
+                    <button class="btn-small btn-export" onclick="toggleExportMenu(event)">📥 Export all data</button>
+                    <div class="export-menu" id="exportMenu">
+                        <button onclick="exportAllData('csv')">Export as CSV</button>
+                        <button onclick="exportAllData('xlsx')">Export as XLSX</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -541,12 +629,11 @@
 
         // Get filtered applications
         function getFilteredApplications() {
-    let filtered = applications.filter(app => {
-        let status = app.status || 'open';
-        // Treat 'submitted' as 'open'
-        if (status === 'submitted') status = 'open';
-        return status === currentTab;
-    });
+            let filtered = applications.filter(app => {
+                let status = app.status || 'open';
+                if (status === 'submitted') status = 'open';
+                return status === currentTab;
+            });
 
             if (searchQuery) {
                 filtered = filtered.filter(app => 
@@ -560,7 +647,11 @@
         // Get statistics
         function getStats() {
             return {
-                open: applications.filter(app => (app.status || 'open') === 'open').length,
+                open: applications.filter(app => {
+                    let status = app.status || 'open';
+                    if (status === 'submitted') status = 'open';
+                    return status === 'open';
+                }).length,
                 approved: applications.filter(app => app.status === 'approved').length,
                 deleted: applications.filter(app => app.status === 'deleted').length,
                 awaiting: applications.filter(app => {
@@ -613,14 +704,17 @@
             const filtered = getFilteredApplications();
             const container = document.getElementById('applicationsContainer');
             const emptyState = document.getElementById('emptyState');
+            const exportSection = document.getElementById('exportSection');
 
             if (filtered.length === 0) {
                 container.innerHTML = '';
                 emptyState.style.display = 'block';
+                exportSection.style.display = 'none';
                 return;
             }
 
             emptyState.style.display = 'none';
+            exportSection.style.display = 'flex';
             container.innerHTML = filtered.map(app => {
                 const responded = app.references.filter(r => r.responded).length;
                 const isReviewed = reviewedApplications.has(app.id);
@@ -651,10 +745,15 @@
                         </div>
                         <div class="application-actions">
                             <button class="btn-small btn-view" onclick="viewDetails('${app.id}')">View Details</button>
-                            ${responded >= 2 ? `<button class="btn-small btn-approve" ${canApprove ? '' : 'disabled'} onclick="approveApplication('${app.id}')" title="${canApprove ? 'Approve this application' : 'Review application details first'}">Approve</button>` : ''}
+                            ${responded >= 2 ? `<button class="btn-small btn-approve" ${canApprove ? '' : 'disabled'} onclick="approveApplication('${app.id}')">Approve</button>` : ''}
                             <div style="position: relative;">
                                 <button class="menu-button" onclick="toggleMenu(event, '${app.id}')">⋯</button>
                                 <div class="context-menu" id="menu-${app.id}">
+                                    <button class="has-submenu" onclick="event.preventDefault()">📥 Export</button>
+                                    <div class="submenu">
+                                        <button onclick="exportApplication('${app.id}', 'csv')">Export as CSV</button>
+                                        <button onclick="exportApplication('${app.id}', 'xlsx')">Export as XLSX</button>
+                                    </div>
                                     <button class="danger" onclick="removeApplication('${app.id}')">Remove Application</button>
                                 </div>
                             </div>
@@ -664,12 +763,124 @@
             }).join('');
         }
 
+        // Export single application
+        function exportApplication(appId, format) {
+            const app = applications.find(a => a.id === appId);
+            if (!app) return;
+            
+            if (format === 'csv') {
+                exportToCSV([app], app.applicant.companyName);
+            } else if (format === 'xlsx') {
+                exportToXLSX([app], app.applicant.companyName);
+            }
+            closeMenu();
+        }
+
+        // Export all applications in current tab
+        function exportAllData(format) {
+            const filtered = getFilteredApplications();
+            if (filtered.length === 0) {
+                alert('No applications to export');
+                return;
+            }
+
+            const fileName = `specialist-sales-${currentTab}-applications`;
+            if (format === 'csv') {
+                exportToCSV(filtered, fileName);
+            } else if (format === 'xlsx') {
+                exportToXLSX(filtered, fileName);
+            }
+            closeMenu();
+        }
+
+        // Export to CSV
+        function exportToCSV(appsToExport, fileName) {
+            let csv = 'Company Name,ABN,ACN,Business Type,Address,Owner,Phone,Email,Credit Limit,Years,Status,Ref1 Company,Ref1 Contact,Ref1 Email,Ref1 Responded,Ref2 Company,Ref2 Contact,Ref2 Email,Ref2 Responded\n';
+
+            appsToExport.forEach(app => {
+                const ref1 = app.references[0] || {};
+                const ref2 = app.references[1] || {};
+                
+                const row = [
+                    `"${app.applicant.companyName}"`,
+                    app.applicant.abn,
+                    app.applicant.acn || '',
+                    app.applicant.businessType,
+                    `"${app.applicant.businessAddress}, ${app.applicant.suburb} ${app.applicant.state}"`,
+                    `"${app.owner.name}"`,
+                    app.owner.phone,
+                    app.owner.email,
+                    app.financial.creditLimit,
+                    app.financial.yearsInBusiness,
+                    app.status || 'open',
+                    `"${ref1.company || ''}"`,
+                    `"${ref1.contact || ''}"`,
+                    ref1.email || '',
+                    ref1.responded ? 'Yes' : 'No',
+                    `"${ref2.company || ''}"`,
+                    `"${ref2.contact || ''}"`,
+                    ref2.email || '',
+                    ref2.responded ? 'Yes' : 'No'
+                ];
+                csv += row.join(',') + '\n';
+            });
+
+            downloadFile(csv, `${fileName}.csv`, 'text/csv');
+        }
+
+        // Export to XLSX
+        function exportToXLSX(appsToExport, fileName) {
+            const data = appsToExport.map(app => {
+                const ref1 = app.references[0] || {};
+                const ref2 = app.references[1] || {};
+                
+                return {
+                    'Company Name': app.applicant.companyName,
+                    'ABN': app.applicant.abn,
+                    'ACN': app.applicant.acn || '',
+                    'Business Type': app.applicant.businessType,
+                    'Address': `${app.applicant.businessAddress}, ${app.applicant.suburb} ${app.applicant.state}`,
+                    'Owner': app.owner.name,
+                    'Phone': app.owner.phone,
+                    'Email': app.owner.email,
+                    'Credit Limit': app.financial.creditLimit,
+                    'Years': app.financial.yearsInBusiness,
+                    'Status': app.status || 'open',
+                    'Ref1 Company': ref1.company || '',
+                    'Ref1 Contact': ref1.contact || '',
+                    'Ref1 Email': ref1.email || '',
+                    'Ref1 Responded': ref1.responded ? 'Yes' : 'No',
+                    'Ref2 Company': ref2.company || '',
+                    'Ref2 Contact': ref2.contact || '',
+                    'Ref2 Email': ref2.email || '',
+                    'Ref2 Responded': ref2.responded ? 'Yes' : 'No'
+                };
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Applications');
+            XLSX.writeFile(workbook, `${fileName}.xlsx`);
+        }
+
+        // Download file helper
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
         // View application details
         function viewDetails(appId) {
             const app = applications.find(a => a.id === appId);
             if (!app) return;
 
-            // Mark as reviewed
             reviewedApplications.add(appId);
             saveReviewedApplications();
             render();
@@ -820,9 +1031,17 @@
             menu.classList.toggle('show');
         }
 
+        // Toggle export menu
+        function toggleExportMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('exportMenu');
+            menu.classList.toggle('show');
+        }
+
         // Close menu
         function closeMenu() {
             document.querySelectorAll('.context-menu').forEach(m => m.classList.remove('show'));
+            document.getElementById('exportMenu').classList.remove('show');
         }
 
         // Tab switching
