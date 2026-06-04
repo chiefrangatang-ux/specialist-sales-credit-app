@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credit Application - Specialist Sales</title>
+    <title>Team Dashboard - Specialist Sales</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -15,11 +16,11 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #f5f5f5 0%, #eef2f5 100%);
             color: #333;
-            line-height: 1.6;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -31,303 +32,544 @@
             margin-bottom: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-placeholder {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #1b75bc;
+            font-size: 24px;
+            flex-shrink: 0;
         }
 
         header h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
+            font-size: 24px;
+            font-weight: 600;
         }
 
         header p {
             opacity: 0.95;
+            font-size: 14px;
+            margin-top: 5px;
         }
 
-        .form-section {
+        .dashboard-section {
             background: white;
             border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
             padding: 30px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
         }
 
-        .form-section h2 {
-            color: #1b75bc;
-            font-size: 18px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eee;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-row.full {
-            grid-template-columns: 1fr;
-        }
-
-        .form-group {
+        .tabs {
             display: flex;
-            flex-direction: column;
+            gap: 0;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 30px;
         }
 
-        .form-group label {
+        .tab-button {
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 15px;
             font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 14px;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+            bottom: -2px;
         }
 
-        .form-group.required label::after {
-            content: " *";
-            color: #dc3545;
+        .tab-button:hover {
+            color: #1b75bc;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 10px 12px;
+        .tab-button.active {
+            color: #1b75bc;
+            border-bottom-color: #1b75bc;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #f8fafb;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            border-left: 4px solid #00aba9;
+        }
+
+        .stat-card h3 {
+            font-size: 28px;
+            color: #1b75bc;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
             border: 1.5px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
-            font-family: inherit;
             transition: all 0.3s;
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .search-box input:focus {
             outline: none;
             border-color: #1b75bc;
             box-shadow: 0 0 0 3px rgba(27, 117, 188, 0.1);
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .info-box {
-            background: #f0f8ff;
-            border-left: 4px solid #1b75bc;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-
-        .signature-section {
-            background: #f8fafb;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        #signaturePad {
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            cursor: crosshair;
-            background: white;
-            display: block;
-            margin: 0 auto 15px;
-        }
-
-        .signature-buttons {
+        .applications-list {
             display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .signature-buttons button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-
-        .btn-clear {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-clear:hover {
-            background: #5a6268;
-        }
-
-        .legal-text {
-            background: #f8fafb;
-            padding: 20px;
-            border-radius: 5px;
-            font-size: 12px;
-            line-height: 1.6;
-            color: #666;
-            margin-bottom: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #e0e0e0;
-        }
-
-        .legal-text h3 {
-            color: #1b75bc;
-            font-size: 13px;
-            margin-top: 15px;
-            margin-bottom: 10px;
-        }
-
-        .legal-text h3:first-child {
-            margin-top: 0;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            margin-top: 4px;
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-        }
-
-        .checkbox-group label {
-            margin: 0;
-            font-weight: normal;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .button-group {
-            display: flex;
+            flex-direction: column;
             gap: 15px;
-            margin-top: 30px;
+            margin-bottom: 25px;
         }
 
-        button {
-            padding: 12px 24px;
-            border: none;
+        .application-card {
+            background: #f8fafb;
+            padding: 20px;
             border-radius: 5px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 15px;
+            border-left: 4px solid #00aba9;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
             transition: all 0.3s;
+            position: relative;
         }
 
-        .btn-submit {
-            background: #1b75bc;
-            color: white;
+        .application-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .warning-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: help;
+        }
+
+        .application-info {
             flex: 1;
         }
 
-        .btn-submit:hover:not(:disabled) {
+        .application-company {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1b75bc;
+            margin-bottom: 5px;
+        }
+
+        .application-details {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-right: 8px;
+        }
+
+        .status-awaiting {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-ready {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .application-actions {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        button.btn-small {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-view {
+            background: #1b75bc;
+            color: white;
+        }
+
+        .btn-view:hover {
             background: #1565a0;
         }
 
-        .btn-reset {
-            background: #6c757d;
+        .btn-approve {
+            background: #28a745;
             color: white;
         }
 
-        .btn-reset:hover {
+        .btn-approve:hover:not(:disabled) {
+            background: #218838;
+        }
+
+        .btn-approve:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-remove-approval {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-remove-approval:hover {
+            background: #e0a800;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .menu-button:hover {
+            color: #1b75bc;
+        }
+
+        .context-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            min-width: 180px;
+            top: 100%;
+            right: 0;
+        }
+
+        .context-menu.show {
+            display: block;
+        }
+
+        .context-menu button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .context-menu button:hover {
+            background: #f0f0f0;
+        }
+
+        .context-menu button.danger {
+            color: #dc3545;
+        }
+
+        .context-menu button.danger:hover {
+            background: #ffe6e6;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            min-width: 150px;
+            margin-left: 5px;
+        }
+
+        .context-menu button.has-submenu:hover + .submenu,
+        .submenu:hover {
+            display: block;
+        }
+
+        .submenu button {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .export-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .export-button {
+            position: relative;
+        }
+
+        .export-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            z-index: 500;
+            min-width: 140px;
+            top: 100%;
+            left: 0;
+            margin-top: 5px;
+        }
+
+        .export-menu.show {
+            display: block;
+        }
+
+        .export-menu button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .export-menu button:hover {
+            background: #f0f0f0;
+        }
+
+        .btn-export {
+            background: #6c757d;
+            color: white;
+            padding: 8px 14px;
+        }
+
+        .btn-export:hover {
             background: #5a6268;
         }
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .spinner {
+        .modal {
             display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 10px;
-            vertical-align: middle;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .modal.show {
+            display: flex;
         }
 
-        .error-message {
-            color: #dc3545;
-            font-size: 13px;
-            margin-top: 5px;
-            display: none;
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .success-message {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
-            display: none;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
         }
 
-        .reference-group {
+        .modal-header h2 {
+            color: #1b75bc;
+            font-size: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h3 {
+            color: #1b75bc;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .modal-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .modal-item {
+            font-size: 13px;
+        }
+
+        .modal-item label {
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .modal-item p {
+            color: #333;
+        }
+
+        .reference-status {
             background: #f8fafb;
             padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             border-left: 4px solid #00aba9;
         }
 
-        .reference-group h4 {
+        .reference-status.unfavourable {
+            border-left-color: #dc3545;
+            background: #ffe6e6;
+        }
+
+        .reference-company {
+            font-weight: 600;
             color: #1b75bc;
-            font-size: 14px;
-            margin-bottom: 15px;
+            margin-bottom: 3px;
         }
 
-        .add-reference-btn {
-            background: #00aba9;
-            color: white;
-            margin-top: 15px;
-        }
-
-        .add-reference-btn:hover {
-            background: #008a88;
-        }
-
-        .remove-ref-btn {
-            background: #dc3545;
-            color: white;
-            padding: 6px 12px;
+        .reference-contact {
             font-size: 12px;
-            margin-top: 10px;
+            color: #666;
         }
 
-        .remove-ref-btn:hover {
-            background: #c82333;
+        .signature-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state h3 {
+            color: #1b75bc;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 768px) {
-            .form-row {
+            .modal-row {
                 grid-template-columns: 1fr;
             }
 
-            header h1 {
-                font-size: 22px;
+            .application-card {
+                flex-direction: column;
             }
 
-            .button-group {
-                flex-direction: column;
+            .application-actions {
+                width: 100%;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .export-section {
+                flex-wrap: wrap;
             }
         }
     </style>
@@ -335,442 +577,584 @@
 <body>
     <div class="container">
         <header>
-            <h1>Specialist Sales Pty Ltd</h1>
-            <p>Credit Application Form</p>
+            <div class="logo-placeholder">SS</div>
+            <div>
+                <h1>Specialist Sales</h1>
+                <p>Credit Application Team Dashboard</p>
+            </div>
         </header>
 
-        <div class="success-message" id="successMessage">
-            <strong>✓ Application submitted successfully!</strong>
-            <p>Your application ID is: <strong id="applicationId"></strong></p>
-            <p>Our accounts team will be in touch shortly.</p>
+        <div class="dashboard-section">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="open">📋 Open Applications</button>
+                <button class="tab-button" data-tab="approved">✅ Approved Applications</button>
+                <button class="tab-button" data-tab="deleted">🗑️ Deleted Applications</button>
+            </div>
+
+            <div id="stats" class="stats-grid"></div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search applications by company name...">
+            </div>
+
+            <div id="applicationsContainer" class="applications-list"></div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <h3>No applications found</h3>
+                <p>There are no applications in this category yet.</p>
+            </div>
+
+            <div class="export-section" id="exportSection" style="display: none;">
+                <div class="export-button">
+                    <button class="btn-small btn-export" onclick="toggleExportMenu(event)">📥 Export all data</button>
+                    <div class="export-menu" id="exportMenu">
+                        <button onclick="exportAllData('csv')">Export as CSV</button>
+                        <button onclick="exportAllData('xlsx')">Export as XLSX</button>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <form id="applicationForm">
-            <!-- Applicant Information -->
-            <div class="form-section">
-                <h2>Applicant Information</h2>
-                
-                <div class="form-row full">
-                    <div class="form-group required">
-                        <label for="companyName">Company Name</label>
-                        <input type="text" id="companyName" name="companyName" required>
-                        <span class="error-message">Company name is required</span>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="abn">ABN</label>
-                        <input type="text" id="abn" name="abn" placeholder="11 digits" maxlength="11" required>
-                        <span class="error-message">ABN must be 11 digits</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="acn">ACN</label>
-                        <input type="text" id="acn" name="acn" placeholder="9 digits" maxlength="9">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="businessType">Business Type</label>
-                        <select id="businessType" name="businessType" required>
-                            <option value="">Select type...</option>
-                            <option value="Sole Trader">Sole Trader</option>
-                            <option value="Partnership">Partnership</option>
-                            <option value="Pty Ltd">Pty Ltd</option>
-                            <option value="Trust">Trust</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group required">
-                        <label for="yearsInBusiness">Years in Business</label>
-                        <input type="number" id="yearsInBusiness" name="yearsInBusiness" min="0" required>
-                        <span class="error-message">Years in business is required</span>
-                    </div>
-                </div>
-
-                <div class="form-row full">
-                    <div class="form-group required">
-                        <label for="businessAddress">Business Address</label>
-                        <input type="text" id="businessAddress" name="businessAddress" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="suburb">Suburb/City</label>
-                        <input type="text" id="suburb" name="suburb" required>
-                    </div>
-                    <div class="form-group required">
-                        <label for="state">State</label>
-                        <select id="state" name="state" required>
-                            <option value="">Select...</option>
-                            <option value="QLD">QLD</option>
-                            <option value="NSW">NSW</option>
-                            <option value="VIC">VIC</option>
-                            <option value="WA">WA</option>
-                            <option value="SA">SA</option>
-                            <option value="TAS">TAS</option>
-                            <option value="NT">NT</option>
-                            <option value="ACT">ACT</option>
-                        </select>
-                    </div>
-                    <div class="form-group required">
-                        <label for="postcode">Postcode</label>
-                        <input type="text" id="postcode" name="postcode" maxlength="4" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="phone">Phone</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group required">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                </div>
+    <!-- Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Application Details</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
             </div>
-
-            <!-- Owner/Principal Information -->
-            <div class="form-section">
-                <h2>Principal/Owner</h2>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="ownerName">Full Name</label>
-                        <input type="text" id="ownerName" name="ownerName" required>
-                    </div>
-                    <div class="form-group required">
-                        <label for="ownerTitle">Position/Title</label>
-                        <input type="text" id="ownerTitle" name="ownerTitle" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="ownerEmail">Personal Email</label>
-                        <input type="email" id="ownerEmail" name="ownerEmail" required>
-                    </div>
-                    <div class="form-group required">
-                        <label for="ownerPhone">Personal Phone</label>
-                        <input type="tel" id="ownerPhone" name="ownerPhone" required>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Financial Information -->
-            <div class="form-section">
-                <h2>Financial Information</h2>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label for="creditLimit">Credit Limit Requested</label>
-                        <div style="position: relative;">
-                            <span style="position: absolute; left: 12px; top: 10px; font-weight: 600;">$</span>
-                            <input type="number" id="creditLimit" name="creditLimit" style="padding-left: 30px;" min="0" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-row full">
-                    <div class="form-group">
-                        <label for="bankDetails">Bank Details (Optional)</label>
-                        <textarea id="bankDetails" name="bankDetails" placeholder="Bank name, account number, etc."></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Trade References -->
-            <div class="form-section">
-                <h2>Trade References</h2>
-                <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Provide details of companies you currently trade with or have traded with recently.</p>
-                
-                <div id="referencesContainer"></div>
-
-                <button type="button" class="btn-submit add-reference-btn" onclick="addReference()">+ Add Another Reference</button>
-            </div>
-
-            <!-- Signature -->
-            <div class="form-section">
-                <h2>Digital Signature</h2>
-                <div class="signature-section">
-                    <p style="margin-bottom: 15px; font-size: 13px; color: #666;">Please sign below to confirm your application:</p>
-                    <canvas id="signaturePad" width="600" height="150"></canvas>
-                    <div class="signature-buttons">
-                        <button type="button" class="btn-clear" onclick="clearSignature()">Clear Signature</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Legal & Declarations -->
-            <div class="form-section">
-                <h2>Terms & Conditions</h2>
-                
-                <div class="legal-text">
-                    <h3>Application Terms</h3>
-                    <p>1. I/We declare that all information provided in this application is true and correct.</p>
-                    <p>2. I/We consent to Specialist Sales Pty Ltd obtaining credit references from the suppliers listed above.</p>
-                    <p>3. I/We understand that the provision of credit is conditional on satisfactory references and creditworthiness assessment.</p>
-                    <p>4. I/We acknowledge that approval may take 5-7 business days depending on reference responses.</p>
-                    <p>5. I/We agree that Specialist Sales Pty Ltd may conduct credit checks and obtain information from credit reporting agencies.</p>
-                    <p>6. I/We authorize Specialist Sales Pty Ltd to contact the references provided for verification purposes.</p>
-                    <p>7. I/We understand that false or misleading information may result in rejection of this application.</p>
-
-                    <h3>Personal Guarantee</h3>
-                    <p>I/We, the undersigned, in consideration of Specialist Sales Pty Ltd extending credit facilities, hereby personally guarantee and undertake to be jointly and severally liable for the due and punctual payment of all debts, liabilities and obligations of the above company to Specialist Sales Pty Ltd. This guarantee is unconditional and enforceable against me/us whether or not the company is still in existence or whether the company is still a customer of Specialist Sales Pty Ltd.</p>
-
-                    <h3>Confidentiality & Privacy</h3>
-                    <p>1. I understand my personal information will be collected, used and disclosed for the purposes of processing this application.</p>
-                    <p>2. Information will be handled in accordance with the Privacy Act and related legislation.</p>
-                    <p>3. Specialist Sales Pty Ltd may share information with credit reporting agencies and trade referees.</p>
-                    <p>4. I can request access to my personal information or lodge a privacy complaint if needed.</p>
-                    <p>5. Information will be retained for the duration of any credit relationship plus 7 years.</p>
-                </div>
-
-                <div class="checkbox-group">
-                    <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
-                    <label for="agreeTerms">I agree to the Terms & Conditions and Personal Guarantee above and confirm all information provided is accurate.</label>
-                </div>
-            </div>
-
-            <!-- Submit -->
-            <div class="form-section">
-                <div class="button-group">
-                    <button type="submit" class="btn-submit">
-                        <span class="spinner" id="spinner"></span>
-                        Submit Application
-                    </button>
-                    <button type="reset" class="btn-reset">Clear Form</button>
-                </div>
-            </div>
-        </form>
+            <div id="modalBody"></div>
+        </div>
     </div>
 
     <script>
-        // Generate SS-prefixed ID (SS + 6 alphanumeric characters)
-        function generateApplicationId() {
-            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            let id = 'SS';
-            for (let i = 0; i < 6; i++) {
-                id += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return id;
-        }
+        let applications = [];
+        let currentTab = 'open';
+        let searchQuery = '';
+        let reviewedApplications = new Set();
 
-        // Initialize signature pad
-        const canvas = document.getElementById('signaturePad');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-        let lastX = 0;
-        let lastY = 0;
-
-        canvas.addEventListener('mousedown', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            isDrawing = true;
-            lastX = e.clientX - rect.left;
-            lastY = e.clientY - rect.top;
-        });
-
-        canvas.addEventListener('mousemove', (e) => {
-            if (!isDrawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            ctx.strokeStyle = '#1b75bc';
-            ctx.lineWidth = 2;
-            ctx.lineCap = 'round';
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(x, y);
-            ctx.stroke();
-
-            lastX = x;
-            lastY = y;
-        });
-
-        canvas.addEventListener('mouseup', () => {
-            isDrawing = false;
-        });
-
-        canvas.addEventListener('mouseleave', () => {
-            isDrawing = false;
-        });
-
-        function clearSignature() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-
-        // Reference template
-        function createReferenceHTML(index) {
-            return `
-                <div class="reference-group" id="reference-${index}">
-                    <h4>Trade Reference ${index + 1}</h4>
-                    <div class="form-row">
-                        <div class="form-group required">
-                            <label>Company Name</label>
-                            <input type="text" class="ref-company" data-index="${index}" required>
-                        </div>
-                        <div class="form-group required">
-                            <label>Contact Person</label>
-                            <input type="text" class="ref-contact" data-index="${index}" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group required">
-                            <label>Email</label>
-                            <input type="email" class="ref-email" data-index="${index}" required>
-                        </div>
-                    </div>
-                    ${index > 1 ? `<button type="button" class="remove-ref-btn" onclick="removeReference(${index})">Remove Reference</button>` : ''}
-                </div>
-            `;
-        }
-
-        function renderReferences() {
-            const container = document.getElementById('referencesContainer');
-            const existingCount = container.children.length;
+        // Check if reference response is unfavourable
+        function isUnfavourableResponse(response) {
+            if (!response) return false;
             
-            if (existingCount === 0) {
-                container.innerHTML = createReferenceHTML(0) + createReferenceHTML(1);
+            // Handle both old and new field names for backwards compatibility
+            const q5_continue = response.q5_continue || response.q6_continue;
+            const q2_payment = response.q2_payment || response.q3_payment;
+            const q3_daysOverdue = response.q3_daysOverdue || response.q4_daysOverdue;
+            
+            // If they said no to continuing credit
+            if (q5_continue === 'no') {
+                return true;
             }
+            // If payment is late AND days overdue > 5
+            if (q2_payment === 'late' && q3_daysOverdue > 5) {
+                return true;
+            }
+            return false;
         }
 
-        function addReference() {
-            const container = document.getElementById('referencesContainer');
-            const newIndex = container.children.length;
-            const newRef = document.createElement('div');
-            newRef.innerHTML = createReferenceHTML(newIndex);
-            container.appendChild(newRef.firstElementChild);
+        // Check if application has unfavourable references
+        function hasUnfavourableReferences(app) {
+            if (!app.responses || app.responses.length === 0) return false;
+            return app.responses.some(resp => isUnfavourableResponse(resp.response));
         }
 
-        function removeReference(index) {
-            const ref = document.getElementById(`reference-${index}`);
-            if (ref) {
-                ref.remove();
-            }
+        // Load reviewed applications from localStorage
+        function loadReviewedApplications() {
+            const reviewed = localStorage.getItem('reviewedApplications');
+            reviewedApplications = new Set(JSON.parse(reviewed || '[]'));
         }
 
-        // Form submission
-        document.getElementById('applicationForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // Save reviewed applications to localStorage
+        function saveReviewedApplications() {
+            localStorage.setItem('reviewedApplications', JSON.stringify(Array.from(reviewedApplications)));
+        }
 
-            // Validate ABN
-            const abn = document.getElementById('abn').value;
-            if (!/^\d{11}$/.test(abn)) {
-                alert('ABN must be exactly 11 digits');
-                return;
-            }
+        // Load applications
+        function loadApplications() {
+            applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            loadReviewedApplications();
+            render();
+        }
 
-            // Validate signature
-            const imageData = canvas.toDataURL();
-            if (imageData === 'data:,') {
-                alert('Please provide a signature');
-                return;
-            }
-
-            // Collect references
-            const references = [];
-            document.querySelectorAll('.reference-group').forEach((group, idx) => {
-                const company = group.querySelector('.ref-company').value;
-                const contact = group.querySelector('.ref-contact').value;
-                const email = group.querySelector('.ref-email').value;
-                
-                if (company && contact && email) {
-                    references.push({
-                        id: generateApplicationId().replace('SS', 'REF'),
-                        company,
-                        contact,
-                        email,
-                        responded: false
-                    });
-                }
+        // Get filtered applications
+        function getFilteredApplications() {
+            let filtered = applications.filter(app => {
+                let status = app.status || 'open';
+                if (status === 'submitted') status = 'open';
+                return status === currentTab;
             });
 
-            if (references.length < 2) {
-                alert('Please provide at least 2 trade references');
+            if (searchQuery) {
+                filtered = filtered.filter(app => 
+                    app.applicant.companyName.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }
+
+            return filtered;
+        }
+
+        // Get statistics
+        function getStats() {
+            return {
+                open: applications.filter(app => {
+                    let status = app.status || 'open';
+                    if (status === 'submitted') status = 'open';
+                    return status === 'open';
+                }).length,
+                approved: applications.filter(app => app.status === 'approved').length,
+                deleted: applications.filter(app => app.status === 'deleted').length,
+                awaiting: applications.filter(app => {
+                    const responded = app.references.filter(r => r.responded).length;
+                    return responded < 2;
+                }).length,
+                ready: applications.filter(app => {
+                    const responded = app.references.filter(r => r.responded).length;
+                    return responded >= 2 && (app.status || 'open') === 'open';
+                }).length,
+            };
+        }
+
+        // Render dashboard
+        function render() {
+            renderStats();
+            renderApplications();
+        }
+
+        // Render statistics
+        function renderStats() {
+            const stats = getStats();
+            const statsHtml = `
+                <div class="stat-card">
+                    <h3>${stats.open}</h3>
+                    <p>Open</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${stats.approved}</h3>
+                    <p>Approved</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${stats.deleted}</h3>
+                    <p>Deleted</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${stats.awaiting}</h3>
+                    <p>Awaiting Refs</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${stats.ready}</h3>
+                    <p>Ready to Review</p>
+                </div>
+            `;
+            document.getElementById('stats').innerHTML = statsHtml;
+        }
+
+        // Render applications
+        function renderApplications() {
+            const filtered = getFilteredApplications();
+            const container = document.getElementById('applicationsContainer');
+            const emptyState = document.getElementById('emptyState');
+            const exportSection = document.getElementById('exportSection');
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                exportSection.style.display = 'none';
                 return;
             }
 
-            // Build application object
-            const applicationId = generateApplicationId();
-            const application = {
-                id: applicationId,
-                dateSubmitted: new Date().toISOString(),
-                status: 'open',
-                applicant: {
-                    companyName: document.getElementById('companyName').value,
-                    abn: document.getElementById('abn').value,
-                    acn: document.getElementById('acn').value || '',
-                    businessType: document.getElementById('businessType').value,
-                    businessAddress: document.getElementById('businessAddress').value,
-                    suburb: document.getElementById('suburb').value,
-                    state: document.getElementById('state').value,
-                    postcode: document.getElementById('postcode').value,
-                    phone: document.getElementById('phone').value,
-                    email: document.getElementById('email').value
-                },
-                owner: {
-                    name: document.getElementById('ownerName').value,
-                    title: document.getElementById('ownerTitle').value,
-                    email: document.getElementById('ownerEmail').value,
-                    phone: document.getElementById('ownerPhone').value
-                },
-                financial: {
-                    creditLimit: parseInt(document.getElementById('creditLimit').value),
-                    yearsInBusiness: parseInt(document.getElementById('yearsInBusiness').value),
-                    bankDetails: document.getElementById('bankDetails').value || ''
-                },
-                references: references,
-                responses: [],
-                signature: imageData
-            };
+            emptyState.style.display = 'none';
+            exportSection.style.display = 'flex';
+            container.innerHTML = filtered.map(app => {
+                const responded = app.references.filter(r => r.responded).length;
+                const isReviewed = reviewedApplications.has(app.id);
+                const canApprove = responded >= 2 && isReviewed;
+                const isUnfavourable = hasUnfavourableReferences(app);
 
-            // Save to localStorage
-            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
-            applications.push(application);
-            localStorage.setItem('applications', JSON.stringify(applications));
-
-            // Show success message
-            document.getElementById('applicationId').textContent = applicationId;
-            document.getElementById('successMessage').style.display = 'block';
-
-            // Try to send emails
-            try {
-                const spinner = document.getElementById('spinner');
-                spinner.style.display = 'inline-block';
-                document.querySelector('.btn-submit').disabled = true;
-
-                const response = await fetch('/api/send-emails', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        applicationId,
-                        applicant: application.applicant,
-                        owner: application.owner,
-                        references: application.references
-                    })
-                });
-
-                spinner.style.display = 'none';
-                document.querySelector('.btn-submit').disabled = false;
-
-                if (response.ok) {
-                    // Reset form
-                    document.getElementById('applicationForm').reset();
-                    renderReferences();
-                    clearSignature();
-                    window.scrollTo(0, 0);
+                let statusBadge = '';
+                if (responded < 2) {
+                    statusBadge = `<span class="status-badge status-awaiting">Awaiting ${2 - responded} Reference${2 - responded !== 1 ? 's' : ''}</span>`;
+                } else if (app.status !== 'approved') {
+                    statusBadge = `<span class="status-badge status-ready">Ready for Review</span>`;
+                } else {
+                    statusBadge = `<span class="status-badge status-approved">Approved</span>`;
                 }
-            } catch (error) {
-                console.log('Application saved locally. Email sending skipped (development mode).');
+
+                let warningBadge = '';
+                if (isUnfavourable) {
+                    warningBadge = `<div class="warning-badge" title="Unfavourable reference response detected">⚠️</div>`;
+                }
+
+                return `
+                    <div class="application-card">
+                        ${warningBadge}
+                        <div class="application-info">
+                            <div class="application-company">${app.applicant.companyName}</div>
+                            <div class="application-details">
+                                <strong>ID:</strong> ${app.id} | 
+                                <strong>ABN:</strong> ${app.applicant.abn} | 
+                                <strong>Requested:</strong> $${app.financial.creditLimit.toLocaleString()} | 
+                                <strong>Owner:</strong> ${app.owner.name}
+                            </div>
+                            <div>
+                                ${statusBadge}
+                                <span style="font-size: 11px; color: #999;">References: ${responded}/2</span>
+                            </div>
+                        </div>
+                        <div class="application-actions">
+                            <button class="btn-small btn-view" onclick="viewDetails('${app.id}')">View Details</button>
+                            ${responded >= 2 && app.status !== 'approved' ? `<button class="btn-small btn-approve" ${canApprove ? '' : 'disabled'} onclick="approveApplication('${app.id}')">Approve</button>` : ''}
+                            ${app.status === 'approved' ? `<button class="btn-small btn-remove-approval" onclick="removeApproval('${app.id}')">Remove Approval</button>` : ''}
+                            <div style="position: relative;">
+                                <button class="menu-button" onclick="toggleMenu(event, '${app.id}')">⋯</button>
+                                <div class="context-menu" id="menu-${app.id}">
+                                    <button class="has-submenu" onclick="event.preventDefault()">📥 Export</button>
+                                    <div class="submenu">
+                                        <button onclick="exportApplication('${app.id}', 'csv')">Export as CSV</button>
+                                        <button onclick="exportApplication('${app.id}', 'xlsx')">Export as XLSX</button>
+                                    </div>
+                                    <button class="danger" onclick="removeApplication('${app.id}')">Remove Application</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Export single application
+        function exportApplication(appId, format) {
+            const app = applications.find(a => a.id === appId);
+            if (!app) return;
+            
+            if (format === 'csv') {
+                exportToCSV([app], app.applicant.companyName);
+            } else if (format === 'xlsx') {
+                exportToXLSX([app], app.applicant.companyName);
             }
+            closeMenu();
+        }
+
+        // Export all applications in current tab
+        function exportAllData(format) {
+            const filtered = getFilteredApplications();
+            if (filtered.length === 0) {
+                alert('No applications to export');
+                return;
+            }
+
+            const fileName = `specialist-sales-${currentTab}-applications`;
+            if (format === 'csv') {
+                exportToCSV(filtered, fileName);
+            } else if (format === 'xlsx') {
+                exportToXLSX(filtered, fileName);
+            }
+            closeMenu();
+        }
+
+        // Export to CSV
+        function exportToCSV(appsToExport, fileName) {
+            let csv = 'Application ID,Company Name,ABN,ACN,Business Type,Address,Owner,Phone,Email,Credit Limit,Years,Status,Ref1 Company,Ref1 Contact,Ref1 Email,Ref1 Responded,Ref2 Company,Ref2 Contact,Ref2 Email,Ref2 Responded\n';
+
+            appsToExport.forEach(app => {
+                const ref1 = app.references[0] || {};
+                const ref2 = app.references[1] || {};
+                
+                const row = [
+                    app.id,
+                    `"${app.applicant.companyName}"`,
+                    app.applicant.abn,
+                    app.applicant.acn || '',
+                    app.applicant.businessType,
+                    `"${app.applicant.businessAddress}, ${app.applicant.suburb} ${app.applicant.state}"`,
+                    `"${app.owner.name}"`,
+                    app.owner.phone,
+                    app.owner.email,
+                    app.financial.creditLimit,
+                    app.financial.yearsInBusiness,
+                    app.status || 'open',
+                    `"${ref1.company || ''}"`,
+                    `"${ref1.contact || ''}"`,
+                    ref1.email || '',
+                    ref1.responded ? 'Yes' : 'No',
+                    `"${ref2.company || ''}"`,
+                    `"${ref2.contact || ''}"`,
+                    ref2.email || '',
+                    ref2.responded ? 'Yes' : 'No'
+                ];
+                csv += row.join(',') + '\n';
+            });
+
+            downloadFile(csv, `${fileName}.csv`, 'text/csv');
+        }
+
+        // Export to XLSX
+        function exportToXLSX(appsToExport, fileName) {
+            const data = appsToExport.map(app => {
+                const ref1 = app.references[0] || {};
+                const ref2 = app.references[1] || {};
+                
+                return {
+                    'Application ID': app.id,
+                    'Company Name': app.applicant.companyName,
+                    'ABN': app.applicant.abn,
+                    'ACN': app.applicant.acn || '',
+                    'Business Type': app.applicant.businessType,
+                    'Address': `${app.applicant.businessAddress}, ${app.applicant.suburb} ${app.applicant.state}`,
+                    'Owner': app.owner.name,
+                    'Phone': app.owner.phone,
+                    'Email': app.owner.email,
+                    'Credit Limit': app.financial.creditLimit,
+                    'Years': app.financial.yearsInBusiness,
+                    'Status': app.status || 'open',
+                    'Ref1 Company': ref1.company || '',
+                    'Ref1 Contact': ref1.contact || '',
+                    'Ref1 Email': ref1.email || '',
+                    'Ref1 Responded': ref1.responded ? 'Yes' : 'No',
+                    'Ref2 Company': ref2.company || '',
+                    'Ref2 Contact': ref2.contact || '',
+                    'Ref2 Email': ref2.email || '',
+                    'Ref2 Responded': ref2.responded ? 'Yes' : 'No'
+                };
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Applications');
+            XLSX.writeFile(workbook, `${fileName}.xlsx`);
+        }
+
+        // Download file helper
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        // View application details
+        function viewDetails(appId) {
+            const app = applications.find(a => a.id === appId);
+            if (!app) return;
+
+            reviewedApplications.add(appId);
+            saveReviewedApplications();
+            render();
+
+            const responded = app.references.filter(r => r.responded).length;
+            
+            let referencesHtml = app.references.map(ref => {
+                const status = ref.responded ? '✅ Responded' : '⏳ Pending';
+                const responseData = ref.responded ? app.responses.find(r => r.referenceId === ref.id) : null;
+                
+                let isUnfav = false;
+                let responseDetails = '';
+                if (responseData) {
+                    isUnfav = isUnfavourableResponse(responseData.response);
+                    responseDetails = `
+                        <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                            <p><strong>Duration:</strong> ${responseData.response.q1_duration}</p>
+                            <p><strong>Payment:</strong> ${responseData.response.q2_payment || responseData.response.q3_payment}</p>
+                            <p><strong>Days Overdue:</strong> ${responseData.response.q3_daysOverdue || responseData.response.q4_daysOverdue}</p>
+                            <p><strong>Would Continue:</strong> ${responseData.response.q5_continue || responseData.response.q6_continue}</p>
+                        </div>
+                    `;
+                }
+
+                const refClass = isUnfav ? 'unfavourable' : '';
+                return `
+                    <div class="reference-status ${refClass}">
+                        <div>
+                            <div class="reference-company">${ref.company}</div>
+                            <div class="reference-contact">${ref.contact} | ${ref.email}</div>
+                            ${responseDetails}
+                        </div>
+                        <div style="text-align: right; font-size: 13px;">${status}</div>
+                    </div>
+                `;
+            }).join('');
+
+            const modalBody = `
+                <div class="modal-section">
+                    <h3>Application ID</h3>
+                    <p style="font-size: 16px; font-weight: 600; color: #1b75bc;">${app.id}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Applicant Information</h3>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Company Name</label>
+                            <p>${app.applicant.companyName}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>ABN</label>
+                            <p>${app.applicant.abn}</p>
+                        </div>
+                    </div>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Business Type</label>
+                            <p>${app.applicant.businessType}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>Years in Business</label>
+                            <p>${app.financial.yearsInBusiness}</p>
+                        </div>
+                    </div>
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Address</label>
+                            <p>${app.applicant.businessAddress}, ${app.applicant.suburb} ${app.applicant.state} ${app.applicant.postcode}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Principal/Owner</h3>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Name</label>
+                            <p>${app.owner.name}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>Position</label>
+                            <p>${app.owner.title}</p>
+                        </div>
+                    </div>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Email</label>
+                            <p>${app.owner.email}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>Phone</label>
+                            <p>${app.owner.phone}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Financial</h3>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Credit Limit Requested</label>
+                            <p>$${app.financial.creditLimit.toLocaleString()}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>Bank Details</label>
+                            <p>${app.financial.bankDetails || 'Not provided'}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Trade References (${responded}/2 responded)</h3>
+                    ${referencesHtml}
+                </div>
+
+                <div class="modal-section">
+                    <h3>Signature</h3>
+                    <img src="${app.signature}" class="signature-image" alt="Signature">
+                </div>
+            `;
+
+            document.getElementById('modalBody').innerHTML = modalBody;
+            document.getElementById('detailsModal').classList.add('show');
+        }
+
+        // Approve application
+        function approveApplication(appId) {
+            const app = applications.find(a => a.id === appId);
+            if (!app) return;
+
+            app.status = 'approved';
+            localStorage.setItem('applications', JSON.stringify(applications));
+            render();
+            document.getElementById('detailsModal').classList.remove('show');
+        }
+
+        // Remove approval
+        function removeApproval(appId) {
+            if (confirm('Remove approval from this application and move back to open?')) {
+                const app = applications.find(a => a.id === appId);
+                if (app) {
+                    app.status = 'open';
+                    localStorage.setItem('applications', JSON.stringify(applications));
+                    render();
+                    closeMenu();
+                }
+            }
+        }
+
+        // Remove application
+        function removeApplication(appId) {
+            if (confirm('Are you sure you want to remove this application?')) {
+                const app = applications.find(a => a.id === appId);
+                if (app) {
+                    app.status = 'deleted';
+                    localStorage.setItem('applications', JSON.stringify(applications));
+                    render();
+                    closeMenu();
+                }
+            }
+        }
+
+        // Toggle context menu
+        function toggleMenu(event, appId) {
+            event.stopPropagation();
+            const menu = document.getElementById(`menu-${appId}`);
+            menu.classList.toggle('show');
+        }
+
+        // Toggle export menu
+        function toggleExportMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('exportMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Close menu
+        function closeMenu() {
+            document.querySelectorAll('.context-menu').forEach(m => m.classList.remove('show'));
+            document.getElementById('exportMenu').classList.remove('show');
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTab = this.dataset.tab;
+                searchQuery = '';
+                document.getElementById('searchInput').value = '';
+                render();
+            });
         });
 
-        // Initialize
-        renderReferences();
+        // Search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            searchQuery = this.value;
+            render();
+        });
+
+        // Modal close
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('detailsModal').classList.remove('show');
+        });
+
+        // Close menu on outside click
+        document.addEventListener('click', function() {
+            closeMenu();
+        });
+
+        // Initial load
+        loadApplications();
     </script>
 </body>
 </html>
