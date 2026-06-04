@@ -631,6 +631,17 @@
         </div>
     </div>
 
+    <!-- Reference Details Modal -->
+    <div id="referenceDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Reference Response - All Answers</h2>
+                <button class="close-btn" id="closeRefModal">&times;</button>
+            </div>
+            <div id="referenceModalBody"></div>
+        </div>
+    </div>
+
     <script>
         let applications = [];
         let currentTab = 'open';
@@ -996,7 +1007,10 @@
                 
                 let isUnfav = false;
                 let responseDetails = '';
-                if (responseData && responseData.response) {
+                let clickableClass = '';
+                let clickHandler = '';
+                
+                if (responseData) {
                     isUnfav = isUnfavourableResponse(responseData.response);
                     const resp = responseData.response;
                     const q2 = resp.q2_payment || resp.q3_payment || 'N/A';
@@ -1011,15 +1025,19 @@
                             <p><strong>Would Continue:</strong> ${q5}</p>
                         </div>
                     `;
+                    
+                    clickableClass = 'style="cursor: pointer;"';
+                    clickHandler = `onclick="viewReferenceDetails('${appId}', '${ref.id}')"`;
                 }
 
                 const refClass = isUnfav ? 'unfavourable' : '';
                 return `
-                    <div class="reference-status ${refClass}">
+                    <div class="reference-status ${refClass}" ${clickableClass} ${clickHandler}>
                         <div>
                             <div class="reference-company">${ref.company}</div>
                             <div class="reference-contact">${ref.contact} | ${ref.email}</div>
                             ${responseDetails}
+                            ${responseData ? '<p style="margin-top: 8px; font-size: 11px; color: #999; font-style: italic;">Click to view all answers</p>' : ''}
                         </div>
                         <div style="text-align: right; font-size: 13px;">${status}</div>
                     </div>
@@ -1190,9 +1208,132 @@
             document.getElementById('detailsModal').classList.remove('show');
         });
 
+        // Reference modal close
+        document.getElementById('closeRefModal').addEventListener('click', function() {
+            document.getElementById('referenceDetailsModal').classList.remove('show');
+        });
+
+        // View reference details
+        function viewReferenceDetails(appId, refId) {
+            const app = applications.find(a => a.id === appId);
+            if (!app) return;
+
+            const responseData = app.responses.find(r => r.referenceId === refId);
+            if (!responseData || !responseData.response) return;
+
+            const resp = responseData.response;
+            const ref = app.references.find(r => r.id === refId);
+            
+            // Helper function to format answers
+            const formatAnswer = (val) => {
+                if (val === null || val === undefined || val === '') return 'N/A';
+                if (typeof val === 'number') return val.toString();
+                return val;
+            };
+
+            // Check if unfavourable
+            const isUnfav = isUnfavourableResponse(resp);
+
+            const modalBody = `
+                <div class="modal-section">
+                    <h3>Reference Company</h3>
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Company Name</label>
+                            <p>${ref.company}</p>
+                        </div>
+                    </div>
+                    <div class="modal-row">
+                        <div class="modal-item">
+                            <label>Contact Person</label>
+                            <p>${ref.contact}</p>
+                        </div>
+                        <div class="modal-item">
+                            <label>Email</label>
+                            <p>${ref.email}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>Reference Answers</h3>
+                    ${isUnfav ? '<p style="background: #ffe6e6; border-left: 3px solid #dc3545; padding: 10px; margin-bottom: 15px; border-radius: 3px; color: #721c24;"><strong>⚠️ This response contains unfavourable indicators</strong></p>' : ''}
+                    
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Q1. How long have you been trading with this company?</label>
+                            <p><strong>${formatAnswer(resp.q1_duration)}</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Q2. How would you describe their payment behaviour?</label>
+                            <p><strong>${formatAnswer(resp.q2_payment || resp.q3_payment)}</strong></p>
+                        </div>
+                    </div>
+
+                    ${(resp.q2_payment === 'late' || resp.q3_payment === 'late') ? `
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Q3. If late, how many days overdue on average?</label>
+                            <p><strong>${formatAnswer(resp.q3_daysOverdue || resp.q4_daysOverdue)} days</strong></p>
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Q4. Have they ever been placed on credit hold?</label>
+                            <p><strong>${formatAnswer(resp.q4_creditHold)}</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Q5. Would you continue to trade with them on credit terms?</label>
+                            <p><strong>${formatAnswer(resp.q5_continue || resp.q6_continue)}</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Q6. Have there been any disputes or issues?</label>
+                            <p><strong>${formatAnswer(resp.q6_disputes)}</strong></p>
+                        </div>
+                    </div>
+
+                    ${resp.q7_comments ? `
+                    <div class="modal-row full">
+                        <div class="modal-item">
+                            <label>Q7. Additional Comments</label>
+                            <p style="font-style: italic; background: #f8fafb; padding: 10px; border-radius: 3px;">${resp.q7_comments}</p>
+                        </div>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+
+            document.getElementById('referenceModalBody').innerHTML = modalBody;
+            document.getElementById('referenceDetailsModal').classList.add('show');
+        }
+
         // Close menu on outside click
         document.addEventListener('click', function() {
             closeMenu();
+        });
+
+        // Close modals on outside click
+        document.getElementById('detailsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('show');
+            }
+        });
+
+        document.getElementById('referenceDetailsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('show');
+            }
         });
 
         // Initial load
