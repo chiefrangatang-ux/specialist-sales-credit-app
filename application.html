@@ -546,10 +546,11 @@
     </div>
 
     <script>
-        // Initialize EmailJS
-        (function() {
+        // Initialize EmailJS when DOM is ready
+        window.addEventListener('DOMContentLoaded', () => {
             emailjs.init('xdj8WYm0g7fq6Tj9V'); // Public Key
-        })();
+            addReferenceField(); // Add first reference field
+        });
 
         // Signature pad setup
         const canvas = document.getElementById('signaturePad');
@@ -731,10 +732,6 @@
             const ref = document.getElementById(`reference-${num}`);
             if (ref) ref.remove();
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            addReferenceField();
-        });
 
         document.getElementById('addReferenceBtn').addEventListener('click', (e) => {
             e.preventDefault();
