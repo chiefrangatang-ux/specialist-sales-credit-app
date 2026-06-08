@@ -100,9 +100,40 @@ export default async function handler(req, res) {
           `,
         }),
       });
-    }
+    } else if (emailType === 'additional-reference-request') {
+      // Send email to the new reference
+      const ref = singleReference;
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from: 'onboarding@resend.dev',
+          to: ref.email,
+          subject: `Trade Reference Request - ${ref.applicantCompany}`,
+          html: `
+            <html>
+              <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: #f9f9f9; border-radius: 8px;">
+                  <h2 style="color: #1b75bc;">Trade Reference Request</h2>
+                  <p>Hi ${ref.contactName},</p>
+                  <p><strong>${ref.applicantCompany}</strong> has listed ${ref.company} as a trade reference in their credit application to Specialist Sales Pty Ltd.</p>
+                  <p>We would appreciate your feedback on their trading history and credit reliability.</p>
+                  <p style="text-align: center; margin: 25px 0;">
+                    <a href="${ref.link}" style="background: #1b75bc; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Complete Reference Assessment</a>
+                  </p>
+                  <p>The assessment takes approximately 2 minutes to complete.</p>
+                  <p>Thank you for your assistance.</p>
+                  <p>Kind regards,<br><strong>Specialist Sales Pty Ltd</strong><br>PO Box 382, Toowoomba QLD 4350<br>1800 780 317</p>
+                </div>
+              </body>
+            </html>
+          `,
+        }),
+      });
 
-    return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Email error:', error);
     return res.status(500).json({ error: 'Failed to send emails', details: error.message });
