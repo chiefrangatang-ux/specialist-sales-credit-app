@@ -286,12 +286,30 @@
         }
 
         .btn-remove-approval {
-            background: var(--light-blue);
+            background: #ffc107;
             color: #333;
         }
 
         .btn-remove-approval:hover {
             background: #e0a800;
+        }
+
+        .btn-restore {
+            background: var(--emerald);
+            color: white;
+        }
+
+        .btn-restore:hover {
+            background: #007a3a;
+        }
+
+        .btn-send-back {
+            background: var(--orange);
+            color: white;
+        }
+
+        .btn-send-back:hover {
+            background: #e08b00;
         }
 
         .menu-button {
@@ -882,6 +900,8 @@
                             <button class="btn-small btn-view" onclick="viewDetails('${app.id}')">View Details</button>
                             ${responded >= 2 && app.status !== 'approved' ? `<button class="btn-small btn-approve" ${canApprove ? '' : 'disabled'} onclick="approveApplication('${app.id}')">Approve</button>` : ''}
                             ${app.status === 'approved' ? `<button class="btn-small btn-remove-approval" onclick="removeApproval('${app.id}')">Remove Approval</button>` : ''}
+                            ${app.status === 'deleted' ? `<button class="btn-small btn-restore" onclick="restoreApplication('${app.id}')">Restore</button>` : ''}
+                            ${app.status === 'open' && isUnfavourable ? `<button class="btn-small btn-send-back" onclick="sendBackApplication('${app.id}')">Send Back for More Refs</button>` : ''}
                             <div style="position: relative;">
                                 <button class="menu-button" onclick="toggleMenu(event, '${app.id}')">⋯</button>
                                 <div class="context-menu" id="menu-${app.id}">
@@ -1177,6 +1197,53 @@
                     localStorage.setItem('applications', JSON.stringify(applications));
                     render();
                     closeMenu();
+                }
+            }
+        }
+
+        // Restore deleted application
+        function restoreApplication(appId) {
+            if (confirm('Restore this application to the open applications list?')) {
+                const app = applications.find(a => a.id === appId);
+                if (app) {
+                    app.status = 'open';
+                    localStorage.setItem('applications', JSON.stringify(applications));
+                    render();
+                    closeMenu();
+                }
+            }
+        }
+
+        // Send back application for additional references
+        function sendBackApplication(appId) {
+            if (confirm('Send this application back to the applicant to provide an additional trade reference?')) {
+                const app = applications.find(a => a.id === appId);
+                if (app) {
+                    // Send email to applicant
+                    const additionalRefLink = `${window.location.origin}/reference-additional.html?app=${appId}&applicantCompany=${encodeURIComponent(app.applicant.companyName)}&ownerEmail=${encodeURIComponent(app.owner.email)}`;
+                    
+                    fetch('/api/send-emails', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            applicationId: appId,
+                            applicantEmail: app.owner.email,
+                            applicantCompany: app.applicant.companyName,
+                            emailType: 'send-back',
+                            additionalRefLink: additionalRefLink
+                        })
+                    }).then(response => {
+                        if (response.ok) {
+                            alert('Application sent back to applicant. They will receive an email to provide an additional trade reference.');
+                            render();
+                            closeMenu();
+                        } else {
+                            alert('Email sent back failed, but you can manually send the link:\n' + additionalRefLink);
+                        }
+                    }).catch(error => {
+                        console.log('Email send-back skipped (development mode)');
+                        alert('Application flagged. Link for applicant:\n' + additionalRefLink);
+                    });
                 }
             }
         }
