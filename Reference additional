@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Trade Reference - Specialist Sales</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&family=Oswald:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-blue: #1b75bc;
+            --primary-dust: #b5481d;
+            --steel-grey: #8e8e8e;
+            --teal: #008ca9;
+            --grass-green: #39b54a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #eef2f5 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1565a0 100%);
+            color: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header img {
+            max-height: 60px;
+            width: auto;
+            margin-right: 20px;
+        }
+
+        header .header-text h1 {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        header .header-text p {
+            margin: 0;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary-blue);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h2 {
+            color: var(--primary-blue);
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .info-box p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-section h2 {
+            color: var(--primary-blue);
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            font-weight: 700;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group.required label::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 10px 12px;
+            border: 1.5px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(27, 117, 188, 0.1);
+        }
+
+        .company-display {
+            background: #f8fafb;
+            padding: 12px;
+            border-radius: 5px;
+            border-left: 3px solid var(--primary-blue);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .company-display label {
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .company-display p {
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .btn-submit {
+            background: var(--primary-dust);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #a03815;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            border: 2px solid var(--grass-green);
+            color: #1b5e20;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message h2 {
+            color: #1b5e20;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            header img {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://specialistsales.com.au/wp-content/themes/specialistsales/img/logo-main-white.png" alt="Specialist Sales">
+            <div class="header-text">
+                <h1>Additional Trade Reference</h1>
+                <p>Specialist Sales Pty Ltd</p>
+            </div>
+        </header>
+
+        <div id="formPage">
+            <div class="info-box">
+                <h2>Additional Trade Reference Required</h2>
+                <p>Thank you for submitting your credit application. To help us complete our assessment, we'd like to request one additional trade reference.</p>
+                <p>Please provide details of another company you currently trade with or have traded with recently.</p>
+            </div>
+
+            <form id="referenceForm">
+                <div class="form-section">
+                    <h2>Your Company</h2>
+                    <div class="company-display">
+                        <label>Company Name</label>
+                        <p id="displayCompany"></p>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Trade Reference Details</h2>
+                    
+                    <div class="form-group required">
+                        <label for="refCompany">Reference Company Name</label>
+                        <input type="text" id="refCompany" name="refCompany" required>
+                    </div>
+
+                    <div class="form-group required">
+                        <label for="refContact">Contact Person Name</label>
+                        <input type="text" id="refContact" name="refContact" required>
+                    </div>
+
+                    <div class="form-group required">
+                        <label for="refEmail">Contact Email Address</label>
+                        <input type="email" id="refEmail" name="refEmail" required>
+                    </div>
+
+                    <div class="form-group required">
+                        <label for="refPhone">Contact Phone Number</label>
+                        <input type="tel" id="refPhone" name="refPhone" required>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <button type="submit" class="btn-submit">
+                        <span class="spinner" id="spinner"></span>
+                        Submit Additional Reference
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="successPage" class="success-message">
+            <h2>✓ Reference Submitted Successfully</h2>
+            <p>Thank you for providing the additional trade reference.</p>
+            <p style="margin-top: 15px; font-size: 14px; color: #666;">Our team will contact this reference and we'll be in touch shortly with the outcome of your application.</p>
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const appId = params.get('app');
+        const applicantCompany = params.get('applicantCompany');
+
+        // Display applicant company
+        document.getElementById('displayCompany').textContent = applicantCompany || 'Unknown';
+
+        // Form submission
+        document.getElementById('referenceForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const referenceData = {
+                appId: appId,
+                company: document.getElementById('refCompany').value,
+                contact: document.getElementById('refContact').value,
+                email: document.getElementById('refEmail').value,
+                phone: document.getElementById('refPhone').value,
+                submittedAt: new Date().toISOString()
+            };
+
+            // Get existing applications
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            const app = applications.find(a => a.id === appId);
+
+            if (app) {
+                // Add new reference
+                if (!app.additionalReferences) {
+                    app.additionalReferences = [];
+                }
+                app.additionalReferences.push(referenceData);
+
+                // Save to localStorage
+                localStorage.setItem('applications', JSON.stringify(applications));
+
+                // Show success message
+                document.getElementById('formPage').style.display = 'none';
+                document.getElementById('successPage').style.display = 'block';
+
+                // Try to send notification email (optional)
+                try {
+                    const spinner = document.querySelector('.spinner');
+                    spinner.style.display = 'inline-block';
+                    
+                    await fetch('/api/send-emails', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            applicationId: appId,
+                            emailType: 'additional-reference-submitted',
+                            applicantCompany: applicantCompany
+                        })
+                    });
+                } catch (error) {
+                    console.log('Email notification skipped (development mode)');
+                }
+            } else {
+                alert('Error: Application not found. Please check the link and try again.');
+            }
+        });
+    </script>
+</body>
+</html>
