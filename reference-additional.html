@@ -325,11 +325,13 @@
             e.preventDefault();
 
             const referenceData = {
+                id: 'REF' + Math.random().toString(36).substr(2, 9).toUpperCase(),
                 appId: appId,
                 company: document.getElementById('refCompany').value,
                 contact: document.getElementById('refContact').value,
                 email: document.getElementById('refEmail').value,
                 phone: document.getElementById('refPhone').value,
+                responded: false,
                 submittedAt: new Date().toISOString()
             };
 
@@ -338,36 +340,52 @@
             const app = applications.find(a => a.id === appId);
 
             if (app) {
-                // Add new reference
-                if (!app.additionalReferences) {
-                    app.additionalReferences = [];
+                // Add as a regular reference (not additional) so it gets counted and emailed
+                if (!app.references) {
+                    app.references = [];
                 }
-                app.additionalReferences.push(referenceData);
+                app.references.push({
+                    id: referenceData.id,
+                    company: referenceData.company,
+                    contact: referenceData.contact,
+                    email: referenceData.email,
+                    responded: false
+                });
 
                 // Save to localStorage
                 localStorage.setItem('applications', JSON.stringify(applications));
 
-                // Show success message
-                document.getElementById('formPage').style.display = 'none';
-                document.getElementById('successPage').style.display = 'block';
-
-                // Try to send notification email (optional)
+                // Send email to the new reference
                 try {
                     const spinner = document.querySelector('.spinner');
                     spinner.style.display = 'inline-block';
+                    
+                    const refLink = `${window.location.origin}/reference.html?app=${appId}&ref=${referenceData.id}&refCompany=${encodeURIComponent(referenceData.company)}&applicantCompany=${encodeURIComponent(applicantCompany)}`;
                     
                     await fetch('/api/send-emails', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             applicationId: appId,
-                            emailType: 'additional-reference-submitted',
-                            applicantCompany: applicantCompany
+                            emailType: 'additional-reference-request',
+                            singleReference: {
+                                email: referenceData.email,
+                                contactName: referenceData.contact,
+                                company: referenceData.company,
+                                applicantCompany: applicantCompany,
+                                link: refLink
+                            }
                         })
                     });
+                    
+                    spinner.style.display = 'none';
                 } catch (error) {
-                    console.log('Email notification skipped (development mode)');
+                    console.log('Email to reference skipped (development mode)');
                 }
+
+                // Show success message
+                document.getElementById('formPage').style.display = 'none';
+                document.getElementById('successPage').style.display = 'block';
             } else {
                 alert('Error: Application not found. Please check the link and try again.');
             }
